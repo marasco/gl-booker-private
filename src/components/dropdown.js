@@ -1,35 +1,48 @@
 import React from 'react';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { FormControl } from 'react-bootstrap';
+import Select from 'react-select';
 
 class Specialist extends React.Component {
   constructor(props) {
     super(props);
 
-    this.toggle = this.toggle.bind(this);
     this.state = {
-      dropdownOpen: false
+      selectedSpecialist: 0,
+      specialists: [
+      {id:0, name: "Anyone"},
+      {id:1, name: "Fran"},
+      {id:2, name: "Pablo"},
+      {id:3, name: "Gonzalo"}
+      ]
     };
   }
-
-  toggle() {
-    this.setState(prevState => ({
-      dropdownOpen: !prevState.dropdownOpen
-    }));
-  }
+  
 
   render() {
     return (
-      <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-        <DropdownToggle caret>
-          Any specialist
-        </DropdownToggle>
-        <DropdownMenu>
-          <DropdownItem>first action</DropdownItem>
-          <DropdownItem>second sction</DropdownItem>
-          <DropdownItem>Another Action</DropdownItem>
-          <DropdownItem>Another Action</DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
+
+      <Select
+        value={this.state.selectedSpecialist}
+        onChange={(e)=>{
+            let value = (e.target.value)?e.target.value:0
+            this.setState({selectedSpecialist:value})
+        }}
+        
+        options={(()=>{
+            let options = []
+
+            this.state.specialists.map((obj)=>{
+                options.push({
+                  value:obj.id,
+                  label:obj.name
+                })
+                  })
+            return options;
+           
+
+        })()}
+     />
+
     );
   }
 }

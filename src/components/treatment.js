@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Row, Col } from 'reactstrap';
+import { Button, Row, Col } from 'react-bootstrap';
 import '../App.css';
 import Specialist from './dropdown';
 import Calendar from './datapicker';
@@ -7,63 +7,92 @@ import Calendar from './datapicker';
 class Treatment extends Component{
     constructor(){
         super()
+        this.state = {
+            itemsSelected: [],
+            treatments: [
+                {
+                    id:"1",
+                    selected:false,
+                    imageUrl: "https://www.promocipsalut.es/90/promociones-tratamientos-faciales-prx-t33.jpg",   
+                    name:"Treatment 1",   
+                },{
+                    id:"2",
+                    selected:false,
+                    imageUrl: "https://http2.mlstatic.com/tratamientos-faciales-promocion-mes-de-la-madre-40-off-D_NQ_NP_653738-MLA26155901967_102017-F.jpg",   
+                    name:"Treatment 2",   
+                },{
+                    id:"3",
+                    selected:false,
+                    imageUrl: "https://www.promocipsalut.es/90/promociones-tratamientos-faciales-prx-t33.jpg",   
+                    name:"Treatment 3",   
+                },{
+                    id:"4",
+                    selected:false,
+                    imageUrl: "https://http2.mlstatic.com/tratamientos-faciales-promocion-mes-de-la-madre-40-off-D_NQ_NP_653738-MLA26155901967_102017-F.jpg",   
+                    name:"Treatment 4",   
+                },{
+                    id:"5",
+                    selected:false,
+                    imageUrl: "https://www.promocipsalut.es/90/promociones-tratamientos-faciales-prx-t33.jpg",   
+                    name:"Treatment 5",   
+                },{
+                    id:"6",
+                    selected:false,
+                    imageUrl: "https://www.promocipsalut.es/90/promociones-tratamientos-faciales-prx-t33.jpg",   
+                    name:"Treatment 6",   
+                },
+            ]
+        }
+
        /*this.onTypeaheadaChange = this.onTypeaheadChange.bind(this);
         this.onInputChange = this.onInputChange.bind(this);
         this.handleClick = this.handleClick.bind(this);*/
-}
-render(){
+
+    }
+    onClickTreatment = (arg) => {
+        let treats = this.state.treatments
+        console.log('arg:'+arg)
+        treats.map((item,i)=>{
+        console.log('item.id:'+item.id)
+            if (item.id===arg){
+                item.selected = (item.selected)?false:true;
+            }
+        })
+
+        this.setState({
+            treatments: treats
+        })  
+    }
+    render(){
     return(
-        <div className="selectreatment">
+        <div className="container treatments">
             <Row>
-                <Col>
-                    <img src="" alt="1"></img>
-                    <h1>Treatment 1</h1>
-                    <Button color="primary" onClick={() => this.onRadioBtnClick(1)} active={this.state.rSelected === 1}>SELECT</Button>
-                    <Specialist></Specialist>
-                </Col>
+
+              {(()=>{
+                let doms = []
+                let items = (this.state.treatments) ? this.state.treatments : []
+
+                let count = 0
+                items.map((item,i)=>{
+                    count++
+                    doms.push(
+                        
+                        <Col xs={6} md={4} className={item.selected?"item active":"item"} key={"image" + item.id}>
+                            <div className="image" style={{backgroundImage: "url("+item.imageUrl+")"}} alt={item.id}></div>
+                            <h1>{item.name}</h1>
+                            <Button color="primary" onClick={() => this.onClickTreatment(item.id) }>SELECT</Button>
+                            <Specialist></Specialist>
+                        </Col>
+                    )
+                    return item
+                })
+
+                    return doms
+                })()}
+
             </Row>
-              <Row>
-                <Col>
-                    <img src="" alt="2"></img>
-                    <h1>Treatment 2</h1>
-                    <Button color="primary" onClick={() => this.onRadioBtnClick(2)} active={this.state.rSelected === 2}>SELECT</Button>
-                    <Specialist></Specialist>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                    <img src="" alt="3"></img>
-                    <h1>Treatment 3</h1>
-                    <Button color="primary" onClick={() => this.onRadioBtnClick(3)} active={this.state.rSelected === 3}>SELECT</Button>
-                    <Specialist></Specialist>
-                </Col>
-              </Row>
-              <Row> 
-                <Col>
-                    <img src="" alt="4"></img>
-                    <h1>Treatment 4</h1>
-                    <Button color="primary" onClick={() => this.onRadioBtnClick(4)} active={this.state.rSelected === 4}>SELECT</Button>
-                    <Specialist></Specialist>
-                </Col>
-              </Row>
-                <Row>
-                <Col>
-                    <img src="" alt="5"></img>
-                    <h1>Treatment 5</h1>
-                    <Button color="primary" onClick={() => this.onRadioBtnClick(5)} active={this.state.rSelected === 5}>SELECT</Button>
-                    <Specialist></Specialist>
-                </Col>
-                </Row>
-                <Row>
-                <Col>
-                    <img src="" alt="6"></img>
-                    <h1>Treatment 6</h1>
-                    <Button color="primary" onClick={() => this.onRadioBtnClick(6)} active={this.state.rSelected === 6}>SELECT</Button>
-                    <Specialist></Specialist>
-                </Col>
-            </Row>
-             <Calendar></Calendar>
-             <Button outline color="danger">Next</Button>
+ 
+            <Button outline color="danger">Next</Button>
         </div>
         );
     }
