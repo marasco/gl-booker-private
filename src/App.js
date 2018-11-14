@@ -13,10 +13,10 @@ class App extends React.Component {
               <h1>BOOK A SERVICE</h1>
               <h3>Welcome to Georgia Louise bookings, the leading destination for  the most advanced facials in Manhattan, home to celebrity and world-acclaimed facialist, Georgia Louise, and her elite team. Its time to book your bespoke GLO</h3>
           </div>
-
-         <Treatment />
-         <Calendar />
-         <BookResults />
+	
+          <Treatment />
+          <Calendar />
+          <BookResults />
       </div>
     );
   }

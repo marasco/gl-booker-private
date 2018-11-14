@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Row, Col } from 'react-bootstrap';
 import '../App.css';
-import Specialist from './dropdown';
+import Specialist from './specialist';
 import Calendar from './datapicker';
 
 class Treatment extends Component{
