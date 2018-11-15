@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Calendar from './components/datapicker'
 import Treatment from './components/treatment'
 import BookResults from './components/bookResults'
+import Calendario from './components/calendario'
 
 class App extends React.Component {
   render() {
@@ -15,7 +15,7 @@ class App extends React.Component {
           </div>
 	
           <Treatment />
-          <Calendar />
+          <Calendario />
           <BookResults />
       </div>
     );
