@@ -1,5 +1,4 @@
 import React from 'react';
-import { FormControl } from 'react-bootstrap';
 import Select from 'react-select';
 
 class Specialist extends React.Component {

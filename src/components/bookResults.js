@@ -1,14 +1,35 @@
 import React, { Component } from 'react';
 import BookResultTable from './bookResultTable';
+import {  FormGroup, Label, FormControl } from 'react-bootstrap';
 
 class BookResults extends Component{
-
+    formFields = {
+        who:{ label:'WHO',value:''},
+        when:{ label:'WHEN',value:''},
+        with:{ label:'WITH',value:''},
+    }
+    state = {
+        form:{
+            who:'',
+            when:'',
+            with:'',
+        } 
+    };
     render(){
+        let getdata = Object.keys(this.formFields).map(x =>  <FormGroup key={x} id={"form" + x}>
+        <Label>{this.formFields[x].label+ ': '}</Label>
+        <FormControl
+            type="text"
+            value={this.state.form[x]}
+            onChange={e => this.handleChange(e.target.value,x)}
+        />
+        </FormGroup>)
+
         return(
                 <div className="timetable">
                     <h1>BOOK A SERVICE</h1>
                     <h2>The Hollywood EGF Facial</h2>
-                    <form>get db</form>
+                    <form>{ getdata }</form>
                     <BookResultTable></BookResultTable>
                     <h3>Congratulations we’ll see you soon!</h3>
                     <h4> #GLOtoGO </h4>
