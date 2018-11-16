@@ -1,18 +1,18 @@
 import React from 'react';
-import { Table, Input, Label, Col, FormGroup } from 'react-bootstrap';
+import { Table, FormControl, Label, Col, FormGroup } from 'react-bootstrap';
 
 class BookResultTable extends React.Component {
     showResults = () => {
       return (
         <tr>
-          <td>1</td>
-          <td>2</td>
-          <td>3</td>
-          <td>4</td>
+          <td>10:00 AM</td>
+          <td>11:30 AM</td>
+          <td>Taylor</td>
+          <td>BOOK</td>
         </tr>)
     }
     render() { 
-         return (
+            return (
              <div className="datatable">
                  <Table responsive>
                         <thead>
