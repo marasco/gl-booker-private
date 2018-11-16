@@ -13,8 +13,8 @@ class Calendario extends React.Component {
   render() {
    
     return (
-      <div>
-        <Calendar
+      <div className="calendar">
+        <Calendar className="fix"
           onChange={this.onChange}
           value={this.state.date}
           tileDisabled={({activeStartDate, date, view }) => date.getDate() % 2}
