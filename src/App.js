@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
 import Treatment from './components/treatment'
 import BookResults from './components/bookResults'
@@ -13,14 +13,17 @@ class App extends React.Component {
   render() {
     return (
       <div className="App container">
-      	  <div>
+      	  <div className="section-1 col-xs-12">
               <h1>BOOK A SERVICE</h1>
               <h3>Welcome to Georgia Louise bookings, the leading destination for  the most advanced facials in Manhattan, home to celebrity and world-acclaimed facialist, Georgia Louise, and her elite team. Its time to book your bespoke GLO</h3>
           </div>
           <Treatment />
           <Calendar />
           <BookResults />
+      	  <LoginForm />
+      	  <Signup />
           <NewsLetter />
+	
       </div>
     );
   }

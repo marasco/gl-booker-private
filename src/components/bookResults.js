@@ -16,20 +16,29 @@ class BookResults extends Component{
         } 
     };
     render(){
-        let getdata = Object.keys(this.formFields).map(x =>  <FormGroup key={x} id={"form" + x}>
+        let getdata = Object.keys(this.formFields).map(x =>  {
+            return ( 
+            <div className="col-xs-12 col-sm-4"  key={"list" +x}><FormGroup key={x} id={"form" + x}>
+
         <Label>{this.formFields[x].label+ ': '}</Label>
+        
         <FormControl
             type="text"
             value={this.state.form[x]}
             onChange={e => this.handleChange(e.target.value,x)}
         />
-        </FormGroup>)
+        </FormGroup></div>
+
+           )
+        })
 
         return(
                 <div className="timetable">
                     <h1>BOOK A SERVICE</h1>
                     <h2>The Hollywood EGF Facial</h2>
+                    <div className="col-xs-12">
                     <form>{ getdata }</form>
+                    </div>
                     <BookResultTable></BookResultTable>
                     <h3>Congratulations we’ll see you soon!</h3>
                     <h4> #GLOtoGO </h4>

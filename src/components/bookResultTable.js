@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, FormControl, Label, Col, FormGroup } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 
 class BookResultTable extends React.Component {
     showResults = () => {

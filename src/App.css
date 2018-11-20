@@ -1,3 +1,11 @@
+html,body {
+  font-family: 'Montserrat',sans-serif,Helvetica;
+  letter-spacing: 0.2em;
+  font-style: normal;
+  font-weight: 500;
+  transition: color 0.2s ease-in-out;
+  text-transform: uppercase;
+}
 .App {
   text-align: center;
 }
@@ -22,6 +30,13 @@
   color: #61dafb;
 }
 
+
+.section-1{
+  font-family: 'Libre Baskerville', serif;
+  text-transform: none;
+}
+
+
 .treatments .image {
   background-repeat: no-repeat;
   background-position: center center;
@@ -29,16 +44,53 @@
   height:300px;
   width:100%;
 }
+.padding-0 {
+  padding:0px;
+}
 .calendar {
   width: 350px;
   height: 265px;
   margin-left: 35%;
   margin-right: 100px;
 }
+.treatments .item .title {
+    font-size: 20px;
+    text-transform: uppercase;
+    line-height: 60px;
+    font-weight: bold;
+}
+.treatments .item .itemContent.active {
+  border:solid 3px #b1b1b1;
+}
+.treatments .item .itemContent {
+  border:solid 3px #e1e1e1;
+  margin: 16px 8px;
+}
+.treatments .item .duration {
+  line-height: 40px;
+  padding: 10px 0px;
+  /* soft yellow */
+  background: #fbf4ef;
+}
+.selectBtn {
+  /* pink hard */
+  background:#ecdce9;
+  cursor:pointer;
+  line-height: 40px;
+  padding: 10px;
+  font-weight: bold;
+}
+.treatments .border-bottom {
+  border-bottom: solid 1px #ccc;
+  margin:0px 0px;
+   
+}
+
+
+
 @media only screen and (max-width: 348px) and (max-height: 812px) {
   .calendar .fix {
-    
-}
+  }
 }
 @keyframes App-logo-spin {
   from {

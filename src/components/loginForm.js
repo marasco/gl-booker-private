@@ -19,8 +19,12 @@ class LoginForm extends Component {
         return (<Button bsStyle="primary">Log out</Button>)
     }
     return (
+
+        <div className="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
+        <div className="title"><h2>LogIn</h2></div>
+
         <div className="LoginForm">
-        {button()}
+        
         <form className="form">
                 <Col>
                     <FormGroup>
@@ -31,22 +35,30 @@ class LoginForm extends Component {
                             name="email"
                             id="exampleEmail"
                             placeholder="myemail@email.com"
+                            onChange={(e)=>{
+
+                            }}
                         />
                     </FormGroup>
                 </Col>
                 <Col>
                     <FormGroup>
-                        <Label for="examplePassword">Password</Label>
+                        <Label htmlFor="examplePassword">Password</Label>
                         <FormControl
                             type="password"
                             value={this.state.form.password}
                             name="password"
                             id="examplePassword"
                             placeholder="********"
+                            onChange={(e)=>{
+                                
+                            }}
                             />
                     </FormGroup>
                 </Col>
+                {button()}
             </form>
+        </div>
         </div>
     );
   }

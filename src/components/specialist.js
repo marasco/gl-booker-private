@@ -1,7 +1,35 @@
 import React from 'react';
 import Select from 'react-select';
 
+const customStyles = {
+  control: styles => ({ ...styles, backgroundColor: 'white', height: '40', border:'none',borderRadius:0 }),
+  option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+    return {
+      ...styles,
+      height: '40',
+      backgroundColor: isDisabled
+        ? null
+        : isSelected ? 'black' : isFocused ? '#e1e1e1' : 'white',
+      color: isDisabled
+        ? '#ccc'
+        : isSelected
+          ? 'white'
+          : data.color,
+      cursor: isDisabled ? 'not-allowed' : 'default',
+    };
+  },
+  singleValue: (provided, state) => {
+    const opacity = state.isDisabled ? 0.5 : 1;
+    const transition = 'opacity 300ms';
+
+    return { ...provided, opacity, transition };
+  }
+}
 class Specialist extends React.Component {
+
+
+
+
   constructor(props) {
     super(props);
 
@@ -16,15 +44,16 @@ class Specialist extends React.Component {
     };
   }
   
-
   render() {
     return (
 
       <Select
-        value={this.state.selectedSpecialist}
-        onChange={(e)=>{
-            let value = (e.target.value)?e.target.value:0
-            this.setState({selectedSpecialist:value})
+        styles={customStyles}
+        value={(()=>{
+          return this.state.selectedSpecialist
+        })()}
+        onChange={(obj)=>{
+            this.setState({selectedSpecialist:obj})
         }}
         
         options={(()=>{
@@ -35,7 +64,8 @@ class Specialist extends React.Component {
                   value:obj.id,
                   label:obj.name
                 })
-                  })
+                return obj;
+            })
             return options;
            
 

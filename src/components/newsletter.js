@@ -22,10 +22,10 @@ class NewsLetter extends Component{
                     />
                     </FormGroup>)
         return(
-                <div className="newsletter">
+                <div className="col-xs-12 newsletter">
                     <h1>BECOME A GLO INSIDER, SIGN UP FOR GLO NEWSLETTER/OFFERS AND RECEIVE 10% OFF YOUR FIRST ORDER</h1>
                     {data}
-                    <Button outline color="danger">I’M IN!</Button>
+                    <Button color="danger">I’M IN!</Button>
                 </div>
         );
     }

@@ -27,11 +27,14 @@ class Signup extends Component {
             />
             </FormGroup>)
     return (
+        <div className="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
+        <div className="title"><h2>Sign Up</h2></div>
         <div className="UserCreation">
             <form className="whitebackground">
                 {fields}
                 <Button bsStyle="primary">Register</Button>
             </form>
+        </div>
         </div>
         );
     }
