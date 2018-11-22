@@ -6,6 +6,7 @@ import Calendar from './components/calendar'
 import LoginForm from './components/loginForm';
 import Signup from './components/signup';
 import NewsLetter from './components/newsletter';
+import Profile from './components/profile';
 
 /*se pueden agregar los componentes loginForm y signup para ver como quedaron creados*/
 
@@ -37,6 +38,9 @@ class App extends React.Component {
     this.setState( prev => ({ ...prev, users: users }) )
     localStorage.setItem('users', JSON.stringify(users))
   }
+  updateUser(){
+    
+  }
   render() {
     return (
       <div className="App container">
@@ -49,6 +53,7 @@ class App extends React.Component {
           <BookResults />
       	  <LoginForm user={this.state.loggedUser} login={this.login} logout={this.logout} />
       	  <Signup submit={this.addUser} />
+          <Profile refresh={this.updateUser} />
           <NewsLetter />
 	
       </div>
