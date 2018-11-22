@@ -91,6 +91,7 @@ class LoginForm extends Component {
                             this.handleClose()
                             }} color="success">Accept</Button>
                         <Button onClick={this.handleClose}>Cancel</Button>
+                        <Button>Sign Up</Button>
                 </Modal.Footer>
             </Modal>
         </div>
