@@ -8,6 +8,8 @@ class Profile extends Component {
         lastname:{ label:'Last name',value:''},
         email:{ label:'Email',value:''},
         password:{ label:'Password',value:''},
+        birthday:{label:'Birthday', value:''},
+        phone:{label:'Phone number',value:''},
     }
     state = {
         form:{
@@ -15,6 +17,8 @@ class Profile extends Component {
             lastname:'',
             email:'',
             password:'',
+            birthday:'',
+            phone:'',
         }
     };
 
@@ -33,7 +37,7 @@ class Profile extends Component {
             </FormGroup>)
     return (
         <div className="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
-        <div className="title"><h2>Profile</h2></div>
+        <div className="title"><h2>My account</h2></div>
         <div className="UserCreation">
             <Form className="whitebackground">
                 {fields}
