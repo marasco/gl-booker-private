@@ -18,12 +18,13 @@ class Treatment extends Component{
     loadTreatments = () => {
         try {
             request
-            .post('/services/treatments.json')
+            .get('/services/treatments.json')
             .set('Authorization', 'Bearer xxxx')
             .send({
                 param1: 'test'
             })
             .then(res=>{
+                console.log('res',res.body)
                 this.setState({treatments:res.body})
             }).catch(error => {
                 console.log(error) 
