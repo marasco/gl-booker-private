@@ -7,22 +7,22 @@ import {Nav, NavItem, Navbar} from 'react-bootstrap';
 
 class App extends React.Component {
   render() {
-    let user = JSON.parse(localStorage.getItem('user'))
+    let users = JSON.parse(localStorage.getItem('users'))
     let pages = [
-      {name:'link nav1',path:'/link1'},
-      {name:'link nav2',path:'/link2'},
-      {name:'link nav3',path:'/link3'},
-      {name:'link nav4',path:'/link4'},
+      {name:'treatments',path:'/treatment'},
+      {name:'signup',path:'/signup'},
+      {name:'book',path:'/book'},
+      {name:'profile',path:'/myaccount'},
       
     ]
-    if(user)
-    console.log(user)
+    if(users)
+    console.log(users)
     let buttons = () => {
         return (
        
               <Nav>
               {pages.map(page => (
-                <NavItem href={page.path}>{page.name}>Link</NavItem>
+                <NavItem href={page.path}>{page.name}></NavItem>
                 ))}
               </Nav>)
       }
@@ -32,13 +32,12 @@ class App extends React.Component {
          <Navbar>
             <Navbar.Header>
                 <Navbar.Brand>
-                    <a href="#home">Home</a>
+                    <a href="/">Home</a>
                 </Navbar.Brand>
                 {buttons()}
                 <LoginForm />
             </Navbar.Header>
           </Navbar>
-          <Footer />
       </div>
     );
   }
