@@ -3,57 +3,36 @@ import { Button, Row, Col } from 'react-bootstrap';
 import '../App.css';
 import Specialist from './specialist';
 import Calendar from './datapicker';
+import request from 'superagent'
 
 class Treatment extends Component{
     constructor(){
         super()
         this.state = {
             itemsSelected: [],
-            treatments: [
-                {
-                    id:"1",
-                    selected:false,
-                    imageUrl: "https://www.promocipsalut.es/90/promociones-tratamientos-faciales-prx-t33.jpg",   
-                    name:"Treatment 1",
-                    duration: "XX minutes - $500"   
-                },{
-                    id:"2",
-                    selected:false,
-                    imageUrl: "https://http2.mlstatic.com/tratamientos-faciales-promocion-mes-de-la-madre-40-off-D_NQ_NP_653738-MLA26155901967_102017-F.jpg",   
-                    name:"Treatment 2",
-                    duration: "XX minutes - $500"   
-                },{
-                    id:"3",
-                    selected:false,
-                    imageUrl: "https://www.promocipsalut.es/90/promociones-tratamientos-faciales-prx-t33.jpg",   
-                    name:"Treatment 3",
-                    duration: "XX minutes - $500"   
-                },{
-                    id:"4",
-                    selected:false,
-                    imageUrl: "https://http2.mlstatic.com/tratamientos-faciales-promocion-mes-de-la-madre-40-off-D_NQ_NP_653738-MLA26155901967_102017-F.jpg",   
-                    name:"Treatment 4",
-                    duration: "XX minutes - $500"   
-                },{
-                    id:"5",
-                    selected:false,
-                    imageUrl: "https://www.promocipsalut.es/90/promociones-tratamientos-faciales-prx-t33.jpg",   
-                    name:"Treatment 5",
-                    duration: "XX minutes - $500"   
-                },{
-                    id:"6",
-                    selected:false,
-                    imageUrl: "https://www.promocipsalut.es/90/promociones-tratamientos-faciales-prx-t33.jpg",   
-                    name:"Treatment 6",
-                    duration: "XX minutes - $500"   
-                },
-            ]
+            treatments: []
         }
+        this.loadTreatments() 
 
-       /*this.onTypeaheadaChange = this.onTypeaheadChange.bind(this);
-        this.onInputChange = this.onInputChange.bind(this);
-        this.handleClick = this.handleClick.bind(this);*/
+    }
+    loadTreatments = () => {
+        try {
+            request
+            .post('/services/treatments.json')
+            .set('Authorization', 'Bearer xxxx')
+            .send({
+                param1: 'test'
+            })
+            .then(res=>{
+                this.setState({treatments:res.body})
+            }).catch(error => {
+                console.log(error) 
+            });
 
+        } catch (e){
+            console.error(e)
+            alert(e.message)
+        }
     }
     onClickTreatment = (arg) => {
         let treats = this.state.treatments
