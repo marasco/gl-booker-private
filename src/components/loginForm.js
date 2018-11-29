@@ -48,12 +48,14 @@ class LoginForm extends Component {
         <div className="title"><h2>LogIn</h2></div>
 
         <div className="LoginForm">
+        {/*
         {button()}
         <Modal show={this.state.show} onHide={this.handleClose}>
                 <Modal.Header closeButton>
                         <Modal.Title>Please enter your email and password</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+        */}
                 <div>
                 <Form className="form">
                 <Col>
@@ -84,16 +86,21 @@ class LoginForm extends Component {
                     </Col>
                     </Form>
                 </div>  
+        {/*
                 </Modal.Body>
                 <Modal.Footer>
+        */}
                         <Button onClick={() => { 
                             this.props.login(this.state.form)
                             this.handleClose()
-                            }} color="success">Accept</Button>
+                            }} color="success"
+                            bsStyle="primary">Sign In</Button>
+        {/*
                         <Button onClick={this.handleClose}>Cancel</Button>
                         <Button>Sign Up</Button>
                 </Modal.Footer>
             </Modal>
+        */}
         </div>
     </div>
     );

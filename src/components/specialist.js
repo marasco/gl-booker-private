@@ -1,5 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
+import request from 'superagent'
+import { API_URL } from '../App'
 
 const customStyles = {
   control: styles => ({ ...styles, backgroundColor: 'white', height: '40', border:'none',borderRadius:0 }),
@@ -35,13 +37,31 @@ class Specialist extends React.Component {
 
     this.state = {
       selectedSpecialist: 0,
-      specialists: [
-      {id:0, name: "Anyone"},
-      {id:1, name: "Fran"},
-      {id:2, name: "Pablo"},
-      {id:3, name: "Gonzalo"}
-      ]
+      specialists: []
     };
+
+    this.loadSpeacialists();
+  }
+
+  loadSpeacialists() {
+    request
+    .get(API_URL + '/employees')
+    .set('Authorization', 'Bearer xxxx')
+    .query({
+        pageSize: 100,
+        treatmentId: this.props.treatmentId,
+    })
+    .then(res=>{
+        console.log('res',res.body)
+        this.setState({
+          specialists: res.body.Results.map(record => ({
+            id: record.ID,
+            name: [record.LastName, record.FirstName].join(', '),
+          }))
+        })
+    }).catch(error => {
+        console.log(error)
+    });
   }
   
   render() {

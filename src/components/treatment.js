@@ -22,7 +22,10 @@ class Treatment extends Component{
             request
             .get(API_URL + '/treatments')
             .set('Authorization', 'Bearer xxxx')
-            .query({ page: this.state.page })
+            .query({
+                page: this.state.page,
+                pageSize: 12,
+            })
             .send({
                 param1: 'test'
             })
@@ -87,7 +90,7 @@ class Treatment extends Component{
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col xs={12} sm={12}><Specialist></Specialist></Col>
+                                    <Col xs={12} sm={12}><Specialist treatmentId={item.ID}></Specialist></Col>
                                 </Row>
                             </div>
                         </Col>
@@ -100,7 +103,7 @@ class Treatment extends Component{
 
             </Row>
 
-            { this.state.page && (
+            {this.state.page && (
                 <Button color="danger" onClick={ this.loadTreatments }>Load More</Button>
             )}
  
