@@ -11,7 +11,8 @@ class Treatment extends Component{
         super()
         this.state = {
             itemsSelected: [],
-            treatments: []
+            treatments: [],
+            page: 1,
         }
         this.loadTreatments() 
 
@@ -21,12 +22,16 @@ class Treatment extends Component{
             request
             .get(API_URL + '/treatments')
             .set('Authorization', 'Bearer xxxx')
+            .query({ page: this.state.page })
             .send({
                 param1: 'test'
             })
             .then(res=>{
                 console.log('res',res.body)
-                this.setState({treatments:res.body})
+                this.setState({
+                    treatments: [...this.state.treatments, ...res.body.Treatments],
+                    page: res.body.Treatments.length ? this.state.page + 1 : false,
+                })
             }).catch(error => {
                 console.log(error) 
             });
@@ -94,6 +99,10 @@ class Treatment extends Component{
                 })()}
 
             </Row>
+
+            { this.state.page && (
+                <Button color="danger" onClick={ this.loadTreatments }>Load More</Button>
+            )}
  
             <Button color="danger">Next</Button>
         </div>
