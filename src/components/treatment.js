@@ -4,6 +4,7 @@ import '../App.css';
 import Specialist from './specialist';
 import Calendar from './datapicker';
 import request from 'superagent'
+import { API_URL } from '../App'
 
 class Treatment extends Component{
     constructor(){
@@ -18,7 +19,7 @@ class Treatment extends Component{
     loadTreatments = () => {
         try {
             request
-            .get('/services/treatments.json')
+            .get(API_URL + '/treatments')
             .set('Authorization', 'Bearer xxxx')
             .send({
                 param1: 'test'
@@ -66,18 +67,18 @@ class Treatment extends Component{
                     count++
                     doms.push(
                         
-                       <Col xs={12} sm={6} md={4} className="item" key={"image" + item.id}>
+                       <Col xs={12} sm={6} md={4} className="item" key={"image" + item.ID}>
                             <div className={item.selected?"itemContent active":"itemContent"}>
                                 <Row className="border-bottom">
-                                    <Col xs={12} className="image" style={{backgroundImage: "url("+item.imageUrl+")"}} alt={item.id}></Col>
+                                    <Col xs={12} className="image" style={{backgroundImage: "url("+item.ImageURL+")"}} alt={item.ID}></Col>
                                 </Row>
                                 <Row className="border-bottom">
-                                    <Col xs={12}><div className="title">{item.name}</div></Col>
+                                    <Col xs={12}><div className="title">{item.Name}</div></Col>
                                 </Row>
                                 <Row className="border-bottom">
                                     <Col xs={12} className="padding-0">
-                                    <Col xs={12} sm={8} className="padding-0"><div className="duration">{item.duration}</div></Col>
-                                    <Col xs={12} sm={4} className="padding-0"><div className="selectBtn" onClick={() => this.onClickTreatment(item.id) }>SELECT</div></Col>
+                                    <Col xs={12} sm={8} className="padding-0"><div className="duration">{item.TreatmentDuration}</div></Col>
+                                    <Col xs={12} sm={4} className="padding-0"><div className="selectBtn" onClick={() => this.onClickTreatment(item.ID) }>SELECT</div></Col>
                                     </Col>
                                 </Row>
                                 <Row>

@@ -4,6 +4,7 @@ import LoginForm from './components/loginForm';
 import {Nav, NavItem, Navbar} from 'react-bootstrap'; 
 import Signup from './components/signup';
 
+export const API_URL = 'https://gl-bookings-server-staging.herokuapp.com/api';
 
 class App extends React.Component {
   constructor(props) {
