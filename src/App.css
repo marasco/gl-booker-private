@@ -62,13 +62,16 @@ html,body {
 .treatments .item .itemContent.active {
   border:solid 3px #b1b1b1;
 }
+.centered {
+  text-align: center;
+}
 .treatments .item .itemContent {
   border:solid 3px #e1e1e1;
   margin: 16px 8px;
 }
 .treatments .item .duration {
   line-height: 40px;
-  padding: 10px 0px;
+  padding: 10px 10px;
   /* soft yellow */
   background: #fbf4ef;
 }
@@ -76,6 +79,7 @@ html,body {
   /* pink hard */
   background:#ecdce9;
   cursor:pointer;
+  text-align: center;
   line-height: 40px;
   padding: 10px;
   font-weight: bold;
@@ -85,7 +89,9 @@ html,body {
   margin:0px 0px;
    
 }
-
+.marginTop20{
+  margin-top:20px;
+}
 
 
 @media only screen and (max-width: 348px) and (max-height: 812px) {

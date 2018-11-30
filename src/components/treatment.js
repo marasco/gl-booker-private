@@ -61,7 +61,7 @@ class Treatment extends Component{
     render(){
     return(
         <div className="container treatments">
-            <div>
+            <div className="section-1">
                 <h1>BOOK A SERVICE</h1>
                 <h3>Welcome to Georgia Louise bookings, the leading destination for  the most advanced facials in Manhattan, home to celebrity and world-acclaimed facialist, Georgia Louise, and her elite team. Its time to book your bespoke GLO</h3>
             </div>
@@ -73,19 +73,23 @@ class Treatment extends Component{
                 let count = 0
                 items.map((item,i)=>{
                     count++
+                    let img = item.ImageURL;
+                    if (!img || img.length===0){
+                        img = '/sample.png';
+                    }
                     doms.push(
                         
                        <Col xs={12} sm={6} md={4} className="item" key={"image" + item.ID}>
                             <div className={item.selected?"itemContent active":"itemContent"}>
                                 <Row className="border-bottom">
-                                    <Col xs={12} className="image" style={{backgroundImage: "url("+item.ImageURL+")"}} alt={item.ID}></Col>
+                                    <Col xs={12} className="image" style={{backgroundImage: "url("+img+")"}} alt={item.ID}></Col>
                                 </Row>
                                 <Row className="border-bottom">
                                     <Col xs={12}><div className="title">{item.Name}</div></Col>
                                 </Row>
                                 <Row className="border-bottom">
                                     <Col xs={12} className="padding-0">
-                                    <Col xs={12} sm={8} className="padding-0"><div className="duration">{item.TreatmentDuration}</div></Col>
+                                    <Col xs={12} sm={8} className="padding-0"><div className="duration">{item.TreatmentDuration} MIN - {item.Price.CurrencyCode} {item.Price.Amount}</div></Col>
                                     <Col xs={12} sm={4} className="padding-0"><div className="selectBtn" onClick={() => this.onClickTreatment(item.ID) }>SELECT</div></Col>
                                     </Col>
                                 </Row>
@@ -104,10 +108,14 @@ class Treatment extends Component{
             </Row>
 
             {this.state.page && (
-                <Button color="danger" onClick={ this.loadTreatments }>Load More</Button>
+                <div className="col-xs-12 centered">
+                <Button bsStyle="primary" onClick={ this.loadTreatments }>Load More</Button>
+                </div>
             )}
- 
-            <Button color="danger">Next</Button>
+             <div className="col-xs-12 centered marginTop20">
+
+                <Button bsStyle="primary" >Next</Button>
+            </div>
         </div>
         );
     }
