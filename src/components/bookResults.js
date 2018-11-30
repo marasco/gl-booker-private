@@ -34,14 +34,19 @@ class BookResults extends Component{
 
         return(
                 <div className="timetable">
+                    <div className="no-visible">
                     <h1>BOOK A SERVICE</h1>
                     <h2>The Hollywood EGF Facial</h2>
+
                     <div className="col-xs-12">
                     <form>{ getdata }</form>
                     </div>
+                    </div>
                     <BookResultTable></BookResultTable>
+                    <div className="centered">
                     <h3>Congratulations we’ll see you soon!</h3>
                     <h4> #GLOtoGO </h4>
+                    </div>
                 </div>
         );
     }

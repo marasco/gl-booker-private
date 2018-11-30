@@ -19,7 +19,7 @@ class LoginForm extends Component {
         };   
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
-    }
+    } 
     handleClose() {
         this.setState({ show: false });
     }
@@ -45,17 +45,10 @@ class LoginForm extends Component {
     return (
 
         <div className="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
-        <div className="title"><h2>LogIn</h2></div>
+        <div className="title"><h2>Sign In</h2></div>
 
         <div className="LoginForm">
-        {/*
-        {button()}
-        <Modal show={this.state.show} onHide={this.handleClose}>
-                <Modal.Header closeButton>
-                        <Modal.Title>Please enter your email and password</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-        */}
+        
                 <div>
                 <Form className="form">
                 <Col>
@@ -70,37 +63,32 @@ class LoginForm extends Component {
                                 onChange={e => { this.handleChange(e.target.value, 'email')}}
                             />
                         </FormGroup>
-                    </Col>
-                    <Col>
-                        <FormGroup>
-                            <Label htmlFor="examplePassword">Password</Label>
-                            <FormControl
-                                type="password"
-                                value={this.state.form.password}
-                                name="password"
-                                id="examplePassword"
-                                placeholder="********"
-                                onChange={e => this.handleChange(e.target.value, 'password')}
-                                />
-                        </FormGroup>
-                    </Col>
-                    </Form>
+                </Col>
+                <Col>
+                    <FormGroup>
+                        <Label htmlFor="examplePassword">Password</Label>
+                        <FormControl
+                            type="password"
+                            value={this.state.form.password}
+                            name="password"
+                            id="examplePassword"
+                            placeholder="********"
+                            onChange={e => this.handleChange(e.target.value, 'password')}
+                            />
+                    </FormGroup>
+                </Col>
+                </Form>
                 </div>  
-        {/*
-                </Modal.Body>
-                <Modal.Footer>
-        */}
-                        <Button onClick={() => { 
-                            this.props.login(this.state.form)
-                            this.handleClose()
-                            }} color="success"
-                            bsStyle="primary">Sign In</Button>
-        {/*
-                        <Button onClick={this.handleClose}>Cancel</Button>
-                        <Button>Sign Up</Button>
-                </Modal.Footer>
-            </Modal>
-        */}
+    
+                    <Button onClick={() => { 
+                         
+                        }} color="success"
+                        bsStyle="primary">Sign In</Button>
+
+                <Col className="marginTop20">
+                    You don't have an account? <a href="#">Create an Account</a>
+                </Col>
+        
         </div>
     </div>
     );

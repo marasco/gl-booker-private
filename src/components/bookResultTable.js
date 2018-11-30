@@ -9,13 +9,13 @@ class BookResultTable extends React.Component {
                 <td>10:00 AM</td>
                 <td>11:30 AM</td>
                 <td>Taylor</td>
-                <td><button className="btn-default"> BOOK </button></td>
+                <td><button bsStyle="primary"> BOOK </button></td>
             </tr>
             <tr>
                 <td>11:00 AM</td>
                 <td>12:30 AM</td>
                 <td>Thornton</td>
-                <td><button className="btn-default"> BOOK </button></td>
+                <td><button bsStyle="primary"> BOOK </button></td>
             </tr>
         </tbody>)
     }

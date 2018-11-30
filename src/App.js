@@ -10,7 +10,7 @@ class App extends React.Component {
     let users = JSON.parse(localStorage.getItem('users'))
     let pages = [
       {name:'treatments',path:'/treatment'},
-      {name:'book',path:'/book'},
+      //{name:'book',path:'/book'},
       {name: 'sign in', path: '/signin'},
       {name:'profile',path:'/myaccount'},
       
@@ -28,12 +28,9 @@ class App extends React.Component {
       }
 
     return (
-      <div className="App container">
+      <div className="App container marginBottom20">
          <Navbar>
             <Navbar.Header>
-                <Navbar.Brand>
-                    <a href="/">Home</a>
-                </Navbar.Brand>
                 {buttons()}
             </Navbar.Header>
           </Navbar>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, Row, Col } from 'react-bootstrap';
 import '../App.css';
 import Specialist from './specialist';
-import Calendar from './datapicker';
+import Calendar from './calendar';
 import request from 'superagent'
 import { API_URL } from '../App'
 
@@ -13,9 +13,18 @@ class Treatment extends Component{
             itemsSelected: [],
             treatments: [],
             page: 1,
+            step: 1,
         }
         this.loadTreatments() 
 
+    }
+
+    checkStep = (step) => {
+        console.log('step->'+this.state.step)
+        if (this.state.step == step){
+            return true;
+        }
+        return false;
     }
     loadTreatments = () => {
         try {
@@ -44,12 +53,13 @@ class Treatment extends Component{
             alert(e.message)
         }
     }
+    goToStep = (step) => {
+        this.setState({step: step})
+    }
     onClickTreatment = (arg) => {
         let treats = this.state.treatments
-        console.log('arg:'+arg)
         treats.map((item,i)=>{
-        console.log('item.id:'+item.id)
-            if (item.id===arg){
+            if (item.ID===arg){
                 item.selected = (item.selected)?false:true;
             }
         })
@@ -61,8 +71,10 @@ class Treatment extends Component{
     render(){
     return(
         <div className="container treatments">
-            <div className="section-1">
-                <h1>BOOK A SERVICE</h1>
+            <div className="centered col-xs-12">
+                <h1 className="centered section-1">BOOK A SERVICE</h1>
+            </div>
+            <div className="centered col-xs-12 col-md-8 col-md-offset-2">
                 <h3>Welcome to Georgia Louise bookings, the leading destination for  the most advanced facials in Manhattan, home to celebrity and world-acclaimed facialist, Georgia Louise, and her elite team. Its time to book your bespoke GLO</h3>
             </div>
             <Row>
@@ -112,10 +124,10 @@ class Treatment extends Component{
                 <Button bsStyle="primary" onClick={ this.loadTreatments }>Load More</Button>
                 </div>
             )}
-             <div className="col-xs-12 centered marginTop20">
+            
 
-                <Button bsStyle="primary" >Next</Button>
-            </div>
+
+            <Calendar />
         </div>
         );
     }

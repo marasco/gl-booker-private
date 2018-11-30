@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Signup from './signup';
 import LoginForm from './loginForm';
 
 export default class SignIn extends Component {
@@ -40,7 +39,6 @@ export default class SignIn extends Component {
     return (
       <div>
       <LoginForm user={this.state.loggedUser} login={this.login} logout={this.logout} />
-      <Signup submit={this.addUser} />
       </div>
     )
   }

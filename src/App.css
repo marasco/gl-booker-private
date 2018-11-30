@@ -1,10 +1,9 @@
-html,body {
+html,body,h3,div {
   font-family: 'Montserrat',sans-serif,Helvetica;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.1em;
   font-style: normal;
-  font-weight: 500;
+  font-weight: normal;
   transition: color 0.2s ease-in-out;
-  text-transform: uppercase;
 }
 .App {
   text-align: center;
@@ -49,18 +48,20 @@ html,body {
 }
 .calendar {
   width: 350px;
-  height: 265px;
-  margin-left: 35%;
-  margin-right: 100px;
+  height: 265px; 
+  margin:0 auto;
 }
 .treatments .item .title {
-    font-size: 20px;
+  font-size: 20px;
     text-transform: uppercase;
     line-height: 60px;
+    word-break: break-word;
     font-weight: bold;
+    text-overflow: ellipsis;
+    height: 60px;
 }
 .treatments .item .itemContent.active {
-  border:solid 3px #b1b1b1;
+  border:solid 3px #333;
 }
 .centered {
   text-align: center;
@@ -84,6 +85,9 @@ html,body {
   padding: 10px;
   font-weight: bold;
 }
+.no-visible {
+  display: none;
+}
 .treatments .border-bottom {
   border-bottom: solid 1px #ccc;
   margin:0px 0px;
@@ -91,6 +95,9 @@ html,body {
 }
 .marginTop20{
   margin-top:20px;
+}
+.marginBottom20{
+  margin-bottom:20px;
 }
 
 
