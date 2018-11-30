@@ -15,9 +15,9 @@ export const makeMainRoutes = () => {
     <Router history={history} component={App}>
       <div>
         <Route path="/" render={(props) => <App {...props} />} />
+        <Route exact path="/" render={(props) => <Treatment {...props} />} />
         <Route path="/signin" render={(props) => <SignIn {...props} />} />
         <Route path="/myaccount" render={(props) => <Profile {...props} />} />
-        <Route path="/treatment" render={(props) => <Treatment {...props} />} />
       </div>
     </Router>
   );

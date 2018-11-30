@@ -17,6 +17,7 @@ class LoginForm extends Component {
                 loginError:''
             }
         };   
+        this.login = this.login.bind(this)
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
     } 
@@ -30,6 +31,10 @@ class LoginForm extends Component {
 
     handleChange(value, key){
         this.setState(prev => ({form:{...prev.form,[key]:value}}))
+    }
+
+    login() {
+        this.props.login(this.state.form.email, this.state.form.password)
     }
     
   render() {
@@ -80,9 +85,8 @@ class LoginForm extends Component {
                 </Form>
                 </div>  
     
-                    <Button onClick={() => { 
-                         
-                        }} color="success"
+                    <Button onClick={ this.login }
+                        color="success"
                         bsStyle="primary">Sign In</Button>
 
                 <Col className="marginTop20">

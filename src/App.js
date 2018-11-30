@@ -9,7 +9,7 @@ class App extends React.Component {
   render() {
     let users = JSON.parse(localStorage.getItem('users'))
     let pages = [
-      {name:'treatments',path:'/treatment'},
+      {name:'treatments',path:'/'},
       //{name:'book',path:'/book'},
       {name: 'sign in', path: '/signin'},
       {name:'profile',path:'/myaccount'},

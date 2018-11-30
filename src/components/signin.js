@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
+import request from 'superagent'
+import { Redirect } from 'react-router-dom'
 import LoginForm from './loginForm';
+import { API_URL } from '../App'
 
 export default class SignIn extends Component {
 
@@ -8,7 +11,7 @@ export default class SignIn extends Component {
 
     this.state = {
       users: JSON.parse(localStorage.getItem('users')) || [],
-      loggedUser: JSON.parse(localStorage.getItem('loggedUser')) || null
+      loggedUser: localStorage.getItem('loggedUser'),
     }
 
     this.login = this.login.bind(this)
@@ -16,12 +19,30 @@ export default class SignIn extends Component {
     this.addUser = this.addUser.bind(this)
   }
 
-  login(user){
-    let foundUser = this.state.users.find(x => x.email == user.email)
-    if(foundUser && user.password === foundUser.password){
-      this.setState(prev => ({...prev, loggedUser:user}))
-      localStorage.setItem('user', user)
-    }
+  login(email, password){
+    request
+    .post(API_URL + '/account/login')
+    .send({
+      Email: email,
+      Password: password
+    })
+    .then(res => {
+      console.log(res)
+
+      if (res.body.error) {
+        throw res.body.error
+      }
+
+      localStorage.setItem('loggedUser', JSON.stringify(res.body))
+
+      this.setState(prev => ({ ...prev,
+        loggedUser: res.body.Customer,
+      }))
+    })
+
+    .catch(err => {
+      alert(err)
+    })
   }
 
   logout(){
@@ -36,6 +57,9 @@ export default class SignIn extends Component {
   }
 
   render() {
+    if (this.state.loggedUser) {
+      return (<Redirect to="myaccount" />)
+    }
     return (
       <div>
       <LoginForm user={this.state.loggedUser} login={this.login} logout={this.logout} />
