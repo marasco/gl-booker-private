@@ -4,17 +4,21 @@ import {  FormGroup, Button, Col, Label, FormControl, Form } from 'react-bootstr
 
 class RegisterForm extends Component {
     formFields = {
-        name:{ label:'Name',value:''},
-        lastname:{ label:'Last name',value:''},
-        email:{ label:'Email',value:''},
-        password:{ label:'Password',value:''},
+        FirstName:{ label:'Name',value:''},
+        LastName:{ label:'Last name',value:''},
+        Email:{ label:'Email',value:''},
+        Password:{ label:'Password',value:''},
+        CellPhone: { label: 'Phone', value: '' },
+        DateOfBirth: { label: 'Birthdate', value: '' },
     }
     state = {
         form:{
-            name:'',
-            lastname:'',
-            email:'',
-            password:'',
+            FirstName:'',
+            LastName:'',
+            Email:'',
+            Password:'',
+            CellPhone: '',
+            DateOfBirth: '',
         }
     };
     handleChange(value, key){
