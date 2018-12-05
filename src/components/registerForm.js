@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {  FormGroup, Button, Label, FormControl, Form } from 'react-bootstrap';
 
 
-class Signup extends Component {
+class RegisterForm extends Component {
     formFields = {
         name:{ label:'Name',value:''},
         lastname:{ label:'Last name',value:''},
@@ -15,12 +15,12 @@ class Signup extends Component {
             lastname:'',
             email:'',
             password:'',
-        } 
+        }
     };
     handleChange(value, key){
         this.setState(prev => ({form:{...prev.form,[key]:value}}))
     }
-    
+
     render() {
         let fields = Object.keys(this.formFields).map(x =>  <FormGroup key={x} id={"form" + x}>
             <Label>{this.formFields[x].label+ ': '}</Label>
@@ -44,4 +44,4 @@ class Signup extends Component {
         );
     }
 }
-export default Signup;
+export default RegisterForm;

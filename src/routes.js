@@ -4,7 +4,7 @@ import App from './App';
 import history from './history';
 import Profile from './components/profile';
 import Treatment from './components/treatment';
-import SignIn from './components/signin';
+import Auth from './components/auth';
 
 
 
@@ -16,7 +16,7 @@ export const makeMainRoutes = () => {
       <div>
         <Route path="/" render={(props) => <App {...props} />} />
         <Route exact path="/" render={(props) => <Treatment {...props} />} />
-        <Route path="/signin" render={(props) => <SignIn {...props} />} />
+        <Route path="/signin" render={(props) => <Auth {...props} />} />
         <Route path="/myaccount" render={(props) => <Profile {...props} />} />
       </div>
     </Router>

@@ -2,14 +2,16 @@ import React, { Component } from 'react'
 import request from 'superagent'
 import { Redirect } from 'react-router-dom'
 import LoginForm from './loginForm';
+import RegisterForm from './registerForm';
 import { API_URL } from '../App'
 
-export default class SignIn extends Component {
+export default class Auth extends Component {
 
   constructor(props) {
     super(props)
 
     this.state = {
+      showSection: 'signin',
       users: JSON.parse(localStorage.getItem('users')) || [],
       loggedUser: localStorage.getItem('loggedUser'),
     }
@@ -55,14 +57,27 @@ export default class SignIn extends Component {
     this.setState( prev => ({ ...prev, users: users }) )
     localStorage.setItem('users', JSON.stringify(users))
   }
-
+  openSignUp = () =>{
+    this.setState(prev => ({ ...prev, showSection:'signup'}))
+  }
+  openSignIn = () =>{
+    this.setState(prev => ({ ...prev, showSection:'signin'}))
+  }
   render() {
     if (this.state.loggedUser) {
       return (<Redirect to="myaccount" />)
     }
     return (
+
+
       <div>
-      <LoginForm user={this.state.loggedUser} login={this.login} logout={this.logout} />
+      {
+      (this.state.showSection==='signin')?
+      <LoginForm user={this.state.loggedUser} openSignUp={this.openSignUp} login={this.login} logout={this.logout} />
+      :
+      <RegisterForm user={this.state.loggedUser} openSignIn={this.openSignIn} login={this.login} logout={this.logout} />
+
+    }
       </div>
     )
   }

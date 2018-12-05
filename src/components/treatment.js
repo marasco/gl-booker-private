@@ -15,13 +15,13 @@ class Treatment extends Component{
             page: 1,
             step: 1,
         }
-        this.loadTreatments() 
+        this.loadTreatments()
 
     }
 
     checkStep = (step) => {
         console.log('step->'+this.state.step)
-        if (this.state.step == step){
+        if (this.state.step === step){
             return true;
         }
         return false;
@@ -39,13 +39,18 @@ class Treatment extends Component{
                 param1: 'test'
             })
             .then(res=>{
-                console.log('res',res.body)
-                this.setState({
-                    treatments: [...this.state.treatments, ...res.body.Treatments],
-                    page: res.body.Treatments.length ? this.state.page + 1 : false,
-                })
+                console.log('xhr.response:',res.body)
+                if (res.body && res.body.Treatments){
+                  this.setState({
+                      treatments: [...this.state.treatments, ...res.body.Treatments],
+                      page: res.body.Treatments.length ? this.state.page + 1 : false,
+                  })
+                }else{
+                  throw({message: 'We cannot reach list of services available.'})
+                }
             }).catch(error => {
-                console.log(error) 
+                console.log(error)
+                alert(error.message)
             });
 
         } catch (e){
@@ -62,11 +67,12 @@ class Treatment extends Component{
             if (item.ID===arg){
                 item.selected = (item.selected)?false:true;
             }
+            return item
         })
 
         this.setState({
             treatments: treats
-        })  
+        })
     }
     render(){
     return(
@@ -82,15 +88,15 @@ class Treatment extends Component{
                 let doms = []
                 let items = (this.state.treatments) ? this.state.treatments : []
 
-                let count = 0
+                //let count = 0
                 items.map((item,i)=>{
-                    count++
+                    //count++
                     let img = item.ImageURL;
                     if (!img || img.length===0){
                         img = '/sample.png';
                     }
                     doms.push(
-                        
+
                        <Col xs={12} sm={6} md={4} className="item" key={"image" + item.ID}>
                             <div className={item.selected?"itemContent active":"itemContent"}>
                                 <Row className="border-bottom">
@@ -124,7 +130,7 @@ class Treatment extends Component{
                 <Button bsStyle="primary" onClick={ this.loadTreatments }>Load More</Button>
                 </div>
             )}
-            
+
 
 
             <Calendar />
