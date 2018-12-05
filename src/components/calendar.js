@@ -1,6 +1,6 @@
 import React from 'react';
 import Calendar from 'react-calendar';
-import { Button, Row, Col } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import BookResults from './bookResults';
 
 
@@ -13,17 +13,17 @@ class Calendario extends React.Component {
         visibleClass:  'no-visible',
         bookClass: 'no-visible'
       }
-  } 
+  }
   goToStep = (step) => {
-    if (step==2)
+    if (step===2)
       this.setState({visibleClass: "visible"})
-    if (step==3)
+    if (step===3)
       this.setState({bookClass: "visible"})
   }
   onChange = date => this.setState({ date })
-    
+
   render() {
-   
+
     return (
       <div>
       <div>
@@ -41,9 +41,9 @@ class Calendario extends React.Component {
         <div className="col-xs-12 centered marginTop20">
           <Button bsStyle="primary"  onClick={() => this.goToStep(3) } >Next</Button>
        </div>
-      </div> 
-      </div> 
-      </div> 
+      </div>
+      </div>
+      </div>
       <div className={this.state.bookClass}>
       <BookResults />
       </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
 
 class BookResultTable extends React.Component {
     showResults = () => {
@@ -9,17 +9,17 @@ class BookResultTable extends React.Component {
                 <td>10:00 AM</td>
                 <td>11:30 AM</td>
                 <td>Taylor</td>
-                <td><button bsStyle="primary"> BOOK </button></td>
+                <td><Button bsStyle="primary"> BOOK </Button></td>
             </tr>
             <tr>
                 <td>11:00 AM</td>
                 <td>12:30 AM</td>
                 <td>Thornton</td>
-                <td><button bsStyle="primary"> BOOK </button></td>
+                <td><Button bsStyle="primary"> BOOK </Button></td>
             </tr>
         </tbody>)
     }
-    render() { 
+    render() {
             return (
              <div className="col-xs-10 col-sm-8 col-md-8 col-sm-offset-2 col-md-offset-2">
                  <Table>

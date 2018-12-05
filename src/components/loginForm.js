@@ -16,14 +16,15 @@ class LoginForm extends Component {
                   },
                 loginError:''
             }
-        };   
+        };
+        this.login = this.login.bind(this)
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
-    } 
+    }
     handleClose() {
         this.setState({ show: false });
     }
-    
+
     handleShow() {
         this.setState({ show: true });
     }
@@ -31,7 +32,11 @@ class LoginForm extends Component {
     handleChange(value, key){
         this.setState(prev => ({form:{...prev.form,[key]:value}}))
     }
-    
+
+    login() {
+        this.props.login(this.state.form.email, this.state.form.password)
+    }
+
   render() {
     let button = () => {
         if (!this.props.user) return (<Button bsStyle="primary" onClick={this.handleShow}>Log in</Button>)
@@ -48,7 +53,7 @@ class LoginForm extends Component {
         <div className="title"><h2>Sign In</h2></div>
 
         <div className="LoginForm">
-        
+
                 <div>
                 <Form className="form">
                 <Col>
@@ -78,20 +83,19 @@ class LoginForm extends Component {
                     </FormGroup>
                 </Col>
                 </Form>
-                </div>  
-    
-                    <Button onClick={() => { 
-                         
-                        }} color="success"
+                </div>
+
+                    <Button onClick={ this.login }
+                        color="success"
                         bsStyle="primary">Sign In</Button>
 
                 <Col className="marginTop20">
-                    You don't have an account? <a href="#">Create an Account</a>
+                    You don't have an account? <a href={null} onClick={this.props.openSignUp}>Create an Account</a>
                 </Col>
-        
+
         </div>
     </div>
     );
   }
-} 
-export default LoginForm; 
+}
+export default LoginForm;
