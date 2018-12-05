@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {  FormGroup, Button, Label, FormControl, Form } from 'react-bootstrap';
+import {  FormGroup, Button, Col, Label, FormControl, Form } from 'react-bootstrap';
 
 
 class RegisterForm extends Component {
@@ -40,6 +40,9 @@ class RegisterForm extends Component {
                 <Button bsStyle="primary" onClick={()=>this.props.submit(this.state.form)}>Register</Button>
             </Form>
         </div>
+        <Col className="marginTop20">
+            Do you have an account? <a href={null} onClick={this.props.openSignIn}>Login</a>
+        </Col>
         </div>
         );
     }

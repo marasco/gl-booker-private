@@ -50,7 +50,6 @@ class LoginForm extends Component {
     return (
 
         <div className="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
-        {button}<br />
         <div className="title"><h2>Sign In</h2></div>
 
         <div className="LoginForm">
@@ -91,7 +90,7 @@ class LoginForm extends Component {
                         bsStyle="primary">Sign In</Button>
 
                 <Col className="marginTop20">
-                    You don't have an account? <a href="#" onClick={this.props.openSignUp}>Create an Account</a>
+                    You don't have an account? <a href={null} onClick={this.props.openSignUp}>Create an Account</a>
                 </Col>
 
         </div>

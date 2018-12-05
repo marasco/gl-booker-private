@@ -5,7 +5,6 @@ import Specialist from './specialist';
 import Calendar from './calendar';
 import request from 'superagent'
 import { API_URL } from '../App'
-
 class Treatment extends Component{
     constructor(){
         super()
@@ -46,7 +45,7 @@ class Treatment extends Component{
                       page: res.body.Treatments.length ? this.state.page + 1 : false,
                   })
                 }else{
-                  throw 'We cannot reach list of services available.'
+                  throw new Error('We cannot reach list of services available.')
                 }
             }).catch(error => {
                 console.log(error)
