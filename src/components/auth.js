@@ -4,19 +4,26 @@ import { Redirect } from 'react-router-dom'
 import LoginForm from './loginForm';
 import RegisterForm from './registerForm';
 import { API_URL } from '../App'
+import { Modal, Col } from 'react-bootstrap';
+
 
 export default class Auth extends Component {
 
   constructor(props) {
     super(props)
 
+    let user = localStorage.getItem('loggedUser')
+
     this.state = {
+      title: 'Sign In',
       errors: null,
+      redirect: user ? 'myaccount' : null,
       showSection: 'signin',
       users: JSON.parse(localStorage.getItem('users')) || [],
-      loggedUser: localStorage.getItem('loggedUser'),
+      loggedUser: user,
     }
 
+    this.close = this.close.bind(this)
     this.login = this.login.bind(this)
     this.logout = this.logout.bind(this)
     this.addUser = this.addUser.bind(this)
@@ -40,6 +47,7 @@ export default class Auth extends Component {
       localStorage.setItem('loggedUser', JSON.stringify(res.body))
 
       this.setState(prev => ({ ...prev,
+        redirect: 'myaccount',
         loggedUser: res.body.Customer,
       }))
     })
@@ -82,40 +90,64 @@ export default class Auth extends Component {
     })
   }
 
+  close() {
+    this.setState(prev => ({ ...prev, redirect: '/' }))
+  }
+
   addUser(user){
     let users = [...this.state.users,user]
     this.setState( prev => ({ ...prev, users: users }) )
     localStorage.setItem('users', JSON.stringify(users))
   }
   openSignUp = () =>{
-    this.setState(prev => ({ ...prev, errors: null, showSection:'signup'}))
+    this.setState(prev => ({ ...prev,
+      title: 'Sign Up',
+      errors: null,
+      showSection:'signup'
+    }))
   }
   openSignIn = () =>{
-    this.setState(prev => ({ ...prev, errors: null, showSection:'signin'}))
+    this.setState(prev => ({ ...prev,
+      title: 'Sign In',
+      errors: null,
+      showSection:'signin'
+    }))
   }
   render() {
-    if (this.state.loggedUser) {
-      return (<Redirect to="myaccount" />)
+    if (this.state.redirect) {
+      return (<Redirect to={ this.state.redirect } />)
     }
     return (
-      <div>
+      <Modal show={ true } onHide={ this.close }>
+        <Modal.Header>
+          <Modal.Title>{ this.state.title }</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Col>
+          { this.state.errors && (
+            <ul>
+            { this.state.errors.map(error => (
+              <li key={ error }>{ JSON.stringify(error) }</li>
+            ))}
+            </ul>
+          )}
 
-      { this.state.errors && (
-        <ul>
-        { this.state.errors.map(error => (
-          <li key={ error }>{ JSON.stringify(error) }</li>
-        ))}
-        </ul>
-      )}
-
-      {
-      (this.state.showSection==='signin')?
-      <LoginForm user={this.state.loggedUser} openSignUp={this.openSignUp} login={this.login} logout={this.logout} />
-      :
-      <RegisterForm user={this.state.loggedUser} openSignIn={this.openSignIn} login={this.login} logout={this.logout} submit={this.register} />
-
-    }
-      </div>
+          {
+          (this.state.showSection==='signin')?
+          <LoginForm user={this.state.loggedUser}
+            openSignUp={this.openSignUp}
+            login={this.login}
+            logout={this.logout} />
+          :
+          <RegisterForm user={this.state.loggedUser}
+            openSignIn={this.openSignIn}
+            login={this.login}
+            logout={this.logout}
+            submit={this.register} />
+          }
+          </Col>
+        </Modal.Body>
+      </Modal>
     )
   }
 
