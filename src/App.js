@@ -28,7 +28,7 @@ class App extends React.Component {
       }
 
     return (
-      <div className="App container marginBottom20">
+      <div className="App container">
          <Navbar>
             <Navbar.Header>
                 {buttons()}
