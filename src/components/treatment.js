@@ -46,7 +46,7 @@ class Treatment extends Component{
                       page: res.body.Treatments.length ? this.state.page + 1 : false,
                   })
                 }else{
-                  throw({message: 'We cannot reach list of services available.'})
+                  throw 'We cannot reach list of services available.'
                 }
             }).catch(error => {
                 console.log(error)

@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import {Nav, NavItem, Navbar} from 'react-bootstrap';
 
-export const API_URL = process.env.API_URL;
+export const API_URL = process.env.REACT_APP_API_URL;
 
 class App extends React.Component {
 
