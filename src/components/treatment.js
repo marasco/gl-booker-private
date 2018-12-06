@@ -2,29 +2,37 @@ import React, { Component } from 'react';
 import { Button, Row, Col } from 'react-bootstrap';
 import '../App.css';
 import Specialist from './specialist';
-import Calendar from './calendar';
 import request from 'superagent'
 import { API_URL } from '../App'
 class Treatment extends Component{
-    constructor(){
-        super()
-        this.state = {
-            selected: null,
+    constructor(props){
+        super(props)
+
+        this.state = props.step.state || {
+            employee: null,
+            treatment: null,
             treatments: [],
             page: 1,
-            step: 1,
         }
-        this.loadTreatments()
 
+        if (!this.state.treatments.length) {
+            this.loadTreatments()
+        }
+
+        props.step.validator = () => {
+            if (!this.state.treatment) {
+                throw 'You must select a treatment.'
+            }
+            if (!this.state.employee) {
+                throw 'You must select a terapist.'
+            }
+        }
     }
 
-    checkStep = (step) => {
-        console.log('step->'+this.state.step)
-        if (this.state.step === step){
-            return true;
-        }
-        return false;
+    componentWillUnmount = () => {
+        this.props.save(this.state)
     }
+
     loadTreatments = () => {
         try {
             request
@@ -57,12 +65,11 @@ class Treatment extends Component{
             alert(e.message)
         }
     }
-    goToStep = (step) => {
-        this.setState({step: step})
+
+    onClickTreatment = treatment => {
+        this.setState(prev => ({ ...prev, treatment }))
     }
-    onClickTreatment = selected => {
-        this.setState(prev => ({ ...prev, selected }))
-    }
+
     render(){
     return(
         <div className="container treatments">
@@ -87,7 +94,7 @@ class Treatment extends Component{
                     doms.push(
 
                        <Col xs={12} sm={6} md={4} className="item" key={"image" + item.ID}>
-                            <div className={this.state.selected === item?"itemContent active":"itemContent"}>
+                            <div className={this.state.treatment === item?"itemContent active":"itemContent"}>
                                 <Row className="border-bottom">
                                     <Col xs={12} className="image" style={{backgroundImage: "url("+img+")"}} alt={item.ID}></Col>
                                 </Row>
@@ -120,9 +127,6 @@ class Treatment extends Component{
                 </div>
             )}
 
-
-
-            <Calendar />
         </div>
         );
     }
