@@ -43,7 +43,7 @@ class BookResults extends Component{
                     </div>
                     </div>
                     <BookResultTable></BookResultTable>
-                    <div className="centered">
+                    <div className="col-xs-12 centered">
                     <h3>Congratulations we’ll see you soon!</h3>
                     <h4> #GLOtoGO </h4>
                     </div>

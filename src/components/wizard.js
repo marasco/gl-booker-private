@@ -73,10 +73,12 @@ export default class Wizard extends Component {
     let component = React.createElement(step.component, { step, save, validator })
 
     return (
+      <div>
       <div className="centered col-xs-12">
-
       { component }
+      </div>
 
+      <div className="centered col-xs-12">
       {this.hasPrev() && (
         <Button bsStyle="primary" onClick={ this.prev }>PREV</Button>
       )}
@@ -84,7 +86,7 @@ export default class Wizard extends Component {
       {this.hasNext() && (
         <Button bsStyle="primary" onClick={ this.next }>NEXT</Button>
       )}
-
+      </div>
       </div>
     )
   }

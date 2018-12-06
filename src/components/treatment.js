@@ -9,7 +9,6 @@ class Treatment extends Component{
         super(props)
 
         this.state = props.step.state || {
-            employee: null,
             treatment: null,
             treatments: [],
             page: 1,
@@ -22,9 +21,6 @@ class Treatment extends Component{
         props.step.validator = () => {
             if (!this.state.treatment) {
                 throw 'You must select a treatment.'
-            }
-            if (!this.state.employee) {
-                throw 'You must select a terapist.'
             }
         }
     }
