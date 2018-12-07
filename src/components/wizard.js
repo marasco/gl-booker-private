@@ -100,11 +100,11 @@ export default class Wizard extends Component {
 
       <div className="centered col-xs-12">
       {this.hasPrev() && (
-        <Button bsStyle="primary" onClick={ this.prev }>PREV</Button>
+        <Button bsStyle="primary" className="marginTop20" onClick={ this.prev }>PREV</Button>
       )}
 
       {this.hasNext() && (
-        <Button bsStyle="primary" onClick={ this.next }>NEXT</Button>
+        <Button bsStyle="primary" className="marginTop20 marginBottom20" onClick={ this.next }>NEXT</Button>
       )}
       </div>
       </div>

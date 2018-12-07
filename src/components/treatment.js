@@ -24,7 +24,7 @@ class Treatment extends Component{
                 throw 'You must select a treatment.'
             }
             if (!this.state.specialist) {
-                throw 'You must select a specialist.'
+            //    throw 'You must select a specialist.'
             }
         }
     }
