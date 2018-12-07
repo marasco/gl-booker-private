@@ -3,9 +3,13 @@ import { Button } from 'react-bootstrap'
 import Treatment from './treatment'
 import Calendar from './calendar'
 import BookResults from './bookResults'
+export const DEBUG_MODE = process.env.REACT_APP_DEBUG_MODE;
 
 export default class Wizard extends Component {
-
+  constructor(props){
+      super(props)
+      console.log(DEBUG_MODE)
+  }
   steps = [{
     component: Treatment,
     validator: null,
@@ -91,8 +95,12 @@ export default class Wizard extends Component {
 
     return (
       <div>
+      {
+        (DEBUG_MODE===1
+        )?
+        <pre>{ JSON.stringify(this.state.data, null, 2) }</pre>:<div></div>
+      }
 
-      <pre>{ JSON.stringify(this.state.data, null, 2) }</pre>
 
       <div className="centered col-xs-12">
       { component }
@@ -100,11 +108,11 @@ export default class Wizard extends Component {
 
       <div className="centered col-xs-12">
       {this.hasPrev() && (
-        <Button bsStyle="primary" className="marginTop20" onClick={ this.prev }>PREV</Button>
+        <Button bsStyle="primary" className="marginTop20 marginBottom20" onClick={ this.prev }>PREV</Button>
       )}
 
       {this.hasNext() && (
-        <Button bsStyle="primary" className="marginTop20 marginBottom20" onClick={ this.next }>NEXT</Button>
+        <Button bsStyle="primary" className="marginTop20 marginBottom20 marginLeft20" onClick={ this.next }>NEXT</Button>
       )}
       </div>
       </div>

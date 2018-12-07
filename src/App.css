@@ -102,7 +102,15 @@ a{
 .marginBottom20{
   margin-bottom:20px;
 }
-
+.marginLeft20{
+  margin-left:20px;
+}
+.react-calendar__navigation{
+  background: #ecdce9;
+}
+.react-calendar__navigation button:enabled:hover, .react-calendar__navigation button:enabled:focus{
+  background:#dcc5d7;
+}
 
 @media only screen and (max-width: 348px) and (max-height: 812px) {
   .calendar .fix {
