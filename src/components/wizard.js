@@ -22,6 +22,10 @@ export default class Wizard extends Component {
 
   state = {
     step: 0,
+    data: {
+      treatment: null,  // Pushed by <Treatment>
+      specialist: null, // Pushed by <Treatment>
+    },
   }
 
   hasNext = () => {
@@ -43,7 +47,13 @@ export default class Wizard extends Component {
   }
 
   save = (step, state) => {
+    // Save step component state.
     this.steps[step].state = state
+  }
+
+  push = (state) => {
+    // Let steps components push data to "data" state attribute.
+    this.setState(prev => ({ ...prev, data: { ...this.state.data, ...state } }))
   }
 
   validator = (step, fn) => {
@@ -68,12 +78,22 @@ export default class Wizard extends Component {
 
   render() {
     let step = this.steps[this.state.step]
-    let save = this.save.bind(this, this.state.step)
-    let validator = this.validator.bind(this, this.state.step)
-    let component = React.createElement(step.component, { step, save, validator })
+    let component = React.createElement(step.component, {
+      // Step specific-data including saved state.
+      step,
+      // Method to save sub-component state.
+      save: this.save.bind(this, this.state.step),
+      // Push sub-component data shared between sub-components.
+      push: this.push,
+      // Let sub-component provide a validation callback.
+      validator: this.validator.bind(this, this.state.step),
+    })
 
     return (
       <div>
+
+      <pre>{ JSON.stringify(this.state.data, null, 2) }</pre>
+
       <div className="centered col-xs-12">
       { component }
       </div>

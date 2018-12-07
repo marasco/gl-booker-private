@@ -10,6 +10,7 @@ class Treatment extends Component{
 
         this.state = props.step.state || {
             treatment: null,
+            specialist: null,
             treatments: [],
             page: 1,
         }
@@ -21,6 +22,9 @@ class Treatment extends Component{
         props.step.validator = () => {
             if (!this.state.treatment) {
                 throw 'You must select a treatment.'
+            }
+            if (!this.state.specialist) {
+                throw 'You must select a specialist.'
             }
         }
     }
@@ -63,7 +67,13 @@ class Treatment extends Component{
     }
 
     onClickTreatment = treatment => {
-        this.setState(prev => ({ ...prev, treatment }))
+        this.props.push({ treatment, specialist: null })
+        this.setState({treatment, specialist: null })
+    }
+
+    onSpecialistChange = specialist => {
+        this.props.push({ specialist })
+        this.setState({ specialist })
     }
 
     render(){
@@ -104,7 +114,12 @@ class Treatment extends Component{
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col xs={12} sm={12}><Specialist treatmentId={item.ID}></Specialist></Col>
+                                    <Col xs={12} sm={12}>
+                                        <Specialist treatmentId={item.ID}
+                                        selected={ this.state.treatment === item }
+                                        specialist={ this.state.specialist }
+                                        onSpecialistChange={ this.onSpecialistChange } />
+                                    </Col>
                                 </Row>
                             </div>
                         </Col>

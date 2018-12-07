@@ -36,11 +36,17 @@ class Specialist extends React.Component {
     super(props);
 
     this.state = {
-      selectedSpecialist: 0,
       specialists: []
     };
+  }
 
-    this.loadSpeacialists();
+  componentWillUpdate = (nextProps, nextState) => {
+    if (nextProps.selected && !nextState.specialists.length) {
+      this.loadSpeacialists();
+    }
+    if (!nextProps.selected) {
+      nextState.selectedSpecialist = 0
+    }
   }
 
   loadSpeacialists() {
@@ -52,44 +58,25 @@ class Specialist extends React.Component {
         treatmentId: this.props.treatmentId,
     })
     .then(res=>{
-        console.log('res',res.body)
         this.setState({
-          specialists: res.body.Results.map(record => ({
-            id: record.ID,
-            name: [record.LastName, record.FirstName].join(', '),
+          specialists: res.body.Results.map(record => ({ ...record,
+            value: record.ID,
+            label: [record.LastName, record.FirstName].join(', '),
           }))
         })
     }).catch(error => {
         console.log(error)
     });
   }
-  
+
   render() {
     return (
-
       <Select
         styles={customStyles}
-        value={(()=>{
-          return this.state.selectedSpecialist
-        })()}
-        onChange={(obj)=>{
-            this.setState({selectedSpecialist:obj})
-        }}
-        
-        options={(()=>{
-            let options = []
-
-            this.state.specialists.map((obj)=>{
-                options.push({
-                  value:obj.id,
-                  label:obj.name
-                })
-                return obj;
-            })
-            return options;
-           
-
-        })()}
+        isDisabled={!this.props.selected}
+        value={ this.props.selected ? this.props.specialist : null }
+        onChange={ this.props.onSpecialistChange }
+        options={ this.state.specialists }
      />
 
     );
