@@ -29,45 +29,11 @@ const customStyles = {
 }
 class Specialist extends React.Component {
 
-
-
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      specialists: []
-    };
-  }
-
-  componentWillUpdate = (nextProps, nextState) => {
-    if (nextProps.selected && !nextState.specialists.length) {
-      this.loadSpeacialists();
-    }
-    if (!nextProps.selected) {
-      nextState.selectedSpecialist = 0
-    }
-  }
-
-  loadSpeacialists() {
-    request
-    .get(API_URL + '/employees')
-    .set('Authorization', 'Bearer xxxx')
-    .query({
-        pageSize: 100,
-        treatmentId: this.props.treatmentId,
-    })
-    .then(res=>{
-        this.setState({
-          specialists: res.body.Results.map(record => ({ ...record,
-            value: record.ID,
-            label: [record.LastName, record.FirstName].join(', '),
-          }))
-        })
-    }).catch(error => {
-        console.log(error)
-    });
-  }
+  // componentWillUpdate = (nextProps, nextState) => {
+  //   if (!nextProps.selected) {
+  //     nextState.selectedSpecialist = 0
+  //   }
+  // }
 
   render() {
     return (
@@ -76,7 +42,7 @@ class Specialist extends React.Component {
         isDisabled={!this.props.selected}
         value={ this.props.selected ? this.props.specialist : null }
         onChange={ this.props.onSpecialistChange }
-        options={ this.state.specialists }
+        options={ this.props.specialists }
      />
 
     );

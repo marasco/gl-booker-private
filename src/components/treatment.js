@@ -12,6 +12,7 @@ class Treatment extends Component{
             treatment: null,
             specialist: null,
             treatments: [],
+            specialists: [],
             page: 1,
         }
 
@@ -66,13 +67,34 @@ class Treatment extends Component{
         }
     }
 
+    loadSpeacialists = treatmentId => {
+        request
+        .get(API_URL + '/employees')
+        .set('Authorization', 'Bearer xxxx')
+        .query({
+        pageSize: 100,
+        treatmentId,
+        })
+        .then(res=>{
+            this.setState({
+                specialists: res.body.Results.map(record => ({ ...record,
+                value: record.ID,
+                label: [record.LastName, record.FirstName].join(', '),
+                }))
+            })
+        }).catch(error => {
+            console.log(error)
+        });
+    }
+
     onClickTreatment = treatment => {
-        this.props.push({ treatment, specialist: null })
-        this.setState({treatment, specialist: null })
+        this.props.push({ treatment, specialist: null, date: null })
+        this.setState({treatment, specialist: null, specialists: [] })
+        this.loadSpeacialists(treatment.ID)
     }
 
     onSpecialistChange = specialist => {
-        this.props.push({ specialist })
+        this.props.push({ specialist, date: null })
         this.setState({ specialist })
     }
 
@@ -118,6 +140,7 @@ class Treatment extends Component{
                                         <Specialist treatmentId={item.ID}
                                         selected={ this.state.treatment === item }
                                         specialist={ this.state.specialist }
+                                        specialists={ this.state.specialists }
                                         onSpecialistChange={ this.onSpecialistChange } />
                                     </Col>
                                 </Row>

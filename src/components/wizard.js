@@ -23,6 +23,7 @@ export default class Wizard extends Component {
   state = {
     step: 0,
     data: {
+      date: null,       // Pushed by <Calendario>
       treatment: null,  // Pushed by <Treatment>
       specialist: null, // Pushed by <Treatment>
     },
@@ -81,6 +82,8 @@ export default class Wizard extends Component {
     let component = React.createElement(step.component, {
       // Step specific-data including saved state.
       step,
+      // Pass shared data between sub-components.
+      data: this.state.data,
       // Method to save sub-component state.
       save: this.save.bind(this, this.state.step),
       // Push sub-component data shared between sub-components.
