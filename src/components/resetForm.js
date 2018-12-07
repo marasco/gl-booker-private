@@ -3,21 +3,21 @@ import '../App.css';
 import {  FormGroup, Button, Col, Label, FormControl, Modal, Form } from 'react-bootstrap';
 
 
-class LoginForm extends Component {
+class ResetForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
             show: false,
             form: {
+                firstname: '',
                 email: '',
-                password: '',
                 validate: {
                     emailState: '',
                   },
                 loginError:''
             }
         };
-        this.login = this.login.bind(this)
+        this.submitForgotPassword = this.submitForgotPassword.bind(this)
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
     }
@@ -33,21 +33,13 @@ class LoginForm extends Component {
         this.setState(prev => ({form:{...prev.form,[key]:value}}))
     }
 
-    login() {
-        this.props.login(this.state.form.email, this.state.form.password)
+    submitForgotPassword() {
+        this.props.submitForgotPassword(this.state.form)
     }
   render() {
-    let button = () => {
-        if (!this.props.user) return (<Button bsStyle="primary" onClick={this.handleShow}>Log in</Button>)
-        return (
-            <div>
-                <span>{this.props.user.email}</span>
-                <Button bsStyle="primary" onClick={this.props.logout}>Log out</Button>
-            </div>
-            )
-    }
+
     return (
-        <div className="LoginForm">
+        <div className="ResetForm">
 
                 <div>
                 <Form className="form">
@@ -66,33 +58,26 @@ class LoginForm extends Component {
                 </Col>
                 <Col>
                     <FormGroup>
-                        <Label htmlFor="examplePassword">Password</Label>
-                        <FormControl
-                            type="password"
-                            value={this.state.form.password}
-                            name="password"
-                            id="examplePassword"
-                            placeholder="********"
-                            onChange={e => this.handleChange(e.target.value, 'password')}
+                            <Label>Your First Name</Label>
+                            <FormControl
+                                type="text"
+                                value={this.state.form.firstname}
+                                name="firstname"
+                                id="firstname"
+                                placeholder="Your first name"
+                                onChange={e => { this.handleChange(e.target.value, 'firstname')}}
                             />
-                    </FormGroup>
+                        </FormGroup>
                 </Col>
                 </Form>
                 </div>
 
-                    <Button onClick={ this.login }
+                    <Button onClick={ this.submitForgotPassword }
                         color="success"
-                        bsStyle="primary">Sign In</Button>
-
-                <Col className="marginTop20">
-                    <a href={null} onClick={this.props.openForgotPassword}>Forgot my Password</a>
-                </Col>
-                <Col className="marginTop20">
-                    You don't have an account? <a href={null} onClick={this.props.openSignUp}>Create an Account</a>
-                </Col>
+                        bsStyle="primary">Submit</Button>
 
         </div>
     );
   }
 }
-export default LoginForm;
+export default ResetForm;

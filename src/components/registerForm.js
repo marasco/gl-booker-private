@@ -31,7 +31,7 @@ class RegisterForm extends Component {
             <FormControl
                 type="text"
                 value={this.state.form[x]}
-                placeholder={"Enter your " + x}
+                placeholder={(x==="DateOfBirth")?"Enter your " + x+" (mm/dd/yyyy)":"Enter your " + x}
                 onChange={e => this.handleChange(e.target.value,x)}
             />
             </FormGroup>)

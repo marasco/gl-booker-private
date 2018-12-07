@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import request from 'superagent'
 import { Redirect } from 'react-router-dom'
 import LoginForm from './loginForm';
+import ResetForm from './resetForm';
 import RegisterForm from './registerForm';
 import { API_URL } from '../App'
 import { Modal, Col } from 'react-bootstrap';
@@ -24,6 +25,7 @@ export default class Auth extends Component {
     }
 
     this.close = this.close.bind(this)
+    this.submitForgotPassword = this.submitForgotPassword.bind(this)
     this.login = this.login.bind(this)
     this.logout = this.logout.bind(this)
     this.addUser = this.addUser.bind(this)
@@ -61,8 +63,73 @@ export default class Auth extends Component {
     this.setState(prev => ({ ...prev, loggedUser:null}))
     localStorage.removeItem('loggedUser')
   }
+  submitForgotPassword(form){
+    request
+    .post(API_URL + '/account/forgot-password')
+    .send({Email: form.email, Firstname: form.firstname})
+    .then(res => {
+      console.log(res)
+
+      if (res.body.error) {
+        throw new [res.body.error]
+      }
+
+      if (res.body.ArgumentErrors) {
+
+        throw res.body.ArgumentErrors.map(error => error.ErrorMessage)
+      }
+      if (typeof res.body !== 'undefined' &&
+        typeof res.body.ErrorMessage === 'string' && res.body.ErrorMessage.length > 0){
+          alert(res.body.ErrorMessage)
+      }else{
+          alert('Check your email to reset your password');
+          this.setState(prev => ({ ...prev, errors: null }))
+          this.openSignIn()
+      }
+
+    })
+
+    .catch(errors => {
+      if (errors.status) {
+        // Handle non-200 gracefully.
+        errors = errors.response.body.errors
+      }
+
+      this.setState(prev => ({ ...prev, errors }))
+    })
+  }
+  // format from M/D/YYYY to YYYYMMDD
+
+  formatDate(userDate) {
+   // split date string at '/'
+   var dateArr = userDate.split('/');
+   if (dateArr.length!==3){
+     return userDate;
+   }
+   //test results of split
+   console.log(dateArr[0]);
+   console.log(dateArr[1]);
+   console.log(dateArr[2]);
+
+   // check for single number dar or month
+   // prepend '0' to single number dar or month
+   if(dateArr[0].length == 1){
+     dateArr[0] = '0' + dateArr[0];
+   } else if (dateArr[1].length == 1){
+     dateArr[1] = '0' + dateArr[1];
+   }
+
+   // concatenate new values into one string
+   userDate = dateArr[2] +'-'+ dateArr[0] +'-'+ dateArr[1];
+   // test new string value
+   console.log(userDate);
+
+   // return value
+   return userDate;
+  }
 
   register(form) {
+    form.DateOfBirth = this.formatDate(form.DateOfBirth)
     request
     .post(API_URL + '/account')
     .send(form)
@@ -113,6 +180,14 @@ export default class Auth extends Component {
       showSection:'signin'
     }))
   }
+  openForgotPassword = () =>{
+    this.setState(prev => ({ ...prev,
+      title: 'Forgot Password',
+      errors: null,
+      showSection:'forgotpassword'
+    }))
+  }
+
   render() {
     if (this.state.redirect) {
       return (<Redirect to={ this.state.redirect } />)
@@ -135,15 +210,28 @@ export default class Auth extends Component {
           {
           (this.state.showSection==='signin')?
           <LoginForm user={this.state.loggedUser}
+            openForgotPassword={this.openForgotPassword}
             openSignUp={this.openSignUp}
             login={this.login}
             logout={this.logout} />
-          :
+          :<div></div>
+        }
+        {
+          (this.state.showSection==='signup')?
           <RegisterForm user={this.state.loggedUser}
             openSignIn={this.openSignIn}
             login={this.login}
             logout={this.logout}
             submit={this.register} />
+            :<div></div>
+        }
+        {
+            (this.state.showSection==='forgotpassword')?
+            <ResetForm user={this.state.loggedUser}
+              submitForgotPassword={this.submitForgotPassword}
+             />
+            :<div></div>
+
           }
           </Col>
         </Modal.Body>

@@ -5,6 +5,9 @@ html,body,h3,div {
   font-weight: normal;
   transition: color 0.2s ease-in-out;
 }
+a{
+  cursor:pointer
+}
 .App {
   text-align: center;
 }
@@ -48,7 +51,7 @@ html,body,h3,div {
 }
 .calendar {
   width: 350px;
-  height: 265px; 
+  height: 265px;
   margin:0 auto;
 }
 .treatments .item .title {
@@ -91,7 +94,7 @@ html,body,h3,div {
 .treatments .border-bottom {
   border-bottom: solid 1px #ccc;
   margin:0px 0px;
-   
+
 }
 .marginTop20{
   margin-top:20px;
