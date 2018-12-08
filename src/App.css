@@ -105,6 +105,9 @@ a{
 .marginLeft20{
   margin-left:20px;
 }
+.react-calendar {
+  margin: 0 auto;
+}
 .react-calendar__navigation{
   background: #ecdce9;
 }
