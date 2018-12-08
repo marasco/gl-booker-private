@@ -1,7 +1,6 @@
 import React from 'react';
 import Calendar from 'react-calendar';
 import { Button } from 'react-bootstrap';
-import BookResults from './bookResults';
 
 
 
@@ -25,28 +24,12 @@ class Calendario extends React.Component {
   render() {
 
     return (
-      <div>
-      <div>
       <div className="col-xs-12 centered marginTop20">
-
-          <Button bsStyle="primary"  onClick={() => this.goToStep(2) } >Next</Button>
-      </div>
-      <div className="row col-xs-12 marginTop20">
-      <div className={"calendar " + this.state.visibleClass}>
         <Calendar className="fix"
           onChange={this.onChange}
           value={this.state.date}
           tileDisabled={({activeStartDate, date, view }) => date.getDate() % 2}
         />
-        <div className="col-xs-12 centered marginTop20">
-          <Button bsStyle="primary"  onClick={() => this.goToStep(3) } >Next</Button>
-       </div>
-      </div>
-      </div>
-      </div>
-      <div className={this.state.bookClass}>
-      <BookResults />
-      </div>
       </div>
     );
   }

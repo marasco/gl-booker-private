@@ -2,29 +2,37 @@ import React, { Component } from 'react';
 import { Button, Row, Col } from 'react-bootstrap';
 import '../App.css';
 import Specialist from './specialist';
-import Calendar from './calendar';
 import request from 'superagent'
 import { API_URL } from '../App'
 class Treatment extends Component{
-    constructor(){
-        super()
-        this.state = {
-            itemsSelected: [],
+    constructor(props){
+        super(props)
+
+        this.state = props.step.state || {
+            treatment: null,
+            specialist: null,
             treatments: [],
             page: 1,
-            step: 1,
         }
-        this.loadTreatments()
 
+        if (!this.state.treatments.length) {
+            this.loadTreatments()
+        }
+
+        props.step.validator = () => {
+            if (!this.state.treatment) {
+                throw 'You must select a treatment.'
+            }
+            if (!this.state.specialist) {
+            //    throw 'You must select a specialist.'
+            }
+        }
     }
 
-    checkStep = (step) => {
-        console.log('step->'+this.state.step)
-        if (this.state.step === step){
-            return true;
-        }
-        return false;
+    componentWillUnmount = () => {
+        this.props.save(this.state)
     }
+
     loadTreatments = () => {
         try {
             request
@@ -57,22 +65,17 @@ class Treatment extends Component{
             alert(e.message)
         }
     }
-    goToStep = (step) => {
-        this.setState({step: step})
-    }
-    onClickTreatment = (arg) => {
-        let treats = this.state.treatments
-        treats.map((item,i)=>{
-            if (item.ID===arg){
-                item.selected = (item.selected)?false:true;
-            }
-            return item
-        })
 
-        this.setState({
-            treatments: treats
-        })
+    onClickTreatment = treatment => {
+        this.props.push({ treatment, specialist: null })
+        this.setState({treatment, specialist: null })
     }
+
+    onSpecialistChange = specialist => {
+        this.props.push({ specialist })
+        this.setState({ specialist })
+    }
+
     render(){
     return(
         <div className="container treatments">
@@ -97,7 +100,7 @@ class Treatment extends Component{
                     doms.push(
 
                        <Col xs={12} sm={6} md={4} className="item" key={"image" + item.ID}>
-                            <div className={item.selected?"itemContent active":"itemContent"}>
+                            <div className={this.state.treatment === item?"itemContent active":"itemContent"}>
                                 <Row className="border-bottom">
                                     <Col xs={12} className="image" style={{backgroundImage: "url("+img+")"}} alt={item.ID}></Col>
                                 </Row>
@@ -107,11 +110,16 @@ class Treatment extends Component{
                                 <Row className="border-bottom">
                                     <Col xs={12} className="padding-0">
                                     <Col xs={12} sm={8} className="padding-0"><div className="duration">{item.TreatmentDuration} MIN - {item.Price.CurrencyCode} {item.Price.Amount}</div></Col>
-                                    <Col xs={12} sm={4} className="padding-0"><div className="selectBtn" onClick={() => this.onClickTreatment(item.ID) }>SELECT</div></Col>
+                                    <Col xs={12} sm={4} className="padding-0"><div className="selectBtn" onClick={() => this.onClickTreatment(item) }>SELECT</div></Col>
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col xs={12} sm={12}><Specialist treatmentId={item.ID}></Specialist></Col>
+                                    <Col xs={12} sm={12}>
+                                        <Specialist treatmentId={item.ID}
+                                        selected={ this.state.treatment === item }
+                                        specialist={ this.state.specialist }
+                                        onSpecialistChange={ this.onSpecialistChange } />
+                                    </Col>
                                 </Row>
                             </div>
                         </Col>
@@ -130,9 +138,6 @@ class Treatment extends Component{
                 </div>
             )}
 
-
-
-            <Calendar />
         </div>
         );
     }

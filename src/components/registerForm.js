@@ -4,17 +4,21 @@ import {  FormGroup, Button, Col, Label, FormControl, Form } from 'react-bootstr
 
 class RegisterForm extends Component {
     formFields = {
-        name:{ label:'Name',value:''},
-        lastname:{ label:'Last name',value:''},
-        email:{ label:'Email',value:''},
-        password:{ label:'Password',value:''},
+        FirstName:{ label:'Name',value:''},
+        LastName:{ label:'Last name',value:''},
+        Email:{ label:'Email',value:''},
+        Password:{ label:'Password',value:''},
+        CellPhone: { label: 'Phone', value: '' },
+        DateOfBirth: { label: 'Birthdate', value: '' },
     }
     state = {
         form:{
-            name:'',
-            lastname:'',
-            email:'',
-            password:'',
+            FirstName:'',
+            LastName:'',
+            Email:'',
+            Password:'',
+            CellPhone: '',
+            DateOfBirth: '',
         }
     };
     handleChange(value, key){
@@ -27,13 +31,12 @@ class RegisterForm extends Component {
             <FormControl
                 type="text"
                 value={this.state.form[x]}
-                placeholder={"Enter your " + x}
+                placeholder={(x==="DateOfBirth")?"Enter your " + x+" (mm/dd/yyyy)":"Enter your " + x}
                 onChange={e => this.handleChange(e.target.value,x)}
             />
             </FormGroup>)
     return (
-        <div className="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
-        <div className="title"><h2>Sign Up</h2></div>
+        <div>
         <div className="UserCreation">
             <Form className="whitebackground">
                 {fields}
