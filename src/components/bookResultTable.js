@@ -21,7 +21,7 @@ class BookResultTable extends React.Component {
     }
     render() {
             return (
-             <div className="col-xs-10 col-sm-8 col-md-8 col-sm-offset-2 col-md-offset-2">
+             <div className="col-xs-10 col-sm-8 col-md-8 col-sm-offset-2 col-md-offset-2 marginTop20">
                  <Table>
                         <thead>
                             <tr>

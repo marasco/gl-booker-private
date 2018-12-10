@@ -18,10 +18,6 @@ export default class Wizard extends Component {
     component: Calendar,
     validator: null,
     state: null,
-  },{
-    component: BookResults,
-    validator: null,
-    state: null,
   }]
 
   state = {

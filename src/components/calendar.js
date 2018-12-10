@@ -3,6 +3,7 @@ import request from 'superagent'
 import * as moment from 'moment'
 import Calendar from 'react-calendar';
 import { API_URL } from '../App'
+import BookResultTable from './bookResultTable';
 
 export default class Calendario extends React.Component {
 
@@ -73,7 +74,11 @@ export default class Calendario extends React.Component {
           value={this.state.date}
           tileDisabled={ this.tileDisabledCallback }
         />
-      </div>:
+          {
+            (this.state.date)? <BookResultTable/>:<span></span>
+          }
+      </div>
+      :
       <div className="col-xs-12 centered marginTop20">
         Loading availability...
       </div>
