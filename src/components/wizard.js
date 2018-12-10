@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Button } from 'react-bootstrap'
 import Treatment from './treatment'
 import Calendar from './calendar'
-import BookResults from './bookResults'
 export const DEBUG_MODE = process.env.REACT_APP_DEBUG_MODE;
 
 export default class Wizard extends Component {
@@ -99,7 +98,6 @@ export default class Wizard extends Component {
         )?
         <pre>{ JSON.stringify(this.state.data, null, 2) }</pre>:<div></div>
       }
-
 
       <div className="centered col-xs-12">
       { component }
