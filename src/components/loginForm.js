@@ -69,16 +69,17 @@ class LoginForm extends Component {
                     </FormGroup>
                 </Col>
                 </Form>
+
+                <Col className="marginTop20">
+                    <a href={null} onClick={this.props.openForgotPassword}>Forgot my Password</a>
+                </Col>
                 </div>
                 <div className="centered marginTop20">
                     <Button onClick={ this.login }
                         className="selectBtnModal">Sign In</Button>
                 </div>
-                <Col className="marginTop20">
-                    <a href={null} onClick={this.props.openForgotPassword}>Forgot my Password</a>
-                </Col>
-                <Col className="marginTop20">
-                    You don't have an account? <a href={null} onClick={this.props.openSignUp}>Create an Account</a>
+                <Col className="centered marginTop20">
+                    <a href={null} onClick={this.props.openSignUp}>Create an Account</a>
                 </Col>
 
         </div>

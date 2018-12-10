@@ -47,7 +47,7 @@ class RegisterForm extends Component {
                 </div>
             </Form>
         </div>
-        <Col className="marginTop20">
+        <Col className="centered marginTop20">
             Do you have an account? <a href={null} onClick={this.props.openSignIn}>Login</a>
         </Col>
         </div>
