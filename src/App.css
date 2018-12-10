@@ -5,8 +5,17 @@ html,body,h3,div {
   font-weight: normal;
   transition: color 0.2s ease-in-out;
 }
+a:hover{
+  border-bottom: solid 1px black;
+  text-decoration: none;
+}
 a{
-  cursor:pointer
+  cursor:pointer;
+  color: black;
+  font-weight: bold;
+  font-size: 11px;
+  line-height: 20px;
+  text-transform: uppercase;
 }
 .App {
   text-align: center;
@@ -88,6 +97,19 @@ a{
   padding: 10px;
   font-weight: bold;
 }
+.selectBtnModal {
+  background: #fbf4ef;
+      cursor: pointer;
+      text-align: center;
+      line-height: 20px;
+      padding: 10px 40px;
+      border-radius: 0px;
+      margin: 0 auto;
+      border: solid 1px;
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: 11px;
+}
 .no-visible {
   display: none;
 }
@@ -126,4 +148,49 @@ a{
   to {
     transform: rotate(360deg);
   }
+}
+
+/* modals */
+
+
+.modal-content{
+  border-radius:0px;
+}
+.modal-header{
+  padding:24px;
+  text-align: center;
+  text-transform: uppercase;
+  font-style: italic;
+}
+.modal-body {
+  background: #ecdce9;
+  padding: 15px 30px;
+}
+.form-control {
+  border-radius: 0px;
+  outline:none;
+  height: 39px;
+  border:solid 1px #333;
+  padding: 9px 12px;
+}
+.form-control:focus{
+  border:solid 1px #333;
+  outline:none;
+  box-shadow: none;
+}
+.btn-default:focus, .btn-default:hover{
+  background-color:#fbf4ef;
+
+}
+.LoginForm{
+  margin: 10px 30px;
+}
+.label-default {
+  background-color: transparent;
+    color: black;
+    padding: 8px 0px;
+    margin: 4px 0px;
+    display: block;
+    text-align: left;
+    text-transform: uppercase;
 }

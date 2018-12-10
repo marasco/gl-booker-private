@@ -71,11 +71,12 @@ class ResetForm extends Component {
                 </Col>
                 </Form>
                 </div>
+                <div className="centered marginTop20">
 
                     <Button onClick={ this.submitForgotPassword }
-                        color="success"
-                        bsStyle="primary">Submit</Button>
+                      className="selectBtnModal" >Submit</Button>
 
+        </div>
         </div>
     );
   }

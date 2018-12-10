@@ -39,8 +39,8 @@ export default class Calendario extends React.Component {
       }
       catch (error) {
         console.error(error)
-        throw new Error('Error loading calendar')
         this.setState({loading:false})
+        throw new Error('Error loading calendar');
       }
     })
     .catch(e => {

@@ -40,7 +40,11 @@ class RegisterForm extends Component {
         <div className="UserCreation">
             <Form className="whitebackground">
                 {fields}
-                <Button bsStyle="primary" onClick={()=>this.props.submit(this.state.form)}>Register</Button>
+                <div className="centered marginTop20">
+                <Button
+                onClick={()=>this.props.submit(this.state.form)}
+                className="selectBtnModal" >Register</Button>
+                </div>
             </Form>
         </div>
         <Col className="marginTop20">

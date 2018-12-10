@@ -70,11 +70,10 @@ class LoginForm extends Component {
                 </Col>
                 </Form>
                 </div>
-
+                <div className="centered marginTop20">
                     <Button onClick={ this.login }
-                        color="success"
-                        bsStyle="primary">Sign In</Button>
-
+                        className="selectBtnModal">Sign In</Button>
+                </div>
                 <Col className="marginTop20">
                     <a href={null} onClick={this.props.openForgotPassword}>Forgot my Password</a>
                 </Col>

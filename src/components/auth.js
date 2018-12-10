@@ -43,7 +43,7 @@ export default class Auth extends Component {
       console.log(res)
 
       if (res.body.error) {
-        throw res.body.error
+        throw new Error(res.body.error)
       }
 
       localStorage.setItem('loggedUser', JSON.stringify(res.body))
