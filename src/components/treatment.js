@@ -22,7 +22,7 @@ class Treatment extends Component{
 
         props.step.validator = () => {
             if (!this.state.treatment) {
-                throw 'You must select a treatment.'
+                throw new Error('You must select a treatment.')
             }
             if (!this.state.specialist) {
             //    throw 'You must select a specialist.'

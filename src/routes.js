@@ -3,7 +3,6 @@ import { Route, Router } from 'react-router-dom';
 import App from './App';
 import history from './history';
 import Profile from './components/profile';
-import Treatment from './components/treatment';
 import Auth from './components/auth';
 import Wizard from './components/wizard'
 

@@ -1,7 +1,5 @@
 import React from 'react';
 import Select from 'react-select';
-import request from 'superagent'
-import { API_URL } from '../App'
 
 const customStyles = {
   control: styles => ({ ...styles, backgroundColor: 'white', height: '40', border:'none',borderRadius:0 }),

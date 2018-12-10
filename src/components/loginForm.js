@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../App.css';
-import {  FormGroup, Button, Col, Label, FormControl, Modal, Form } from 'react-bootstrap';
+import {  FormGroup, Button, Col, Label, FormControl, Form } from 'react-bootstrap';
 
 
 class LoginForm extends Component {
@@ -37,15 +37,6 @@ class LoginForm extends Component {
         this.props.login(this.state.form.email, this.state.form.password)
     }
   render() {
-    let button = () => {
-        if (!this.props.user) return (<Button bsStyle="primary" onClick={this.handleShow}>Log in</Button>)
-        return (
-            <div>
-                <span>{this.props.user.email}</span>
-                <Button bsStyle="primary" onClick={this.props.logout}>Log out</Button>
-            </div>
-            )
-    }
     return (
         <div className="LoginForm">
 

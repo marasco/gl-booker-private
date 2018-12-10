@@ -2,7 +2,6 @@ import React from 'react';
 import request from 'superagent'
 import * as moment from 'moment'
 import Calendar from 'react-calendar';
-import { Button } from 'react-bootstrap';
 import { API_URL } from '../App'
 
 export default class Calendario extends React.Component {
@@ -27,7 +26,7 @@ export default class Calendario extends React.Component {
         fromDate: moment().format('Y-MM-DD'),
         toDate: moment().add(1, 'month').format('Y-MM-DD'),
         treatmentId: this.props.data.treatment.ID,
-        employeeId: this.props.data.specialist.ID,
+        employeeId: (this.props.data.specialist && this.props.data.specialist.ID)?this.props.data.specialist.ID:null,
     })
     .then(res => {
       try {
@@ -36,7 +35,8 @@ export default class Calendario extends React.Component {
         this.setState({ availability })
       }
       catch (error) {
-        throw { message: 'Error loading calendar', error }
+        console.error(error)
+        throw new Error('Error loading calendar')
       }
     })
     .catch(e => {

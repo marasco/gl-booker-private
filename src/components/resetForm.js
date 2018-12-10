@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../App.css';
-import {  FormGroup, Button, Col, Label, FormControl, Modal, Form } from 'react-bootstrap';
+import {  FormGroup, Button, Col, Label, FormControl, Form } from 'react-bootstrap';
 
 
 class ResetForm extends Component {

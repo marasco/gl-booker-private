@@ -71,7 +71,7 @@ export default class Auth extends Component {
       console.log(res)
 
       if (res.body.error) {
-        throw new [res.body.error]
+        throw new Error(res.body.error)
       }
 
       if (res.body.ArgumentErrors) {
@@ -113,9 +113,9 @@ export default class Auth extends Component {
 
    // check for single number dar or month
    // prepend '0' to single number dar or month
-   if(dateArr[0].length == 1){
+   if(dateArr[0].length === 1){
      dateArr[0] = '0' + dateArr[0];
-   } else if (dateArr[1].length == 1){
+   } else if (dateArr[1].length === 1){
      dateArr[1] = '0' + dateArr[1];
    }
 
@@ -137,7 +137,7 @@ export default class Auth extends Component {
       console.log(res)
 
       if (res.body.error) {
-        throw [res.body.error]
+        throw new Error(res.body.error)
       }
 
       if (res.body.ArgumentErrors) {
