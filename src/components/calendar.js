@@ -13,12 +13,15 @@ export default class Calendario extends React.Component {
         // Get date from global wizard data.
         date: props.data.date,
         availability: [],
+        loading: true
       }
 
-      this.load()
   }
-
+  componentDidMount = () => {
+    this.load()
+  }
   load = () => {
+    this.setState({loading: true})
     request
     .get(API_URL + '/availability')
     .set('Authorization', 'Bearer xxxx')
@@ -32,16 +35,18 @@ export default class Calendario extends React.Component {
       try {
         let availability = res.body[0].serviceCategories[0].services[0].availability
         console.log(availability)
-        this.setState({ availability })
+        this.setState({ availability, loading:false })
       }
       catch (error) {
         console.error(error)
         throw new Error('Error loading calendar')
+        this.setState({loading:false})
       }
     })
     .catch(e => {
       console.log(e)
       alert(e.message)
+      this.setState({loading:false})
     })
   }
 
@@ -58,13 +63,22 @@ export default class Calendario extends React.Component {
 
   render() {
     return (
+      <div>
+      {
+        (!this.state.loading)?
+
       <div className="col-xs-12 centered marginTop20">
         <Calendar className="fix"
           onChange={this.onChange}
           value={this.state.date}
           tileDisabled={ this.tileDisabledCallback }
         />
+      </div>:
+      <div className="col-xs-12 centered marginTop20">
+        Loading availability...
       </div>
+    }
+    </div>
     );
   }
 
