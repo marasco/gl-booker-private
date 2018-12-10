@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom'
+import * as moment from 'moment'
 import {  FormGroup, Button, Label, FormControl, Form } from 'react-bootstrap';
-
+import request from 'superagent'
+import { API_URL } from '../App'
 
 class Profile extends Component {
     formFields = {
@@ -17,13 +19,60 @@ class Profile extends Component {
         super()
 
         let user = JSON.parse(localStorage.getItem('loggedUser'))
-
+        console.log('user',user)
+        let cust_data = user && user.Customer.Customer
+        cust_data.DateOfBirth = this.convertDate(cust_data.DateOfBirth)
         this.state = {
-            customer: user && user.Customer.Customer
+            customer: cust_data,
+            form: {
+                FirstName: cust_data.FirstName,
+                LastName: cust_data.LastName,
+                Email: cust_data.Email,
+                Password: cust_data.Password,
+                DateOfBirth: cust_data.DateOfBirth,
+                CellPhone: cust_data.CellPhone,
+            },
+            access_token: user && user.access_token
         }
 
         this.logout = this.logout.bind(this)
     }
+
+      updateProfile = () =>{
+        if(!this.state.form) return false;
+        console.log('updateForm[]',this.state.form);
+
+        request
+        .put(API_URL + '/account/'+this.state.customer.ID+'?access_token='+this.state.access_token)
+        .send(this.state.form)
+        .then(res => {
+          console.log(res)
+
+          if (res.body.error) {
+            throw new Error(res.body.error)
+          }
+
+          if (res.body.ArgumentErrors) {
+            throw res.body.ArgumentErrors.map(error => error.ErrorMessage)
+          }
+          if (res.body.IsSuccess===true){
+            this.setState(prev => ({ ...prev, errors: null }))
+            alert("Your profile was saved successfully")
+          }else{
+            alert('An error has ocurred. Try Later.');
+          }
+
+
+        })
+
+        .catch(errors => {
+          if (errors.status) {
+            // Handle non-200 gracefully.
+            errors = errors.response.body.errors
+          }
+          this.setState(prev => ({ ...prev, errors }))
+        })
+      }
 
     setCustomer(customer) {
         this.setState(prev => ({ ...prev,
@@ -40,7 +89,12 @@ class Profile extends Component {
         localStorage.removeItem('loggedUser')
         this.setState(prev => ({ ...prev, customer: null }))
     }
+    convertDate = (dob) => {
+        dob = dob.replace("/Date(","");
+        dob = dob.replace(")/","");
 
+        return moment(dob,'x').format('MM/DD/YYYY');
+    }
     render() {
         if (!this.state.customer) {
             return (<Redirect to="/signin" />)
@@ -50,7 +104,7 @@ class Profile extends Component {
             <Label>{this.formFields[x].label+ ': '}</Label>
             <FormControl
                 type="text"
-                value={this.state.customer[x]}
+                value={this.state.form[x]}
                 placeholder={"Change your " + x}
                 onChange={e => this.handleChange(e.target.value,x)}
             />
@@ -61,7 +115,7 @@ class Profile extends Component {
         <div className="UserCreation">
             <Form className="whitebackground">
                 {fields}
-                <Button bsStyle="primary" onClick={()=>this.props.refresh(this.state.form)}>Accept</Button>
+                <Button bsStyle="primary" onClick={()=>this.updateProfile()}>Accept</Button>
                 <Button onClick={ this.logout }>Logout</Button>
             </Form>
         </div>
