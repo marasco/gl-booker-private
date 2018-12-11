@@ -9,55 +9,18 @@ export default class Wizard extends Component {
       super(props)
       console.log(DEBUG_MODE)
   }
-  steps = [{
-    component: Treatment,
-    validator: null,
-    state: null,
-  },{
-    component: Calendar,
-    validator: null,
-    state: null,
-  }]
 
   state = {
-    step: 0,
     data: {
       date: null,       // Pushed by <Calendario>
       treatment: null,  // Pushed by <Treatment>
       specialist: null, // Pushed by <Treatment>
-    },
-  }
-
-  hasNext = () => {
-    return this.state.step < this.steps.length - 1
-  }
-
-  hasPrev = () => {
-    return this.state.step > 0
-  }
-
-  next = () => {
-    if (this.validate()) {
-      this.setState(prev => ({ ...prev, step: this.state.step + 1 }))
     }
-  }
-
-  prev = () => {
-    this.setState(prev => ({ ...prev, step: this.state.step - 1 }))
-  }
-
-  save = (step, state) => {
-    // Save step component state.
-    this.steps[step].state = state
   }
 
   push = (state) => {
     // Let steps components push data to "data" state attribute.
     this.setState(prev => ({ ...prev, data: { ...this.state.data, ...state } }))
-  }
-
-  validator = (step, fn) => {
-    this.steps[step].validator = fn
   }
 
   validate = () => {
@@ -76,42 +39,44 @@ export default class Wizard extends Component {
     }
   }
 
+  scrollDown = () => {
+      window.scroll({
+          behavior: 'smooth',
+          left: 0,
+          top: document.documentElement.scrollHeight
+      });
+  }
+
   render() {
-    let step = this.steps[this.state.step]
-    let component = React.createElement(step.component, {
-      // Step specific-data including saved state.
-      step,
+    let treatments = React.createElement(Treatment, {
       // Pass shared data between sub-components.
       data: this.state.data,
-      // Method to save sub-component state.
-      save: this.save.bind(this, this.state.step),
+      // Push sub-component data shared between sub-components.
+      push: this.push
+    })
+    let calendar = React.createElement(Calendar, {
+      // Pass shared data between sub-components.
+      data: this.state.data,
       // Push sub-component data shared between sub-components.
       push: this.push,
-      // Let sub-component provide a validation callback.
-      validator: this.validator.bind(this, this.state.step),
+      scrollDown: this.scrollDown
     })
 
     return (
       <div>
-      {
-        (DEBUG_MODE===1
-        )?
-        <pre>{ JSON.stringify(this.state.data, null, 2) }</pre>:<div></div>
-      }
-
-      <div className="centered col-xs-12">
-      { component }
-      </div>
-
-      <div className="centered col-xs-12">
-      {this.hasPrev() && (
-        <Button bsStyle="primary" className="marginTop20 marginBottom20" onClick={ this.prev }>PREV</Button>
-      )}
-
-      {this.hasNext() && (
-        <Button bsStyle="primary" className="marginTop20 marginBottom20 marginLeft20" onClick={ this.next }>NEXT</Button>
-      )}
-      </div>
+        {
+          (DEBUG_MODE===1
+          )?
+          <pre>{ JSON.stringify(this.state.data, null, 2) }</pre>:<div></div>
+        }
+        <div className="centered col-xs-12">
+          { treatments }
+        </div>
+        {
+            (this.state.data.specialist) ? <div className="centered col-xs-12">
+                { calendar }
+            </div> : <span></span>
+        }
       </div>
     )
   }
