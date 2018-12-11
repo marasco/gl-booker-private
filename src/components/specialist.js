@@ -49,6 +49,7 @@ class Specialist extends React.Component {
   render() {
     return (
       <Select
+        placeholder={"Select specialist..."}
         styles={customStyles}
         isDisabled={!this.props.selected}
         value={ this.props.selected ? this.props.specialist : null }
