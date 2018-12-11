@@ -33,6 +33,19 @@ class Specialist extends React.Component {
   //   }
   // }
 
+  getOptions = () => {
+    let specialists = this.props.specialists
+    if( specialists.length && specialists[0].value ) {
+      // Any specialist
+      specialists.unshift({
+          value:null,
+          label:"Any"
+      })
+    }
+
+    return specialists
+  }
+
   render() {
     return (
       <Select
@@ -40,7 +53,7 @@ class Specialist extends React.Component {
         isDisabled={!this.props.selected}
         value={ this.props.selected ? this.props.specialist : null }
         onChange={ this.props.onSpecialistChange }
-        options={ this.props.specialists }
+        options={ (this.getOptions()) }
      />
 
     );
