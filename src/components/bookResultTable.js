@@ -1,6 +1,5 @@
 import React from 'react';
 import {Table, Button} from 'react-bootstrap';
-import moment from 'moment';
 
 class BookResultTable extends React.Component {
     constructor(props) {

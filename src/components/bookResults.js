@@ -6,9 +6,6 @@ import {API_URL} from "../App";
 import moment from "moment";
 
 class BookResults extends Component{
-    constructor(props){
-        super(props)
-    }
     formFields = {
         who:{ label:'WHO',value:''},
         when:{ label:'WHEN',value:''},
@@ -100,11 +97,15 @@ class BookResults extends Component{
                                                     end: moment(availability.endDateTime).format("hh:mm A"),
                                                     with: specialist.LastName+", "+specialist.FirstName,
                                                 })
+                                                return availability
                                             })
                                         }
+                                        return service
                                     })
                                 }
+                                return servCat
                             })
+                            return loc
                         })
                     }
 
@@ -115,8 +116,8 @@ class BookResults extends Component{
                 }
                 catch (error) {
                     console.error(error)
-                    throw new Error('Error loading calendar times')
                     this.setState({loading:false})
+                    throw new Error('Error loading calendar times')
                 }
             })
             .catch(e => {
@@ -126,18 +127,18 @@ class BookResults extends Component{
             })
     }
     render(){
-        let getdata = Object.keys(this.formFields).map(x =>  {
-            return ( 
+        Object.keys(this.formFields).map(x =>  {
+            return (
             <div className="col-xs-12 col-sm-4"  key={"list" +x}><FormGroup key={x} id={"form" + x}>
 
-        <Label>{this.formFields[x].label+ ': '}</Label>
-        
-        <FormControl
-            type="text"
-            value={this.state.form[x]}
-            onChange={e => this.handleChange(e.target.value,x)}
-        />
-        </FormGroup></div>
+            <Label>{this.formFields[x].label+ ': '}</Label>
+
+            <FormControl
+                type="text"
+                value={this.state.form[x]}
+                onChange={e => this.handleChange(e.target.value,x)}
+            />
+            </FormGroup></div>
 
            )
         })
