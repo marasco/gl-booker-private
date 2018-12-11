@@ -8,7 +8,7 @@ class Treatment extends Component{
     constructor(props){
         super(props)
 
-        this.state = props.step.state || {
+        this.state = {
             treatment: null,
             specialist: null,
             treatments: [],
@@ -19,19 +19,6 @@ class Treatment extends Component{
         if (!this.state.treatments.length) {
             this.loadTreatments()
         }
-
-        props.step.validator = () => {
-            if (!this.state.treatment) {
-                throw new Error('You must select a treatment.')
-            }
-            if (!this.state.specialist) {
-            //    throw 'You must select a specialist.'
-            }
-        }
-    }
-
-    componentWillUnmount = () => {
-        this.props.save(this.state)
     }
 
     loadTreatments = () => {
@@ -88,14 +75,21 @@ class Treatment extends Component{
     }
 
     onClickTreatment = treatment => {
-        this.props.push({ treatment, specialist: null, date: null })
-        this.setState({treatment, specialist: null, specialists: [] })
+        let specialist = null
+        if( this.props.data.treatment && this.props.data.treatment.ID && this.props.data.treatment.ID == treatment.ID && this.props.data.specialist ) {
+            specialist = this.props.data.specialist
+        }
+
+        this.props.push({ treatment, specialist: specialist, date: null })
+        this.setState({treatment, specialist: specialist, specialists: [] })
         this.loadSpeacialists(treatment.ID)
     }
 
     onSpecialistChange = specialist => {
-        this.props.push({ specialist, date: null })
-        this.setState({ specialist })
+        this.props.push({ specialist:null, date: null })
+        this.setState({ specialist },()=>{
+            this.props.push({ specialist, date: null })
+        })
     }
 
     render(){
@@ -152,6 +146,10 @@ class Treatment extends Component{
 
                     return doms
                 })()}
+
+            </Row>
+
+            <Row>
 
             </Row>
 

@@ -111,6 +111,8 @@ class BookResults extends Component{
                     this.setState({
                         times:times,
                         loading:false
+                    },()=>{
+                        this.props.scrollDown()
                     })
                 }
                 catch (error) {

@@ -36,7 +36,9 @@ export default class Calendario extends React.Component {
       try {
         let availability = res.body[0].serviceCategories[0].services[0].availability
         console.log(availability)
-        this.setState({ availability, loading:false })
+        this.setState({ availability, loading:false },()=>{
+          this.props.scrollDown()
+        })
       }
       catch (error) {
         console.error(error)
@@ -68,18 +70,18 @@ export default class Calendario extends React.Component {
       {
         (!this.state.loading)?
 
-      <div className="col-xs-12 centered marginTop20">
+      <div className="col-xs-12 centered marginTop20 marginBottom40">
         <Calendar className="fix"
           onChange={this.onChange}
           value={this.state.date}
           tileDisabled={ this.tileDisabledCallback }
         />
           {
-            (this.state.date)? <BookResults data={this.props.data}/>:<span></span>
+            (this.state.date)? <BookResults scrollDown={this.props.scrollDown} data={this.props.data}/>:<span></span>
           }
       </div>
       :
-      <div className="col-xs-12 centered marginTop20">
+      <div className="col-xs-12 centered marginBottom40">
         Loading availability...
       </div>
     }

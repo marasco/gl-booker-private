@@ -6,10 +6,6 @@ import Profile from './components/profile';
 import Auth from './components/auth';
 import Wizard from './components/wizard'
 
-
-
-
-
 export const makeMainRoutes = () => {
   return (
     <Router history={history} component={App}>
