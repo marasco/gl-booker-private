@@ -21,20 +21,66 @@ class BookResults extends Component{
             with:'',
         },
         times:[],
-        loading:true
+        loading:true,
+        specialist: this.props.data.specialist,
+        specialists: [],
+        treatment: this.props.data.treatment,
+        date: moment(this.props.data.date).format("YYYY-MM-DD"),
     };
-    componentDidMount() {
-        console.log(this.props.data)
-        this.load()
+
+    loadData = () => {
+        this.loadSpeacialists(this.state.treatment['ID']).then((specialists)=>{
+            this.setState({
+                specialists:specialists
+            },()=>{this.loadTimes()})
+        })
     }
 
-    load = () => {
+    componentDidMount() {
+        this.loadData()
+    }
+
+    componentDidUpdate(prevProps) {
+        if( prevProps.data.date && this.props.data.date ) {
+            if( moment(prevProps.data.date).toISOString() !== moment(this.props.data.date).toISOString() ) {
+                this.loadData()
+            }
+        }
+    }
+
+    loadSpeacialists = treatmentId => {
+        return new Promise((resolve,reject)=>{
+            request
+                .get(API_URL + '/employees')
+                .set('Authorization', 'Bearer xxxx')
+                .query({
+                    pageSize: 1000,
+                    treatmentId,
+                })
+                .then(res=>{
+                    let specialists = {}
+
+                    res.body.Results.map(record => {
+                        specialists[record['ID']] = record
+                        return record
+                    })
+
+                    resolve(specialists);
+                }).catch(error => {
+                    console.log(error)
+                    reject({});
+            });
+        })
+    }
+
+    loadTimes = () => {
         request
             .get(API_URL + '/availability/1day')
             .set('Authorization', 'Bearer xxxx')
             .query({
-                fromDate: "2018-12-10",
-                "treatmentId[]": 304035,
+                employeeId: this.state.specialist['ID'],
+                fromDate: this.state.date,
+                "treatmentId[]": this.state.treatment['ID'],
                 includeEmployees:true,
                 format:24
             })
@@ -48,10 +94,11 @@ class BookResults extends Component{
                                     servCat.services.map(service=>{
                                         if( service.availability ) {
                                             service.availability.map(availability=>{
+                                                const specialist = this.state.specialists[this.state.specialist['ID']]
                                                 times.push({
-                                                    start: availability.startDateTime,
-                                                    end: availability.endDateTime,
-                                                    with: "--Get Name--",
+                                                    start: moment(availability.startDateTime).format("hh:mm A"),
+                                                    end: moment(availability.endDateTime).format("hh:mm A"),
+                                                    with: specialist.LastName+", "+specialist.FirstName,
                                                 })
                                             })
                                         }
@@ -99,7 +146,7 @@ class BookResults extends Component{
             <div>
                 {(this.state.loading)?<span>Loading...</span>:
                     <div className="timetable marginTop20">
-                        <BookResultTable times={this.state.times}></BookResultTable>
+                        <BookResultTable times={this.state.times} specialists={this.state.specialists}></BookResultTable>
                         {
                             (false)?
                                 <div className="col-xs-12 centered">
