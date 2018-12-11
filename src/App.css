@@ -5,6 +5,9 @@ html,body,h3,div {
   font-weight: normal;
   transition: color 0.2s ease-in-out;
 }
+li a:hover{
+  border-bottom: none;
+}
 a:hover{
   border-bottom: solid 1px black;
   text-decoration: none;

@@ -7,22 +7,22 @@ export const API_URL = process.env.REACT_APP_API_URL;
 class App extends React.Component {
 
   render() {
-    let users = JSON.parse(localStorage.getItem('users'))
+    let loggedUser = JSON.parse(localStorage.getItem('loggedUser'))
     let pages = [
       {name:'treatments',path:'/'},
       //{name:'book',path:'/book'},
       {name: 'sign in', path: '/signin'},
-      {name:'profile',path:'/myaccount'},
+      {name:'my account',path:'/myaccount'},
 
     ]
-    if(users)
-    console.log(users)
     let buttons = () => {
         return (
 
               <Nav>
               {pages.map(page => (
-                <NavItem key={page.name+"route"} href={page.path}>{page.name}></NavItem>
+                (page.path!=='/myaccount' || loggedUser)?
+                <NavItem key={page.name+"route"} href={page.path}>{page.name}</NavItem>:<div></div>
+
                 ))}
               </Nav>)
       }
