@@ -155,7 +155,7 @@ class Treatment extends Component{
 
             {this.state.page && (
                 <div className="col-xs-12 centered">
-                <Button bsStyle="primary" onClick={ this.loadTreatments }>Load More</Button>
+                <Button  className="selectBtnModal" onClick={ this.loadTreatments }>Load More</Button>
                 </div>
             )}
 

@@ -23,7 +23,7 @@ class BookResultTable extends React.Component {
                     <td>
                         {(time.with)?time.with:""}
                     </td>
-                    <td><Button bsStyle="primary"> BOOK </Button></td>
+                    <td><Button className="selectBtnModal"> BOOK </Button></td>
                 </tr>
             )
         });

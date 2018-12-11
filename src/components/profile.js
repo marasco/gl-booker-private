@@ -115,8 +115,8 @@ class Profile extends Component {
         <div className="UserCreation">
             <Form className="whitebackground">
                 {fields}
-                <Button bsStyle="primary" onClick={()=>this.updateProfile()}>Accept</Button>
-                <Button onClick={ this.logout }>Logout</Button>
+                <Button  className="selectBtnModal" onClick={()=>this.updateProfile()}>Accept</Button>
+                <Button  className="selectBtnModal marginLeft20" onClick={ this.logout }>Logout</Button>
             </Form>
         </div>
         </div>
