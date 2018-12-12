@@ -71,16 +71,19 @@ class BookResults extends Component{
     }
 
     loadTimes = () => {
+        let query = {
+            fromDate: this.state.date,
+            "treatmentId[]": this.state.treatment['ID'],
+            includeEmployees:true,
+            format:24
+        }
+        if( this.state.specialist['ID'] )
+            query.employeeId = this.state.specialist['ID']
+
         request
             .get(API_URL + '/availability/1day')
             .set('Authorization', 'Bearer xxxx')
-            .query({
-                employeeId: this.state.specialist['ID'],
-                fromDate: this.state.date,
-                "treatmentId[]": this.state.treatment['ID'],
-                includeEmployees:true,
-                format:24
-            })
+            .query(query)
             .then(res => {
                 try {
                     let times = []
@@ -89,14 +92,23 @@ class BookResults extends Component{
                             loc.serviceCategories.map(servCat=>{
                                 if( servCat.services ) {
                                     servCat.services.map(service=>{
+                                        let duration = service.duration;
                                         if( service.availability ) {
                                             service.availability.map(availability=>{
-                                                const specialist = this.state.specialists[this.state.specialist['ID']]
-                                                times.push({
-                                                    start: moment(availability.startDateTime).format("hh:mm A"),
-                                                    end: moment(availability.endDateTime).format("hh:mm A"),
-                                                    with: specialist.LastName+", "+specialist.FirstName,
-                                                })
+                                                if( availability.employees && availability.slots ) {
+                                                    availability.employees.map(employeeId => {
+                                                        availability.slots.map(slot=>{
+                                                            let specialist = (this.state.specialists[employeeId])?this.state.specialists[employeeId]:null;
+                                                            if( specialist ) {
+                                                                times.push({
+                                                                    start: slot,
+                                                                    end: moment(slot,"HH:mm").add(duration,"minutes").format("HH:mm"),
+                                                                    with: specialist.LastName+", "+specialist.FirstName
+                                                                })
+                                                            }
+                                                        })
+                                                    })
+                                                }
                                                 return availability
                                             })
                                         }
@@ -112,8 +124,6 @@ class BookResults extends Component{
                     this.setState({
                         times:times,
                         loading:false
-                    },()=>{
-                        this.props.scrollDown()
                     })
                 }
                 catch (error) {
