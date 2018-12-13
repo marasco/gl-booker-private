@@ -94,7 +94,7 @@ class Treatment extends Component{
 
     render(){
     return(
-        <div className="container treatments">
+        <div className="treatments">
             <div className="centered col-xs-12">
                 <h1 className="centered section-1">BOOK A SERVICE</h1>
             </div>
