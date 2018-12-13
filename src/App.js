@@ -21,23 +21,20 @@ class App extends React.Component {
 
   render() {
     let loggedUser = JSON.parse(localStorage.getItem('loggedUser'))
-    let buttons = () => {
-        return (
-          <Nav>
-            {
-                (loggedUser)?<NavItem key={"myaccount"} href={"/myaccount"}>{"My Account"}</NavItem>:<div></div>
-            }
-            <NavItem key={"treatments"} href={"/"}>{"Treatments"}</NavItem>
-            <NavItem key={"signin"} onClick={()=>{ this.setAuthModal(true) }} >Sign In</NavItem>
-          </Nav>)
-      }
-
     return (
       <div className="App container">
          <Auth setAuthModal={this.setAuthModal} showAuthModal={this.state.showAuthModal}/>
          <Navbar>
             <Navbar.Header>
-                {buttons()}
+                <Nav>
+                    <NavItem key={"treatments"} href={"/"}>{"Treatments"}</NavItem>
+                    {
+                        (loggedUser)?<NavItem key={"myaccount"} href={"/myaccount"}>{"My Account"}</NavItem>:null
+                    }
+                    {
+                        (!loggedUser)?<NavItem key={"signin"} href={"#"} onClick={()=>{ this.setAuthModal(true) }} >Sign In</NavItem>:null
+                    }
+                </Nav>
             </Navbar.Header>
           </Navbar>
       </div>

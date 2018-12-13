@@ -6,7 +6,6 @@ export const DEBUG_MODE = process.env.REACT_APP_DEBUG_MODE;
 export default class Wizard extends Component {
   constructor(props){
       super(props)
-      console.log(DEBUG_MODE)
   }
 
   state = {
