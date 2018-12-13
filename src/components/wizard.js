@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Treatment from './treatment'
 import Calendar from './calendar'
+import Cart from './cart'
 export const DEBUG_MODE = process.env.REACT_APP_DEBUG_MODE;
 
 export default class Wizard extends Component {
@@ -15,6 +16,7 @@ export default class Wizard extends Component {
       specialist: null,
     }
   }
+
 
   push = (state) => {
     // Let steps components push data to "data" state attribute.
@@ -36,7 +38,43 @@ export default class Wizard extends Component {
       alert(e)
     }
   }
+  clearCart = () =>{
+    localStorage.removeItem('cart')
+    console.log('cart is clear now')
+    this.setState({cart: null})
 
+  }
+  addToCart = (treatmentId,specialistId,date,time) =>{
+    let cart = localStorage.getItem('cart');
+
+    if (cart){
+      cart = JSON.parse(cart)
+    }else{
+      cart = [];
+    }
+    console.log('old_cart: ',cart)
+    let newObj = {
+      'treatmentId':treatmentId,
+      'specialistId':specialistId,
+      'date':date,
+      'time':time,
+    }
+    console.log('add=>',newObj);
+    cart.push(newObj)
+    console.log('new_cart: ',cart)
+    localStorage.setItem('cart', JSON.stringify(cart))
+
+    this.setState({cart: cart})
+
+  }
+  componentDidMount = () =>{
+    let items = localStorage.getItem('cart')
+    if (items){
+      items = JSON.parse(items)
+    }
+    this.setState({cart: items})
+    console.log('cart=>',items)
+  }
   scrollDown = () => {
       window.scroll({
           behavior: 'smooth',
@@ -54,11 +92,17 @@ export default class Wizard extends Component {
       push: this.push
     })
     let calendar = React.createElement(Calendar, {
+      addToCart: this.addToCart,
       // Pass shared data between sub-components.
       data: this.state.data,
       // Push sub-component data shared between sub-components.
       push: this.push,
       scrollDown: this.scrollDown
+    })
+    let cart = React.createElement(Cart, {
+      items: this.state.cart,
+      addToCart: this.addToCart,
+      clearCart: this.clearCart
     })
 
     return (
@@ -75,7 +119,9 @@ export default class Wizard extends Component {
             (this.state.data.specialist) ? <div className="centered col-xs-12">
                 { calendar }
             </div> : <span></span>
-        }
+        } 
+        { cart }
+ 
         {
           (!loggedUser && this.state.data.date && this.state.data.specialist)?
               <div className="centered col-xs-12 marginBottom20">
@@ -85,7 +131,7 @@ export default class Wizard extends Component {
               </div>
               :
               null
-        }
+        } 
       </div>
     )
   }
