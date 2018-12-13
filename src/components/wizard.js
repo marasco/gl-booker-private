@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Button } from 'react-bootstrap'
 import Treatment from './treatment'
 import Calendar from './calendar'
 import Cart from './cart'
@@ -12,9 +11,9 @@ export default class Wizard extends Component {
 
   state = {
     data: {
-      date: null,       // Pushed by <Calendario>
-      treatment: null,  // Pushed by <Treatment>
-      specialist: null, // Pushed by <Treatment>
+      date: null,
+      treatment: null,
+      specialist: null,
     }
   }
 
@@ -85,6 +84,7 @@ export default class Wizard extends Component {
   }
 
   render() {
+    let loggedUser = JSON.parse(localStorage.getItem('loggedUser'))
     let treatments = React.createElement(Treatment, {
       // Pass shared data between sub-components.
       data: this.state.data,
@@ -119,9 +119,19 @@ export default class Wizard extends Component {
             (this.state.data.specialist) ? <div className="centered col-xs-12">
                 { calendar }
             </div> : <span></span>
-        }
+        } 
         { cart }
-
+ 
+        {
+          (!loggedUser && this.state.data.date && this.state.data.specialist)?
+              <div className="centered col-xs-12 marginBottom20">
+                <a href="#" onClick={()=>{
+                  this.props.setAuthModal(true)
+                }} >Sign In</a>
+              </div>
+              :
+              null
+        } 
       </div>
     )
   }
