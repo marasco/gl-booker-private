@@ -163,10 +163,14 @@ export default class Auth extends Component {
         localStorage.setItem('users', JSON.stringify(users))
     }
 
+    close = () => {
+        this.props.setAuthModal(false);
+    }
+
     render() {
         return <div>
             <Modal show={this.props.showAuthModal} onHide={this.close}>
-                <Modal.Header>
+                <Modal.Header closeButton>
                     <Modal.Title>{this.state.title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
