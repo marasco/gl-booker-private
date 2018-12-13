@@ -12,6 +12,7 @@ class App extends React.Component {
       this.state = {
         showAuthModal:false
       }
+      console.log(props.match.path)
   }
 
   setAuthModal = (status) => {
@@ -38,7 +39,9 @@ class App extends React.Component {
                 </Nav>
             </Navbar.Header>
           </Navbar>
-          <Wizard setAuthModal={this.setAuthModal} />
+          {
+              (this.props.location.pathname === '/')?<Wizard setAuthModal={this.setAuthModal} />:null
+          }
       </div>
     );
   }
