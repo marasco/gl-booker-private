@@ -24,7 +24,14 @@ class BookResults extends Component{
         treatment: this.props.data.treatment,
         date: moment(this.props.data.date).format("YYYY-MM-DD"),
     };
+    book = (slot, specialistId) => {
+      const treatmentId = this.state.treatment['ID'];
+      const date = this.state.date
+      console.log('booking '+slot + '/'+specialistId+'/'+treatmentId+'/'+date)
+      this.props.addToCart(treatmentId,specialistId,date,slot)
+      return true;
 
+    }
     loadData = () => {
         this.loadSpeacialists(this.state.treatment['ID']).then((specialists)=>{
             this.setState({
@@ -103,7 +110,9 @@ class BookResults extends Component{
                                                                 times.push({
                                                                     start: slot,
                                                                     end: moment(slot,"HH:mm").add(duration,"minutes").format("HH:mm"),
-                                                                    with: specialist.LastName+", "+specialist.FirstName
+                                                                    with: specialist.LastName+", "+specialist.FirstName,
+                                                                    slot: slot,
+                                                                    specialistId: specialist.ID
                                                                 })
                                                             }
                                                         })
@@ -120,7 +129,6 @@ class BookResults extends Component{
                             return loc
                         })
                     }
-
                     this.setState({
                         times:times,
                         loading:false
@@ -159,7 +167,7 @@ class BookResults extends Component{
             <div>
                 {(this.state.loading)?<span>Loading...</span>:
                     <div className="timetable marginTop20">
-                        <BookResultTable times={this.state.times} specialists={this.state.specialists}></BookResultTable>
+                        <BookResultTable book={this.book} times={this.state.times} specialists={this.state.specialists}></BookResultTable>
                         {
                             (false)?
                                 <div className="col-xs-12 centered">

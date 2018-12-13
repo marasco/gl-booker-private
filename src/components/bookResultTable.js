@@ -7,6 +7,8 @@ class BookResultTable extends React.Component {
         this.state = {
             times: props.times
         }
+        //this.book = this.props.book.bind(this);
+
     }
 
     showResults = () => {
@@ -23,7 +25,7 @@ class BookResultTable extends React.Component {
                     <td>
                         {(time.with)?time.with:""}
                     </td>
-                    <td><Button className="selectBtnModal"> BOOK </Button></td>
+                    <td><Button className="selectBtnModal" onClick={() => this.props.book(time.slot,time.specialistId)}> BOOK </Button></td>
                 </tr>
             )
         });

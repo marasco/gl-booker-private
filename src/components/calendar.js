@@ -21,6 +21,9 @@ export default class Calendario extends React.Component {
   componentDidMount = () => {
     this.load()
   }
+  addToCart = (treatmentId,specialistId,date,time)=>{
+    this.props.addToCart(treatmentId,specialistId,date,time)
+  }
   load = () => {
     this.setState({loading: true})
     request
@@ -35,7 +38,6 @@ export default class Calendario extends React.Component {
     .then(res => {
       try {
         let availability = res.body[0].serviceCategories[0].services[0].availability
-        console.log(availability)
         this.setState({ availability, loading:false },()=>{
           this.props.scrollDown()
         })
@@ -77,7 +79,7 @@ export default class Calendario extends React.Component {
           tileDisabled={ this.tileDisabledCallback }
         />
           {
-            (this.state.date)? <BookResults scrollDown={this.props.scrollDown} data={this.props.data}/>:<span></span>
+            (this.state.date)? <BookResults addToCart={this.addToCart} scrollDown={this.props.scrollDown} data={this.props.data}/>:<span></span>
           }
       </div>
       :
