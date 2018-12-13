@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Button } from 'react-bootstrap'
 import Treatment from './treatment'
 import Calendar from './calendar'
 export const DEBUG_MODE = process.env.REACT_APP_DEBUG_MODE;
@@ -12,9 +11,9 @@ export default class Wizard extends Component {
 
   state = {
     data: {
-      date: null,       // Pushed by <Calendario>
-      treatment: null,  // Pushed by <Treatment>
-      specialist: null, // Pushed by <Treatment>
+      date: null,
+      treatment: null,
+      specialist: null,
     }
   }
 
