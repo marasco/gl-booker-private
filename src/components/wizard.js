@@ -115,19 +115,18 @@ export default class Wizard extends Component {
             (this.state.data.specialist) ? <div className="centered col-xs-12">
                 { calendar }
             </div> : <span></span>
-        } 
-        { cart }
- 
+        }
         {
-          (!loggedUser && this.state.data.date && this.state.data.specialist)?
-              <div className="centered col-xs-12 marginBottom20">
-                <a href="#" onClick={()=>{
-                  this.props.setAuthModal(true)
-                }} >Sign In</a>
-              </div>
-              :
-              null
-        } 
+            (!loggedUser && this.state.data.date && this.state.data.specialist)?
+                <div className="centered col-xs-12 marginBottom20">
+                    <a href="#" onClick={()=>{
+                        this.props.setAuthModal(true)
+                    }} >Sign In</a>
+                </div>
+                :
+                null
+        }
+        { cart }
       </div>
     )
   }
