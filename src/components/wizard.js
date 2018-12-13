@@ -46,6 +46,7 @@ export default class Wizard extends Component {
   }
 
   render() {
+    let loggedUser = JSON.parse(localStorage.getItem('loggedUser'))
     let treatments = React.createElement(Treatment, {
       // Pass shared data between sub-components.
       data: this.state.data,
@@ -74,6 +75,16 @@ export default class Wizard extends Component {
             (this.state.data.specialist) ? <div className="centered col-xs-12">
                 { calendar }
             </div> : <span></span>
+        }
+        {
+          (!loggedUser && this.state.data.date && this.state.data.specialist)?
+              <div className="centered col-xs-12 marginBottom20">
+                <a href="#" onClick={()=>{
+                  this.props.setAuthModal(true)
+                }} >Sign In</a>
+              </div>
+              :
+              null
         }
       </div>
     )

@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Auth from './components/auth';
 import {Nav, NavItem, Navbar} from 'react-bootstrap';
+import Wizard from './components/wizard'
 
 export const API_URL = process.env.REACT_APP_API_URL;
 
@@ -37,6 +38,7 @@ class App extends React.Component {
                 </Nav>
             </Navbar.Header>
           </Navbar>
+          <Wizard setAuthModal={this.setAuthModal} />
       </div>
     );
   }
