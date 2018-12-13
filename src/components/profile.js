@@ -97,7 +97,7 @@ class Profile extends Component {
     }
     render() {
         if (!this.state.customer) {
-            return (<Redirect to="/signin" />)
+            return (<Redirect to="/" />)
         }
 
         let fields = Object.keys(this.formFields).map(x =>  <FormGroup key={x} id={"form" + x}>
