@@ -17,10 +17,19 @@ class Cart extends Component{
         let rows = [];
         if (this.props.items){
         this.props.items.map((item,index) => {
+
+          let dateFormatted = item.date.substring(0, 10) +
+           ' ' + item.time;
+
+
             rows.push(
-                <div className="item">
-                <div className="desc">{item.treatmentId}</div>
-                <div className="remove">[x]</div>
+                <div className="row col-xs-12" key={item.treatmentId+'key'}>
+                <div className="item col-xs-12">
+                <div className="desc col-xs-10">({index+1}) {item.treatmentName} with {item.specialistName} at {dateFormatted}</div>
+                <div className="remove col-xs-2">
+                <span onClick={() => this.props.removeItem(index)} class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                </div>
+                </div>
                 </div>
             )
         });
@@ -33,11 +42,11 @@ class Cart extends Component{
        return (
          <div>
             <div className="cart centered col-xs-12">
-            <h2>Your treatments cart</h2>
+            <div className="title">Your treatments cart</div>
             <div className="list">
               {this.showItems()}
             </div>
-            <Button className="centered selectBtnModal" onClick={this.props.clearCart}>Clear</Button>
+            <Button className="centered selectBtnModal marginTop20" onClick={this.props.clearCart}>Clear</Button>
             </div>
         </div>
       )

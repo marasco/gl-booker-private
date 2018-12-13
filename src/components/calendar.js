@@ -21,8 +21,8 @@ export default class Calendario extends React.Component {
   componentDidMount = () => {
     this.load()
   }
-  addToCart = (treatmentId,specialistId,date,time)=>{
-    this.props.addToCart(treatmentId,specialistId,date,time)
+  addToCart = (treatmentId,specialistId,date,time,treatmentName,specialistName)=>{
+    this.props.addToCart(treatmentId,specialistId,date,time,treatmentName,specialistName)
   }
   load = () => {
     this.setState({loading: true})

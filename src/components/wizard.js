@@ -44,7 +44,14 @@ export default class Wizard extends Component {
     this.setState({cart: null})
 
   }
-  addToCart = (treatmentId,specialistId,date,time) =>{
+  removeItem = (index) =>{
+    let cart = this.state.cart;
+    cart.splice(index,1);
+    localStorage.setItem('cart', JSON.stringify(cart))
+    this.setState({cart: cart})
+
+  }
+  addToCart = (treatmentId,specialistId,date,time,treatmentName,specialistName) =>{
     let cart = localStorage.getItem('cart');
 
     if (cart){
@@ -54,10 +61,12 @@ export default class Wizard extends Component {
     }
     console.log('old_cart: ',cart)
     let newObj = {
-      'treatmentId':treatmentId,
-      'specialistId':specialistId,
-      'date':date,
-      'time':time,
+      treatmentId:treatmentId,
+      specialistId:specialistId,
+      treatmentName: treatmentName,
+      specialistName: specialistName,
+      date:date,
+      time:time,
     }
     console.log('add=>',newObj);
     cart.push(newObj)
@@ -98,6 +107,7 @@ export default class Wizard extends Component {
     let cart = React.createElement(Cart, {
       items: this.state.cart,
       addToCart: this.addToCart,
+      removeItem: this.removeItem,
       clearCart: this.clearCart
     })
 
@@ -115,18 +125,19 @@ export default class Wizard extends Component {
             (this.state.data.specialist) ? <div className="centered col-xs-12">
                 { calendar }
             </div> : <span></span>
-        }
-        {
-            (!loggedUser && this.state.data.date && this.state.data.specialist)?
-                <div className="centered col-xs-12 marginBottom20">
-                    <a href="#" onClick={()=>{
-                        this.props.setAuthModal(true)
-                    }} >Sign In</a>
-                </div>
-                :
-                null
-        }
+        } 
         { cart }
+
+        {
+          (!loggedUser && this.state.data.date && this.state.data.specialist)?
+              <div className="centered col-xs-12 marginBottom20">
+                <a href="#" onClick={()=>{
+                  this.props.setAuthModal(true)
+                }} >Sign In</a>
+              </div>
+              :
+              null
+        } 
       </div>
     )
   }

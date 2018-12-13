@@ -24,11 +24,12 @@ class BookResults extends Component{
         treatment: this.props.data.treatment,
         date: moment(this.props.data.date).format("YYYY-MM-DD"),
     };
-    book = (slot, specialistId) => {
+    book = (slot, specialistId,specialistName) => {
       const treatmentId = this.state.treatment['ID'];
+      const treatmentName = this.state.treatment['Name'];
       const date = this.state.date
       console.log('booking '+slot + '/'+specialistId+'/'+treatmentId+'/'+date)
-      this.props.addToCart(treatmentId,specialistId,date,slot)
+      this.props.addToCart(treatmentId,specialistId,date,slot,treatmentName,specialistName)
       return true;
 
     }
