@@ -21,11 +21,19 @@ class App extends React.Component {
       })
   }
 
+  scrollDown = () => {
+      window.scroll({
+          behavior: 'smooth',
+          left: 0,
+          top: document.documentElement.scrollHeight
+      });
+  }
+
   render() {
     let loggedUser = JSON.parse(localStorage.getItem('loggedUser'))
     return (
       <div className="App container">
-         <Auth setAuthModal={this.setAuthModal} showAuthModal={this.state.showAuthModal}/>
+         <Auth scrollDown={this.scrollDown} setAuthModal={this.setAuthModal} showAuthModal={this.state.showAuthModal}/>
          <Navbar>
             <Navbar.Header>
                 <Nav>
@@ -40,7 +48,7 @@ class App extends React.Component {
             </Navbar.Header>
           </Navbar>
           {
-              (this.props.location.pathname === '/')?<Wizard setAuthModal={this.setAuthModal} />:null
+              (this.props.location.pathname === '/')?<Wizard scrollDown={this.scrollDown} setAuthModal={this.setAuthModal} />:null
           }
       </div>
     );

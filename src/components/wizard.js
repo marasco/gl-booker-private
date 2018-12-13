@@ -76,11 +76,7 @@ export default class Wizard extends Component {
     console.log('cart=>',items)
   }
   scrollDown = () => {
-      window.scroll({
-          behavior: 'smooth',
-          left: 0,
-          top: document.documentElement.scrollHeight
-      });
+      this.props.scrollDown();
   }
 
   render() {

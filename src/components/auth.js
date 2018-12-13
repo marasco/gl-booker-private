@@ -37,6 +37,7 @@ export default class Auth extends Component {
                     loggedUser: res.body.Customer
                 }), () => {
                     this.props.setAuthModal(false);
+                    //this.props.scrollDown();
                 })
             })
             .catch(err => {
