@@ -2,14 +2,11 @@ import React, { Component } from 'react'
 import Treatment from './treatment'
 import Calendar from './calendar'
 import Cart from './cart'
-import {Button} from 'react-bootstrap';
 
 export const DEBUG_MODE = process.env.REACT_APP_DEBUG_MODE;
 
 export default class Wizard extends Component {
-  constructor(props){
-      super(props)
-  }
+
   state = {
     data: {
       date: null,
@@ -61,7 +58,7 @@ export default class Wizard extends Component {
     this.setState({cart: cart})
 
   }
-  addToCart = (treatmentId,specialistId,date,time,treatmentName,specialistName) =>{
+  addToCart = (treatmentId,specialistId,date,time,treatmentName,specialistName,price) =>{
     let cart = localStorage.getItem('cart');
 
     if (cart){
@@ -74,9 +71,14 @@ export default class Wizard extends Component {
       specialistId:specialistId,
       treatmentName: treatmentName,
       specialistName: specialistName,
+      price: price,
+      fullDate: date.substring(0, 10) +
+         'T' + time + ':00-08:00',
       date:date,
       time:time,
     }
+
+
     cart.push(newObj)
     localStorage.setItem('cart', JSON.stringify(cart))
     this.setState({cart: cart})
@@ -153,9 +155,6 @@ export default class Wizard extends Component {
         <div className="col-sm-12">
         { cart }
         </div>
-
-
-
       </div>
     )
   }

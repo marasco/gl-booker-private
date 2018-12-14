@@ -71,7 +71,7 @@ class LoginForm extends Component {
                 </Form>
 
                 <Col className="marginTop20">
-                    <a href={null} onClick={this.props.openForgotPassword}>Forgot my Password</a>
+                    <a href="#" onClick={this.props.openForgotPassword}>Forgot my Password</a>
                 </Col>
                 </div>
                 <div className="centered marginTop20">
@@ -79,7 +79,7 @@ class LoginForm extends Component {
                         className="selectBtnModal">Sign In</Button>
                 </div>
                 <Col className="centered marginTop20">
-                    <a href={null} onClick={this.props.openSignUp}>Create an Account</a>
+                    <a href="#" onClick={this.props.openSignUp}>Create an Account</a>
                 </Col>
 
         </div>

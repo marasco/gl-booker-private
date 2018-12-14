@@ -28,6 +28,7 @@ class BookResultTable extends React.Component {
                     <td><Button className="selectBtnModal" onClick={() => this.props.book(time.slot,time.specialistId,time.with)}> BOOK </Button></td>
                 </tr>
             )
+            return time
         });
 
         return (

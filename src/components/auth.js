@@ -1,13 +1,13 @@
 import React, {Component} from 'react'
 import request from 'superagent'
-import {Redirect} from 'react-router-dom'
 import LoginForm from './loginForm';
 import ResetForm from './resetForm';
 import RegisterForm from './registerForm';
 import {API_URL} from '../App'
 import {Modal, Col} from 'react-bootstrap';
+import {withRouter} from "react-router-dom";
 
-export default class Auth extends Component {
+class Auth extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -17,6 +17,7 @@ export default class Auth extends Component {
             users: JSON.parse(localStorage.getItem('users')) || [],
             loggedUser: localStorage.getItem('loggedUser')
         }
+        localStorage.removeItem('pendingCheckout');
     }
 
     login = (email, password) => {
@@ -37,7 +38,11 @@ export default class Auth extends Component {
                     loggedUser: res.body.Customer
                 }), () => {
                     this.props.setAuthModal(false);
-                    //this.props.scrollDown();
+                    let pendingCheckout = localStorage.getItem('pendingCheckout');
+                    if( pendingCheckout ) {
+                        localStorage.removeItem('pendingCheckout');
+                        this.props.history.push('/checkout');
+                    }
                 })
             })
             .catch(err => {
@@ -67,8 +72,9 @@ export default class Auth extends Component {
                     throw res.body.ArgumentErrors.map(error => error.ErrorMessage)
                 }
 
-                this.setState(prev => ({...prev, errors: null}))
-                this.openSignIn()
+                this.setState(prev => ({...prev, errors: null}),()=>{
+                    this.login(form.Email,form.Password)
+                })
             })
 
             .catch(errors => {
@@ -215,3 +221,4 @@ export default class Auth extends Component {
         </div>
     }
 }
+export default withRouter(Auth);

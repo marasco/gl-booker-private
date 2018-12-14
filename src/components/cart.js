@@ -1,12 +1,8 @@
-
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
+import {withRouter} from 'react-router-dom'
 
 class Cart extends Component{
-    constructor(props){
-      super(props)
-
-    }
     showItems = () => {
 
         let rows = [];
@@ -21,7 +17,7 @@ class Cart extends Component{
                 <div className="row"  key={item.treatmentId+'key'+index}>
                 <div className="col-xs-12">
                 <div className="item col-xs-12">
-                <div className="desc col-xs-10">({index+1}) {item.treatmentName} with {item.specialistName} at {dateFormatted}</div>
+                <div className="desc col-xs-10">({index+1}) <strong>{item.treatmentName}</strong> with <i>{item.specialistName}</i> at {dateFormatted} - <strong>USD {item.price}</strong></div>
                 <div className="remove col-xs-2">
                 <span onClick={() => this.props.removeItem(index)} className="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
                 </div>
@@ -29,15 +25,24 @@ class Cart extends Component{
                 </div>
                 </div>
             )
+            return item
         });
         }
 
         return rows
     }
 
-    render() {
-      let loggedUser = JSON.parse(localStorage.getItem('loggedUser'))
+    checkout = () => {
+        let loggedUser = JSON.parse(localStorage.getItem('loggedUser'))
+        if( !loggedUser ) {
+            this.props.setAuthModal(true);
+            localStorage.setItem('pendingCheckout',1);
+        }else{
+            this.props.history.push('/checkout')
+        }
+    }
 
+    render() {
        return (
          <div>
             <div className="cart centered">
@@ -52,24 +57,14 @@ class Cart extends Component{
                   <div className="col-xs-12">
                   <Button className="centered selectBtnModal marginTop20" onClick={this.props.clearCart}>Clear Items</Button>
                   </div>
-                  {
-                    (!loggedUser)?
-                    <div className="col-xs-12">
-                      <Button className="selectBtnModal" onClick={()=>{
-                        this.props.addMoreServices()
-                      }} >ADD MORE SERVICES</Button>
-                      <Button className="selectBtnModal" onClick={()=>{
-                          this.props.setAuthModal(true)
-                        }} >PROCEED TO CHECKOUT</Button>
-                    </div>
-                    :
-                    <div  className="col-xs-12">
-                      <Button className="selectBtnModal" onClick={()=>{
-                          this.props.openCheckout()
-                        }} >PROCEED TO CHECKOUT</Button>
-                    </div>
-                  }
-
+                      <div className="col-xs-12">
+                          <Button className="selectBtnModal" onClick={()=>{
+                              this.props.addMoreServices()
+                          }} >ADD MORE SERVICES</Button>
+                          <Button className="selectBtnModal" onClick={()=>{
+                              this.checkout()
+                          }} >PROCEED TO CHECKOUT</Button>
+                      </div>
                   </div>
                   :<div><p className="marginTop20">Your treatments list is empty.</p></div>
 
@@ -80,4 +75,4 @@ class Cart extends Component{
       )
     }
 }
-export default Cart;
+export default withRouter(Cart);
