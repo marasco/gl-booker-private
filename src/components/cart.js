@@ -5,14 +5,9 @@ import { Button } from 'react-bootstrap';
 class Cart extends Component{
     constructor(props){
       super(props)
-      console.log('mountProps:',props)
 
     }
-    componentDidUpdate = () => {
-      console.log('cart updated')
-    }
     showItems = () => {
-      console.log('items=>',this.props.items)
 
         let rows = [];
         if (this.props.items){
@@ -23,7 +18,7 @@ class Cart extends Component{
 
 
             rows.push(
-                <div className="row"  key={item.treatmentId+'key'}>
+                <div className="row"  key={item.treatmentId+'key'+index}>
                 <div className="col-xs-12">
                 <div className="item col-xs-12">
                 <div className="desc col-xs-10">({index+1}) {item.treatmentName} with {item.specialistName} at {dateFormatted}</div>

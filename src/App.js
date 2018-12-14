@@ -12,7 +12,6 @@ class App extends React.Component {
       this.state = {
         showAuthModal:false
       }
-      console.log(props.match.path)
   }
 
   setAuthModal = (status) => {

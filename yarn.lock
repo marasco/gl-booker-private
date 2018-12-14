@@ -7066,6 +7066,13 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
 
+react-number-format@^4.0.5:
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/react-number-format/-/react-number-format-4.0.5.tgz#26bbc6645c027c398564b2bda56ed6540810d572"
+  integrity sha512-RyPT0U7Y/Fbu0tcsokwZyySH7wnGU+J8VumtD3I4gWFUwylwcVsAs5rO6EkI/v9dKH6kYsUe0hdjqEKg7IlcGg==
+  dependencies:
+    prop-types "^15.6.0"
+
 react-onclickoutside@^6.7.1:
   version "6.7.1"
   resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.7.1.tgz#6a5b5b8b4eae6b776259712c89c8a2b36b17be93"
