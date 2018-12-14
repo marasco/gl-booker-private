@@ -72,7 +72,7 @@ export default class Wizard extends Component {
       treatmentName: treatmentName,
       specialistName: specialistName,
       fullDate: date.substring(0, 10) +
-         'T' + time + '00:-08:00',
+         'T' + time + ':00-08:00',
       date:date,
       time:time,
     }
