@@ -21,8 +21,8 @@ export default class Calendario extends React.Component {
   componentDidMount = () => {
     this.load()
   }
-  addToCart = (treatmentId,specialistId,date,time,treatmentName,specialistName)=>{
-    this.props.addToCart(treatmentId,specialistId,date,time,treatmentName,specialistName)
+  addToCart = (treatmentId,specialistId,date,time,treatmentName,specialistName,price)=>{
+    this.props.addToCart(treatmentId,specialistId,date,time,treatmentName,specialistName,price)
   }
   load = () => {
   this.props.scrollDown()
@@ -31,8 +31,8 @@ export default class Calendario extends React.Component {
     .get(API_URL + '/availability')
     .set('Authorization', 'Bearer xxxx')
     .query({
-        fromDate: moment().format('Y-MM-DD'),
-        toDate: moment().add(1, 'month').format('Y-MM-DD'),
+        fromDate: moment().format('Y-MM-DD')+'T00:00:00-08:00',
+        toDate: moment().add(1, 'month').format('Y-MM-DD')+'T00:00:00-08:00',
         treatmentId: this.props.data.treatment.ID,
         employeeId: (this.props.data.specialist && this.props.data.specialist.ID)?this.props.data.specialist.ID:null,
     })

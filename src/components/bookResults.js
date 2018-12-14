@@ -17,9 +17,10 @@ class BookResults extends Component{
     book = (slot, specialistId,specialistName) => {
       const treatmentId = this.state.treatment['ID'];
       const treatmentName = this.state.treatment['Name'];
+      const price = this.state.treatment['Price']['Amount'];
       const date = this.state.date
       console.log('booking '+slot + '/'+specialistId+'/'+treatmentId+'/'+date)
-      this.props.addToCart(treatmentId,specialistId,date,slot,treatmentName,specialistName)
+      this.props.addToCart(treatmentId,specialistId,date,slot,treatmentName,specialistName,price)
       return true;
 
     }
@@ -70,7 +71,7 @@ class BookResults extends Component{
 
     loadTimes = () => {
         let query = {
-            fromDate: this.state.date,
+            fromDate: this.state.date+'T00:00:00-08:00',
             "treatmentId[]": this.state.treatment['ID'],
             includeEmployees:true,
             format:24
@@ -86,6 +87,7 @@ class BookResults extends Component{
                 try {
                     let times = []
                     if( res && res.body ) {
+
                         res.body.map(loc=>{
                             loc.serviceCategories.map(servCat=>{
                                 if( servCat.services ) {
@@ -135,7 +137,7 @@ class BookResults extends Component{
             })
             .catch(e => {
                 console.log(e)
-                alert(e.message)
+                alert('We cannot find available times for this date');
                 this.setState({loading:false})
             })
     }

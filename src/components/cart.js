@@ -17,7 +17,7 @@ class Cart extends Component{
                 <div className="row"  key={item.treatmentId+'key'+index}>
                 <div className="col-xs-12">
                 <div className="item col-xs-12">
-                <div className="desc col-xs-10">({index+1}) {item.treatmentName} with {item.specialistName} at {dateFormatted}</div>
+                <div className="desc col-xs-10">({index+1}) <strong>{item.treatmentName}</strong> with <i>{item.specialistName}</i> at {dateFormatted} - <strong>USD {item.price}</strong></div>
                 <div className="remove col-xs-2">
                 <span onClick={() => this.props.removeItem(index)} className="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
                 </div>
