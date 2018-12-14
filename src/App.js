@@ -46,6 +46,9 @@ class App extends React.Component {
                 <Nav>
                     <NavItem key={"treatments"} href={"/"}>{"Treatments"}</NavItem>
                     {
+                        (loggedUser)?<NavItem key={"appointments"} href={"/appointments"}>{"My Appointments"}</NavItem>:null
+                    }
+                    {
                         (loggedUser)?<NavItem key={"myaccount"} href={"/myaccount"}>{"My Account"}</NavItem>:null
                     }
                     {
