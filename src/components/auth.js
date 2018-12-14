@@ -17,6 +17,7 @@ class Auth extends Component {
             users: JSON.parse(localStorage.getItem('users')) || [],
             loggedUser: localStorage.getItem('loggedUser')
         }
+        localStorage.removeItem('pendingCheckout');
     }
 
     login = (email, password) => {
