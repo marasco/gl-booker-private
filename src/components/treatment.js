@@ -76,7 +76,7 @@ class Treatment extends Component{
 
     onClickTreatment = treatment => {
         let specialist = null
-        if( this.props.data.treatment && this.props.data.treatment.ID && this.props.data.treatment.ID == treatment.ID && this.props.data.specialist ) {
+        if( this.props.data.treatment && this.props.data.treatment.ID && this.props.data.treatment.ID === treatment.ID && this.props.data.specialist ) {
             specialist = this.props.data.specialist
         }
 

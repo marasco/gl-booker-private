@@ -2,14 +2,11 @@ import React, { Component } from 'react'
 import Treatment from './treatment'
 import Calendar from './calendar'
 import Cart from './cart'
-import {Button} from 'react-bootstrap';
 
 export const DEBUG_MODE = process.env.REACT_APP_DEBUG_MODE;
 
 export default class Wizard extends Component {
-  constructor(props){
-      super(props)
-  }
+   
   state = {
     data: {
       date: null,

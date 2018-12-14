@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import BookResultTable from './bookResultTable';
-import {  FormGroup, Label, FormControl } from 'react-bootstrap';
 import request from "superagent";
 import {API_URL} from "../App";
 import moment from "moment";
@@ -107,7 +106,9 @@ class BookResults extends Component{
                                                                     specialistId: specialist.ID
                                                                 })
                                                             }
+                                                            return slot
                                                         })
+                                                        return employeeId
                                                     })
                                                 }
                                                 return availability

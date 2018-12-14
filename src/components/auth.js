@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import request from 'superagent'
-import {Redirect} from 'react-router-dom'
 import LoginForm from './loginForm';
 import ResetForm from './resetForm';
 import RegisterForm from './registerForm';

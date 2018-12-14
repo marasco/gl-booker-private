@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom'
 import {  FormGroup, Button, Label, FormControl, Form } from 'react-bootstrap';
-import request from 'superagent'
-import { API_URL } from '../App'
 
 class ResetPassword extends Component {
     formFields = {
@@ -55,7 +52,7 @@ class ResetPassword extends Component {
         <div className="UserCreation">
             <Form className="whitebackground">
                 {fields}
-                <Button disabled={(this.state.form.Password && this.state.form.Password.length >= 8 && this.state.form.RepeatPassword && this.state.form.RepeatPassword == this.state.form.Password)?false:true} className="selectBtnModal" onClick={()=>this.resetPassword()}>Submit</Button>
+                <Button disabled={(this.state.form.Password && this.state.form.Password.length >= 8 && this.state.form.RepeatPassword && this.state.form.RepeatPassword === this.state.form.Password)?false:true} className="selectBtnModal" onClick={()=>this.resetPassword()}>Submit</Button>
             </Form>
         </div>
         </div>

@@ -3,10 +3,6 @@ import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 
 class Cart extends Component{
-    constructor(props){
-      super(props)
-
-    }
     showItems = () => {
 
         let rows = [];
@@ -29,6 +25,7 @@ class Cart extends Component{
                 </div>
                 </div>
             )
+            return item
         });
         }
 
