@@ -66,8 +66,9 @@ export default class Auth extends Component {
                     throw res.body.ArgumentErrors.map(error => error.ErrorMessage)
                 }
 
-                this.setState(prev => ({...prev, errors: null}))
-                this.openSignIn()
+                this.setState(prev => ({...prev, errors: null}),()=>{
+                    this.login(form.Email,form.Password)
+                })
             })
 
             .catch(errors => {
