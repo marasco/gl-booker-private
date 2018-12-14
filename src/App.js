@@ -49,6 +49,9 @@ class App extends React.Component {
                         (loggedUser)?<NavItem key={"myaccount"} href={"/myaccount"}>{"My Account"}</NavItem>:null
                     }
                     {
+                        (loggedUser)?<NavItem key={"checkout"} href={"/checkout"}>{"Checkout"}</NavItem>:null
+                    }
+                    {
                         (!loggedUser)?<NavItem key={"signin"} href={"#"} onClick={()=>{ this.setAuthModal(true) }} >Sign In</NavItem>:null
                     }
                 </Nav>

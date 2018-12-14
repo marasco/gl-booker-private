@@ -6,7 +6,7 @@ import Cart from './cart'
 export const DEBUG_MODE = process.env.REACT_APP_DEBUG_MODE;
 
 export default class Wizard extends Component {
-   
+
   state = {
     data: {
       date: null,
@@ -71,9 +71,13 @@ export default class Wizard extends Component {
       specialistId:specialistId,
       treatmentName: treatmentName,
       specialistName: specialistName,
+      fullDate: date.substring(0, 10) +
+         'T' + time + '00:-08:00',
       date:date,
       time:time,
     }
+
+
     cart.push(newObj)
     localStorage.setItem('cart', JSON.stringify(cart))
     this.setState({cart: cart})
