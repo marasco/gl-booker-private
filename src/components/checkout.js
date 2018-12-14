@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom'
 import * as moment from 'moment'
 import NumberFormat from 'react-number-format';
-
 import {  FormGroup, Button, Label, FormControl, Form } from 'react-bootstrap';
 import request from 'superagent'
 import { API_URL } from '../App'
 import Select from 'react-select';
+import {withRouter} from "react-router-dom";
 
 const customStyles = {
   control: styles => ({ ...styles, backgroundColor: 'white', height: '40', border:'solid 1px #333',borderRadius:0 }),
@@ -82,7 +82,7 @@ class Checkout extends Component {
       this.setState({cart: cart})
       }
       if (cart.length===0){
-        
+        this.props.history.push('/appointments');
       }
       return true;
     }
@@ -339,4 +339,4 @@ class Checkout extends Component {
         );
     }
 }
-export default Checkout;
+export default withRouter(Checkout);
