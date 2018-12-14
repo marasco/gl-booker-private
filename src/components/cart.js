@@ -70,7 +70,7 @@ class Cart extends Component{
                     :
                     <div  className="col-xs-12">
                       <Button className="selectBtnModal" onClick={()=>{
-                          this.openCheckout()
+                          this.props.openCheckout()
                         }} >PROCEED TO CHECKOUT</Button>
                     </div>
                   }

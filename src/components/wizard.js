@@ -114,6 +114,7 @@ export default class Wizard extends Component {
     })
     let cart = React.createElement(Cart, {
       items: this.state.cart,
+      openCheckout: this.openCheckout,
       addMoreServices: this.addMoreServices,
       setAuthModal: this.props.setAuthModal,
       addToCart: this.addToCart,
