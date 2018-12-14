@@ -6,6 +6,7 @@ import Profile from './components/profile';
 import Checkout from './components/checkout';
 import ResetPassword from './components/resetPassword';
 import Auth from './components/auth';
+import Appointments from './components/appointments';
 
 export const makeMainRoutes = () => {
   return (
@@ -16,6 +17,7 @@ export const makeMainRoutes = () => {
         <Route path="/myaccount" render={(props) => <Profile {...props} />} />
         <Route path="/checkout" render={(props) => <Checkout {...props} />} />
         <Route path="/reset-password" render={(props) => <ResetPassword {...props} />} />
+        <Route path="/appointments" render={(props) => <Appointments {...props} />} />
       </div>
     </Router>
   );
