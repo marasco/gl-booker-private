@@ -41,7 +41,9 @@ class Checkout extends Component {
       let sum = 0;
       cart.map((item,index) => {
         sum+=item.price
+        item.id = index
       })
+      console.log('cart1:',cart);
 
 
       this.state = {
@@ -64,18 +66,42 @@ class Checkout extends Component {
       console.log(this.state)
     }
 
+    removeCartItem = (id) => {
+      console.log('removing id '+id)
+      let cart = this.state.cart;
+      let toRemove = -1;
+      cart.map((item,index) => {
 
+        if (item.id === id){
+          toRemove = index;
+        }
+      })
+      if (toRemove>-1){
+      cart.splice(toRemove,1);
+      localStorage.setItem('cart', JSON.stringify(cart))
+      this.setState({cart: cart})
+      }
+      if (cart.length===0){
+        
+      }
+      return true;
+    }
       processCheckout = () =>{
         let items = [];
         let minDate='2030-00-00T00:00:00-08:00';
+        this.setState({message: 'Processing your payment'})
+
         if (this.state.cart){
+          console.log('cart2:',this.state.cart);
+
           this.state.cart.map((item,index) => {
             if (item.fullDate < minDate){
               minDate = item.fullDate
             }
             items.push({
               slot: item.fullDate,
-              id: item.treatmentId
+              id: item.treatmentId,
+              index:item.id
             })
           })
         }
@@ -90,7 +116,6 @@ class Checkout extends Component {
         let qty = items.length;
         items.forEach(
          function iterator( item, index ) {
-             console.log( "forEach:", index);
              /* each app */
              let form = {
                firstname: this.state.customer.FirstName,
@@ -99,7 +124,7 @@ class Checkout extends Component {
                phone: this.state.customer.CellPhone,
                customerId: this.state.customer.ID,
                startDateTime: minDate,
-               treatments: [item],
+               treatments: [{id: item.id, slot: item.slot}],
                payment: payment,
                access_token: this.state.access_token
              }
@@ -117,7 +142,7 @@ class Checkout extends Component {
                  throw new Error(res.body.ArgumentErrors.map(error => error.ErrorMessage))
                }
                if (res.body.IsSuccess===true){
-
+                 this.removeCartItem(item.index);
                  this.setState({message: 'Your appointment was made successfully.'})
                  this.setState(prev => ({ ...prev, errors: null }))
                  //msg+="Your appointment was created successfully");
