@@ -39,6 +39,7 @@ export default class Calendario extends React.Component {
     .then(res => {
       try {
         let availability = res.body[0].serviceCategories[0].services[0].availability
+        console.log('availability', availability)
         this.setState({ availability, loading:false },()=>{
 
         })
@@ -46,7 +47,7 @@ export default class Calendario extends React.Component {
       catch (error) {
         console.error(error)
         this.setState({loading:false})
-        throw new Error('Error loading calendar');
+        throw new Error('No times available for this specialist, please try with another one');
       }
     })
     .catch(e => {
@@ -63,7 +64,7 @@ export default class Calendario extends React.Component {
 
   tileDisabledCallback = ({activeStartDate, date, view }) => {
     return !this.state.availability.some(
-      availableDate => moment(availableDate).diff(date, 'days') === 0
+      availableDate => moment(availableDate).isSame(moment(date), 'date')
     )
   }
 
