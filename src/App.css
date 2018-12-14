@@ -116,6 +116,26 @@ th {
       font-weight: bold;
       font-size: 11px;
 }
+.cartsummary-container  .total{
+    margin:20px;
+    font-size: 20px;
+    padding-bottom:20px;
+}
+.cartsummary-container  .title{
+  margin:20px;
+    font-size: 24px;
+    border-bottom: solid 1px #f1f1f1;
+    padding-bottom:20px;
+}
+.cartsummary-container  {
+  border: solid 1px #f1f1f1;
+  background: #fbfbfb;
+}
+.cartsummary .desc {
+  margin:10px 0px 10px;
+  padding:20px 10px;
+  border-bottom: solid 1px #ccc;
+}
 .cart {
   border: solid 1px #f1f1f1;
   padding:10px;

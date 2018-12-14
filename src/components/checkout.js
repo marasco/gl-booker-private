@@ -37,7 +37,15 @@ class Checkout extends Component {
       super(props)
       let user = JSON.parse(localStorage.getItem('loggedUser'))
       let cart = JSON.parse(localStorage.getItem('cart'))
+
+      let sum = 0;
+      cart.map((item,index) => {
+        sum+=item.price
+      })
+
+
       this.state = {
+        sum: sum,
         message: '',
         customer: user && user.Customer.Customer,
         access_token: user && user.access_token,
@@ -52,6 +60,7 @@ class Checkout extends Component {
           postalCode:'33108',
         }
       }
+
       console.log(this.state)
     }
 
@@ -169,15 +178,16 @@ class Checkout extends Component {
     showItems = () => {
 
         let rows = [];
+        let sum = 0;
         if (this.state.cart){
         this.state.cart.map((item,index) => {
-
+          sum += item.price
           let dateFormatted = item.date.substring(0, 10) +
            ' ' + item.time;
 
 
             rows.push(
-                <div className="row"  key={item.treatmentId+'key'+index}>
+                <div className="col-xs-12 cartsummary"  key={item.treatmentId+'key'+index}>
                 <div className="desc col-xs-12">({index+1}) <strong>{item.treatmentName}</strong> with <i>{item.specialistName}</i> at {dateFormatted} - <strong>USD {item.price}</strong></div>
                 </div>
             )
@@ -281,7 +291,24 @@ class Checkout extends Component {
             </div>
           </div>
           <div className="col-sm-4">
-            {this.showItems()}
+
+            <div className="cartsummary-container row">
+              <div className="col-xs-12">
+                <div className="title">
+                You are booking
+                </div>
+              </div>
+              <div className="col-xs-12">
+                {this.showItems()}
+              </div>
+              <div className="col-xs-12">
+              <div className="total">
+                Total: USD {this.state.sum}
+              </div>
+              </div>
+            </div>
+
+
           </div>
         </div>
         );
