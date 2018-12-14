@@ -5,8 +5,9 @@ import ResetForm from './resetForm';
 import RegisterForm from './registerForm';
 import {API_URL} from '../App'
 import {Modal, Col} from 'react-bootstrap';
+import {withRouter} from "react-router-dom";
 
-export default class Auth extends Component {
+class Auth extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -36,7 +37,11 @@ export default class Auth extends Component {
                     loggedUser: res.body.Customer
                 }), () => {
                     this.props.setAuthModal(false);
-                    //this.props.scrollDown();
+                    let pendingCheckout = localStorage.getItem('pendingCheckout');
+                    if( pendingCheckout ) {
+                        localStorage.removeItem('pendingCheckout');
+                        this.props.history.push('/checkout');
+                    }
                 })
             })
             .catch(err => {
@@ -215,3 +220,4 @@ export default class Auth extends Component {
         </div>
     }
 }
+export default withRouter(Auth);

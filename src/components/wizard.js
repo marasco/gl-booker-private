@@ -154,9 +154,6 @@ export default class Wizard extends Component {
         <div className="col-sm-12">
         { cart }
         </div>
-
-
-
       </div>
     )
   }
