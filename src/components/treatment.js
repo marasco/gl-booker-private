@@ -95,17 +95,13 @@ class Treatment extends Component{
     render(){
     return(
         <div className="treatments">
-            <div className="centered col-xs-12">
-                <h1 className="centered section-1">BOOK A SERVICE</h1>
-            </div>
-            <div className="centered col-xs-12 col-md-8 col-md-offset-2">
-                <h3>Welcome to Georgia Louise bookings, the leading destination for  the most advanced facials in Manhattan, home to celebrity and world-acclaimed facialist, Georgia Louise, and her elite team. Its time to book your bespoke GLO</h3>
-            </div>
             <Row>
               {(()=>{
                 let doms = []
                 let items = (this.state.treatments) ? this.state.treatments : []
-
+                if (items.length===0){
+                  return <div className="marginBottom20">Loading...</div>
+                }
                 //let count = 0
                 items.map((item,i)=>{
                     //count++
@@ -115,7 +111,7 @@ class Treatment extends Component{
                     }
                     doms.push(
 
-                       <Col xs={12} sm={6} md={4} className="item" key={"image" + item.ID}>
+                       <Col xs={12} sm={6} md={4} lg={3} className="item" key={"image" + item.ID}>
                             <div className={this.state.treatment === item?"itemContent active":"itemContent"}>
                                 <Row className="border-bottom">
                                     <Col xs={12} className="image" style={{backgroundImage: "url("+img+")"}} alt={item.ID}></Col>
@@ -153,7 +149,7 @@ class Treatment extends Component{
 
             </Row>
 
-            {this.state.page && (
+            {this.state.page && this.state.treatments.length>0 && (
                 <div className="col-xs-12 centered">
                 <Button  className="selectBtnModal" onClick={ this.loadTreatments }>Load More</Button>
                 </div>

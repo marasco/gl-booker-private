@@ -79,14 +79,14 @@ th {
     height: 60px;
 }
 .treatments .item .itemContent.active {
-  border:solid 3px #333;
+  border:solid 1px #333;
 }
 .centered {
   text-align: center;
 }
 .treatments .item .itemContent {
-  border:solid 3px #e1e1e1;
-  margin: 16px 8px;
+  border: solid 1px #f7f7f7;
+  margin: 0px 8px 16px;
 }
 .treatments .item .duration {
   line-height: 40px;

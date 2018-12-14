@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import Treatment from './treatment'
 import Calendar from './calendar'
 import Cart from './cart'
+import {Button} from 'react-bootstrap';
+
 export const DEBUG_MODE = process.env.REACT_APP_DEBUG_MODE;
 
 export default class Wizard extends Component {
   constructor(props){
       super(props)
   }
-
   state = {
     data: {
       date: null,
@@ -17,7 +18,17 @@ export default class Wizard extends Component {
     }
   }
 
-
+  addMoreServices =() =>{
+    this.setState({
+      date:null,
+      treatment:null,
+      specialist:null
+    })
+    this.scrollUp();
+  }
+  openCheckout = () => {
+    this.setState({showCheckout: true})
+  }
   push = (state) => {
     // Let steps components push data to "data" state attribute.
     this.setState(prev => ({ ...prev, data: { ...this.state.data, ...state } }))
@@ -40,7 +51,6 @@ export default class Wizard extends Component {
   }
   clearCart = () =>{
     localStorage.removeItem('cart')
-    console.log('cart is clear now')
     this.setState({cart: null})
 
   }
@@ -59,7 +69,6 @@ export default class Wizard extends Component {
     }else{
       cart = [];
     }
-    console.log('old_cart: ',cart)
     let newObj = {
       treatmentId:treatmentId,
       specialistId:specialistId,
@@ -68,12 +77,10 @@ export default class Wizard extends Component {
       date:date,
       time:time,
     }
-    console.log('add=>',newObj);
     cart.push(newObj)
-    console.log('new_cart: ',cart)
     localStorage.setItem('cart', JSON.stringify(cart))
-
     this.setState({cart: cart})
+    this.scrollDown()
 
   }
   componentDidMount = () =>{
@@ -82,14 +89,15 @@ export default class Wizard extends Component {
       items = JSON.parse(items)
     }
     this.setState({cart: items})
-    console.log('cart=>',items)
+  }
+  scrollUp = () => {
+      this.props.scrollUp();
   }
   scrollDown = () => {
       this.props.scrollDown();
   }
 
   render() {
-    let loggedUser = JSON.parse(localStorage.getItem('loggedUser'))
     let treatments = React.createElement(Treatment, {
       // Pass shared data between sub-components.
       data: this.state.data,
@@ -106,6 +114,8 @@ export default class Wizard extends Component {
     })
     let cart = React.createElement(Cart, {
       items: this.state.cart,
+      addMoreServices: this.addMoreServices,
+      setAuthModal: this.props.setAuthModal,
       addToCart: this.addToCart,
       removeItem: this.removeItem,
       clearCart: this.clearCart
@@ -118,26 +128,33 @@ export default class Wizard extends Component {
           )?
           <pre>{ JSON.stringify(this.state.data, null, 2) }</pre>:<div></div>
         }
-        <div className="centered col-xs-12">
-          { treatments }
+        <div className="centered col-xs-12 marginBottom20">
+          <div className="centered col-xs-12">
+              <h1 className="centered section-1">BOOK A SERVICE</h1>
+          </div>
+          <div className="centered col-xs-12 col-md-8 col-md-offset-2">
+              <h3>Welcome to Georgia Louise bookings, the leading destination for  the most advanced facials in Manhattan, home to celebrity and world-acclaimed facialist, Georgia Louise, and her elite team. Its time to book your bespoke GLO</h3>
+          </div>
         </div>
-        {
-            (this.state.data.specialist) ? <div className="centered col-xs-12">
-                { calendar }
-            </div> : <span></span>
-        } 
-        { cart }
 
-        {
-          (!loggedUser && this.state.data.date && this.state.data.specialist)?
-              <div className="centered col-xs-12 marginBottom20">
-                <a href="#" onClick={()=>{
-                  this.props.setAuthModal(true)
-                }} >Sign In</a>
-              </div>
-              :
-              null
-        } 
+        <div className="col-sm-12">
+
+
+          <div className="centered col-xs-12 ">
+            { treatments }
+          </div>
+          {
+              (this.state.data.specialist) ? <div className="centered col-xs-12">
+                  { calendar }
+              </div> : <span></span>
+          }
+        </div>
+        <div className="col-sm-12">
+        { cart }
+        </div>
+
+
+
       </div>
     )
   }

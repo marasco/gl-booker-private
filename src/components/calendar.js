@@ -25,6 +25,7 @@ export default class Calendario extends React.Component {
     this.props.addToCart(treatmentId,specialistId,date,time,treatmentName,specialistName)
   }
   load = () => {
+  this.props.scrollDown()
     this.setState({loading: true})
     request
     .get(API_URL + '/availability')
@@ -39,7 +40,7 @@ export default class Calendario extends React.Component {
       try {
         let availability = res.body[0].serviceCategories[0].services[0].availability
         this.setState({ availability, loading:false },()=>{
-          this.props.scrollDown()
+
         })
       }
       catch (error) {

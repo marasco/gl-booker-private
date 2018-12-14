@@ -6,17 +6,8 @@ import {API_URL} from "../App";
 import moment from "moment";
 
 class BookResults extends Component{
-    formFields = {
-        who:{ label:'WHO',value:''},
-        when:{ label:'WHEN',value:''},
-        with:{ label:'WITH',value:''},
-    }
+
     state = {
-        form:{
-            who:'',
-            when:'',
-            with:'',
-        },
         times:[],
         loading:true,
         specialist: this.props.data.specialist,
@@ -148,25 +139,11 @@ class BookResults extends Component{
             })
     }
     render(){
-        Object.keys(this.formFields).map(x =>  {
-            return (
-            <div className="col-xs-12 col-sm-4"  key={"list" +x}><FormGroup key={x} id={"form" + x}>
 
-            <Label>{this.formFields[x].label+ ': '}</Label>
-
-            <FormControl
-                type="text"
-                value={this.state.form[x]}
-                onChange={e => this.handleChange(e.target.value,x)}
-            />
-            </FormGroup></div>
-
-           )
-        })
 
         return(
             <div>
-                {(this.state.loading)?<span>Loading...</span>:
+                {(this.state.loading)?<div className="marginTop20 marginBottom40">Loading...</div>:
                     <div className="timetable marginTop20">
                         <BookResultTable book={this.book} times={this.state.times} specialists={this.state.specialists}></BookResultTable>
                         {
