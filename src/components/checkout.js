@@ -6,19 +6,45 @@ import NumberFormat from 'react-number-format';
 import {  FormGroup, Button, Label, FormControl, Form } from 'react-bootstrap';
 import request from 'superagent'
 import { API_URL } from '../App'
+import Select from 'react-select';
 
+const customStyles = {
+  control: styles => ({ ...styles, backgroundColor: 'white', height: '40', border:'solid 1px #333',borderRadius:0 }),
+  option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+    return {
+      ...styles,
+      height: '40',
+      backgroundColor: isDisabled
+        ? null
+        : isSelected ? 'black' : isFocused ? '#e1e1e1' : 'white',
+      color: isDisabled
+        ? '#ccc'
+        : isSelected
+          ? 'white'
+          : data.color,
+      cursor: isDisabled ? 'not-allowed' : 'default',
+    };
+  },
+  singleValue: (provided, state) => {
+    const opacity = state.isDisabled ? 0.5 : 1;
+    const transition = 'opacity 300ms';
+
+    return { ...provided, opacity, transition };
+  }
+}
 class Checkout extends Component {
     constructor(props) {
       super(props)
       let user = JSON.parse(localStorage.getItem('loggedUser'))
       let cart = JSON.parse(localStorage.getItem('cart'))
       this.state = {
+        message: '',
         customer: user && user.Customer.Customer,
         access_token: user && user.access_token,
         cart: cart,
         payment: {
           cardName:'Sandbox Card',
-          cardType:2,
+          cardType:{value:2,label:'Visa'},
           cardNumber:'4111-1111-1111-1111',
           cardExpiration:'11/2023',
           cardProvider:'Visa',
@@ -51,10 +77,11 @@ class Checkout extends Component {
           cardExp = parts[1]+'-'+parts[0]
           payment.cardExpiration=cardExp;
         }
+        payment.cardType=payment.cardType.value;
         let qty = items.length;
         items.forEach(
-         function iterator( item ) {
-             console.log( "forEach:", item);
+         function iterator( item, index ) {
+             console.log( "forEach:", index);
              /* each app */
              let form = {
                firstname: this.state.customer.FirstName,
@@ -81,10 +108,14 @@ class Checkout extends Component {
                  throw new Error(res.body.ArgumentErrors.map(error => error.ErrorMessage))
                }
                if (res.body.IsSuccess===true){
+
+                 this.setState({message: 'Your appointment was made successfully.'})
                  this.setState(prev => ({ ...prev, errors: null }))
                  //msg+="Your appointment was created successfully");
                }else if (res.body.ErrorMessage){
-                 alert('An error has ocurred: '+res.body.ErrorMessage);
+                 this.setState({message: 'Your appointment failed: '+res.body.ErrorMessage})
+
+//                 alert('An error has ocurred: '+res.body.ErrorMessage);
                }
 
 
@@ -92,7 +123,8 @@ class Checkout extends Component {
 
              .catch(errors => {
               console.error(errors)
-               alert(errors.message)
+               this.setState({message: 'Your appointment failed: '+errors.message})
+
                this.setState(prev => ({ ...prev, errors }))
              })
          },
@@ -112,84 +144,145 @@ class Checkout extends Component {
 
         return moment(dob,'x').format('MM/DD/YYYY');
     }
+    onTypeChange = type => {
+      let payment = this.state.payment
+      payment.cardType = type
+      this.setState({ payment: payment })
+    }
+    getCardTypeOptions = () => {
+      let options = []
+      options.push({
+        value: 2,
+        label: "Visa"
+      });
+      options.push({
+        value: 1,
+        label: "American Express"
+      });
+      options.push({
+        value: 3,
+        label: "MasterCard"
+      });
+
+      return options
+    }
+    showItems = () => {
+
+        let rows = [];
+        if (this.state.cart){
+        this.state.cart.map((item,index) => {
+
+          let dateFormatted = item.date.substring(0, 10) +
+           ' ' + item.time;
+
+
+            rows.push(
+                <div className="row"  key={item.treatmentId+'key'+index}>
+                <div className="desc col-xs-12">({index+1}) <strong>{item.treatmentName}</strong> with <i>{item.specialistName}</i> at {dateFormatted} - <strong>USD {item.price}</strong></div>
+                </div>
+            )
+            return item
+        });
+        }
+
+        return rows
+    }
     render() {
+
+
 
       let form = (
         <div>
-        <FormGroup>
-            <Label>Name on Card</Label>
-            <FormControl
-                type="text"
-                value={this.state.payment.cardName}
-                placeholder={"Name on Card"}
-                onChange={e => this.handleChange(e.target.value,'cardType')}
-            />
-        </FormGroup>
 
-        <FormGroup>
-            <Label>Credit card number</Label>
-            <FormControl
-                type="text"
-                value={this.state.payment.cardNumber}
-                placeholder={"Credit card number"}
-                onChange={e => this.handleChange(e.target.value,'cardNumber')}
-            />
-        </FormGroup>
+          <div>
+          <FormGroup>
+              <Label>Name on Card</Label>
+              <FormControl
+                  type="text"
+                  value={this.state.payment.cardName}
+                  placeholder={"Name on Card"}
+                  onChange={e => this.handleChange(e.target.value,'cardName')}
+              />
+          </FormGroup>
 
-        <FormGroup>
-            <Label>Credit card type</Label>
-            <FormControl
-                type="text"
-                value={this.state.payment.cardType}
+          <FormGroup>
+              <Label>Credit card number</Label>
+              <FormControl
+                  type="text"
+                  value={this.state.payment.cardNumber}
+                  placeholder={"Credit card number"}
+                  onChange={e => this.handleChange(e.target.value,'cardNumber')}
+              />
+          </FormGroup>
+
+          <FormGroup>
+              <Label>Credit card type</Label>
+              <Select
                 placeholder={"Credit card type"}
-                onChange={e => this.handleChange(e.target.value,'cardType')}
-            />
-        </FormGroup>
-        <Form componentClass="fieldset" inline>
+                styles={customStyles}
+                value={this.state.payment.cardType}
+                onChange={this.onTypeChange}
+                options={ (this.getCardTypeOptions()) }
+             />
 
-        <FormGroup>
-            <Label>Expiration</Label>
-            <FormControl
-                type="text"
-                value={this.state.payment.cardExpiration}
-                placeholder={"MM/YYYY"}
-                onChange={e => this.handleChange(e.target.value,'cardExpiration')}
-            />
-        </FormGroup>{' '}
+          </FormGroup>
+          <Form componentClass="fieldset" inline>
 
-        <FormGroup>
-            <Label>CVC</Label>
-            <FormControl
-                type="text"
-                value={this.state.payment.CVC}
-                placeholder={"CVC"}
-                onChange={e => this.handleChange(e.target.value,'CVC')}
-            />
-        </FormGroup>{' '}
-        <FormGroup>
-            <Label>Postal Code</Label>
-            <FormControl
-                type="text"
-                value={this.state.payment.postalCode}
-                placeholder={"Postal Code"}
-                onChange={e => this.handleChange(e.target.value,'postalCode')}
-            />
-        </FormGroup>
-        </Form>
+          <FormGroup>
+              <Label>Expiration</Label>
+              <FormControl
+                  type="text"
+                  value={this.state.payment.cardExpiration}
+                  placeholder={"MM/YYYY"}
+                  onChange={e => this.handleChange(e.target.value,'cardExpiration')}
+              />
+          </FormGroup>{' '}
 
+          <FormGroup>
+              <Label>CVC</Label>
+              <FormControl
+                  type="text"
+                  value={this.state.payment.CVC}
+                  placeholder={"CVC"}
+                  onChange={e => this.handleChange(e.target.value,'CVC')}
+              />
+          </FormGroup>{' '}
+          <FormGroup>
+              <Label>Postal Code</Label>
+              <FormControl
+                  type="text"
+                  value={this.state.payment.postalCode}
+                  placeholder={"Postal Code"}
+                  onChange={e => this.handleChange(e.target.value,'postalCode')}
+              />
+          </FormGroup>
+          </Form>
+
+          </div>
         </div>
         )
     return (
-        <div className="col-xs-12 col-sm-6 col-sm-offset-3">
-        <div className="title"><h2>Checkout</h2></div>
-        <div className="checkout">
-            <Form className="whitebackground">
-                {form}
-                <div className="marginTop20">
-                <Button  className="selectBtnModal" onClick={()=>this.processCheckout()}>BOOK</Button>
-                </div>
-            </Form>
-        </div>
+        <div className="col-xs-12 col-sm-10 col-sm-offset col-md-8 col-md-offset-2">
+            <div className="title"><h2>Checkout</h2></div>
+            <div className="col-sm-8">
+              <div className="checkout">
+                <Form className="whitebackground">
+                    {form}
+                    <div className="marginTop20">
+                    <div>
+                      {
+                        (this.state.message.length)?
+                        <p>{this.state.message}</p>:<p></p>
+                      }
+                    </div>
+                    <Button  className="selectBtnModal" onClick={()=>this.processCheckout()}>BOOK</Button>
+                    </div>
+                </Form>
+            </div>
+          </div>
+          <div className="col-sm-4">
+            {this.showItems()}
+          </div>
         </div>
         );
     }

@@ -58,7 +58,7 @@ export default class Wizard extends Component {
     this.setState({cart: cart})
 
   }
-  addToCart = (treatmentId,specialistId,date,time,treatmentName,specialistName) =>{
+  addToCart = (treatmentId,specialistId,date,time,treatmentName,specialistName,price) =>{
     let cart = localStorage.getItem('cart');
 
     if (cart){
@@ -71,6 +71,7 @@ export default class Wizard extends Component {
       specialistId:specialistId,
       treatmentName: treatmentName,
       specialistName: specialistName,
+      price: price,
       fullDate: date.substring(0, 10) +
          'T' + time + ':00-08:00',
       date:date,
