@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import { addTreatment, removeTreatment, selectSpecialist } from '../store/actions'
 import { Button, Row, Col } from 'react-bootstrap';
 import '../App.css';
 import Specialist from './specialist';
@@ -54,42 +56,71 @@ class Treatment extends Component{
         }
     }
 
-    loadSpeacialists = treatmentId => {
-        request
-        .get(API_URL + '/employees')
-        .set('Authorization', 'Bearer xxxx')
-        .query({
-        pageSize: 100,
-        treatmentId,
+    isSelected = treatmentId => {
+        return this.props.wizard.treatments.some(data => {
+            return data.treatmentId === treatmentId
         })
-        .then(res=>{
-            this.setState({
-                specialists: res.body.Results.map(record => ({ ...record,
-                value: record.ID,
-                label: [record.LastName, record.FirstName].join(', '),
-                }))
-            })
-        }).catch(error => {
-            console.log(error)
-        });
     }
 
-    onClickTreatment = treatment => {
-        let specialist = null
-        if( this.props.data.treatment && this.props.data.treatment.ID && this.props.data.treatment.ID === treatment.ID && this.props.data.specialist ) {
-            specialist = this.props.data.specialist
+    getSpecialist = treatmentId => {
+        let items = this.props.wizard.treatments.filter(data => {
+            return data.treatmentId === treatmentId
+        })
+
+        return items && items[0].specialistId
+    }
+
+    getSpecialists = treatmentId => {
+        return this.props.wizard.data.specialists[treatmentId] || []
+    }
+
+    // loadSpeacialists = treatmentId => {
+    //     request
+    //     .get(API_URL + '/employees')
+    //     .set('Authorization', 'Bearer xxxx')
+    //     .query({
+    //     pageSize: 100,
+    //     treatmentId,
+    //     })
+    //     .then(res=>{
+    //         this.setState({
+    //             specialists: res.body.Results.map(record => ({ ...record,
+    //             value: record.ID,
+    //             label: [record.LastName, record.FirstName].join(', '),
+    //             }))
+    //         })
+    //     }).catch(error => {
+    //         console.log(error)
+    //     });
+    // }
+
+    onClickTreatment = (treatmentId, selected) => {
+        if (selected) {
+            this.props.removeTreatment(treatmentId)
+        }
+        else {
+            this.props.addTreatment(treatmentId)
         }
 
-        this.props.push({ treatment, specialist: specialist, date: null })
-        this.setState({treatment, specialist: specialist, specialists: [] })
-        this.loadSpeacialists(treatment.ID)
+
+        // let specialist = null
+        // if( this.props.data.treatment && this.props.data.treatment.ID && this.props.data.treatment.ID === treatment.ID && this.props.data.specialist ) {
+        //     specialist = this.props.data.specialist
+        // }
+
+        // this.props.addTreatment(treatment.ID)
+
+        // this.props.push({ treatment, specialist: specialist, date: null })
+        // this.setState({treatment, specialist: specialist, specialists: [] })
+        // this.loadSpeacialists(treatment.ID)
     }
 
-    onSpecialistChange = specialist => {
-        this.props.push({ specialist:null, date: null })
-        this.setState({ specialist },()=>{
-            this.props.push({ specialist, date: null })
-        })
+    onSpecialistChange = (treatmentId, specialist) => {
+        this.props.selectSpecialist(treatmentId, specialist.ID)
+        // this.props.push({ specialist:null, date: null })
+        // this.setState({ specialist },()=>{
+        //     this.props.push({ specialist, date: null })
+        // })
     }
 
     render(){
@@ -106,13 +137,14 @@ class Treatment extends Component{
                 items.map((item,i)=>{
                     //count++
                     let img = item.ImageURL;
+                    let selected = this.isSelected(item.ID)
                     if (!img || img.length===0){
                         img = '/sample.png';
                     }
                     doms.push(
 
                        <Col xs={12} sm={6} md={4} lg={3} className="item" key={"image" + item.ID}>
-                            <div className={this.state.treatment === item?"itemContent active":"itemContent"}>
+                            <div className={selected?"itemContent active":"itemContent"}>
                                 <Row className="border-bottom">
                                     <Col xs={12} className="image" style={{backgroundImage: "url("+img+")"}} alt={item.ID}></Col>
                                 </Row>
@@ -122,16 +154,16 @@ class Treatment extends Component{
                                 <Row className="border-bottom">
                                     <Col xs={12} className="padding-0">
                                     <Col xs={12} sm={8} className="padding-0"><div className="duration">{item.TreatmentDuration} MIN - {item.Price.CurrencyCode} {item.Price.Amount}</div></Col>
-                                    <Col xs={12} sm={4} className="padding-0"><div className="selectBtn" onClick={() => this.onClickTreatment(item) }>SELECT</div></Col>
+                                    <Col xs={12} sm={4} className="padding-0"><div className="selectBtn" onClick={() => this.onClickTreatment(item.ID, selected) }>{ selected ? 'CANCEL' : 'SELECT' }</div></Col>
                                     </Col>
                                 </Row>
                                 <Row>
                                     <Col xs={12} sm={12}>
                                         <Specialist treatmentId={item.ID}
-                                        selected={ this.state.treatment === item }
-                                        specialist={ this.state.specialist }
-                                        specialists={ this.state.specialists }
-                                        onSpecialistChange={ this.onSpecialistChange } />
+                                        selected={ selected }
+                                        specialist={ selected ? this.getSpecialist(item.ID) : null }
+                                        specialists={ selected ? this.getSpecialists(item.ID) : [] }
+                                        onSpecialistChange={ this.onSpecialistChange.bind(this, item.ID) } />
                                     </Col>
                                 </Row>
                             </div>
@@ -159,4 +191,15 @@ class Treatment extends Component{
         );
     }
 }
-export default Treatment;
+
+const mapStateToProps = state => ({
+    wizard: state.wizard,
+})
+
+const mapDispatchToProps = dispatch => ({
+    addTreatment: treatmentId => dispatch(addTreatment(treatmentId)),
+    removeTreatment: treatmentId => dispatch(removeTreatment(treatmentId)),
+    selectSpecialist: (treatmentId, specialistId) => dispatch(selectSpecialist(treatmentId, specialistId)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Treatment)
