@@ -104,6 +104,10 @@ class Wizard extends Component {
       this.props.scrollDown();
   }
 
+  prevStep = () => {
+    this.setState(prev => ({ ...prev, step: prev.step - 1 }))
+  }
+
   nextStep = () => {
     this.setState(prev => ({ ...prev, step: prev.step + 1 }))
   }
@@ -126,6 +130,7 @@ class Wizard extends Component {
     let calendar = React.createElement(Calendar, {
       order: this.props.order,
       nextStep: this.nextStep,
+      prevStep: this.prevStep,
       addToCart: this.addToCart,
       selectDate: this.props.selectDate,
       isActiveStep: this.state.step === 2,
