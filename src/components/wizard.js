@@ -3,9 +3,12 @@ import Treatment from './treatment'
 import Calendar from './calendar'
 import Cart from './cart'
 
+import { connect } from 'react-redux'
+import { setSpecialists, addTreatment, removeTreatment, selectSpecialist } from '../store/actions'
+
 export const DEBUG_MODE = process.env.REACT_APP_DEBUG_MODE;
 
-export default class Wizard extends Component {
+class Wizard extends Component {
 
   state = {
     data: {
@@ -101,8 +104,14 @@ export default class Wizard extends Component {
 
   render() {
     let treatments = React.createElement(Treatment, {
+      order: this.props.order,
+      data: this.props.data,
+      addTreatment: this.props.addTreatment,
+      setSpecialists: this.props.setSpecialists,
+      removeTreatment: this.props.removeTreatment,
+      selectSpecialist: this.props.selectSpecialist,
       // Pass shared data between sub-components.
-      data: this.state.data,
+      // data: this.state.data,
       // Push sub-component data shared between sub-components.
       push: this.push
     })
@@ -160,3 +169,17 @@ export default class Wizard extends Component {
   }
 
 }
+
+const mapStateToProps = state => ({
+    data: state.data,
+    order: state.order,
+})
+
+const mapDispatchToProps = dispatch => ({
+    setSpecialists: (treatment, specialists) => dispatch(setSpecialists(treatment, specialists)),
+    addTreatment: treatment => dispatch(addTreatment(treatment)),
+    removeTreatment: treatment => dispatch(removeTreatment(treatment)),
+    selectSpecialist: (treatment, specialist) => dispatch(selectSpecialist(treatment, specialist)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Wizard)

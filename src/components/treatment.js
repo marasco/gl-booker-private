@@ -5,9 +5,6 @@ import Specialist from './specialist';
 import request from 'superagent'
 import { API_URL } from '../App'
 
-import { connect } from 'react-redux'
-import { setSpecialists, addTreatment, removeTreatment, selectSpecialist } from '../store/actions'
-
 
 class Treatment extends Component{
     constructor(props){
@@ -99,7 +96,7 @@ class Treatment extends Component{
     }
 
     getSpecialists = treatment => {
-        return this.props.specialists[treatment.ID] || []
+        return this.props.data.specialists[treatment.ID] || []
     }
 
     // onClickTreatment = treatment => {
@@ -133,7 +130,7 @@ class Treatment extends Component{
     render(){
     return(
         <div className="treatments">
-            <pre style={{textAlign: 'left'}}>{ JSON.stringify(this.props.specialists, null, 4) }</pre>
+            <pre style={{textAlign: 'left'}}>{ JSON.stringify(this.props.data, null, 4) }</pre>
             <Row>
               {(()=>{
                 let doms = []
@@ -202,16 +199,4 @@ class Treatment extends Component{
     }
 }
 
-const mapStateToProps = state => ({
-    specialists: state.data.specialists,
-    order: state.order,
-})
-
-const mapDispatchToProps = dispatch => ({
-    setSpecialists: (treatment, specialists) => dispatch(setSpecialists(treatment, specialists)),
-    addTreatment: treatment => dispatch(addTreatment(treatment)),
-    removeTreatment: treatment => dispatch(removeTreatment(treatment)),
-    selectSpecialist: (treatment, specialist) => dispatch(selectSpecialist(treatment, specialist)),
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Treatment)
+export default Treatment
