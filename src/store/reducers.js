@@ -1,9 +1,29 @@
 import { combineReducers } from 'redux'
 
 export const initialState = {
+  data: {
+    specialists: {},
+  },
   order: {
     items: {},
   },
+}
+
+function data(state = {}, action) {
+  switch (action.type) {
+
+    case 'setSpecialists':
+      return {
+        ...state,
+        specialists: {
+          ...state.specialists,
+          [action.treatment.ID]: action.specialists
+        }
+      }
+
+    default:
+      return state
+  }
 }
 
 function order(state = {}, action) {
@@ -42,4 +62,4 @@ function order(state = {}, action) {
   }
 }
 
-export const reducers = combineReducers({ order })
+export const reducers = combineReducers({ data, order })

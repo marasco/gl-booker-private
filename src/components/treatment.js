@@ -6,7 +6,7 @@ import request from 'superagent'
 import { API_URL } from '../App'
 
 import { connect } from 'react-redux'
-import { addTreatment, removeTreatment, selectSpecialist } from '../store/actions'
+import { setSpecialists, addTreatment, removeTreatment, selectSpecialist } from '../store/actions'
 
 
 class Treatment extends Component{
@@ -59,21 +59,23 @@ class Treatment extends Component{
         }
     }
 
-    loadSpeacialists = treatmentId => {
+    loadSpeacialists = treatment => {
         request
         .get(API_URL + '/employees')
         .set('Authorization', 'Bearer xxxx')
         .query({
         pageSize: 100,
-        treatmentId,
+        treatmentId: treatment.ID,
         })
         .then(res=>{
-            this.setState({
-                specialists: res.body.Results.map(record => ({ ...record,
+            let specialists = res.body.Results.map(record => ({
+                data: record,
                 value: record.ID,
                 label: [record.LastName, record.FirstName].join(', '),
-                }))
-            })
+            }))
+
+            this.props.setSpecialists(treatment, specialists);
+            // this.setState({ specialists })
         }).catch(error => {
             console.log(error)
         });
@@ -84,7 +86,7 @@ class Treatment extends Component{
             this.props.removeTreatment(treatment)
         } else {
             this.props.addTreatment(treatment)
-            this.loadSpeacialists(treatment.ID)
+            this.loadSpeacialists(treatment)
         }
     }
 
@@ -94,6 +96,10 @@ class Treatment extends Component{
 
     getSpecialist = treatment => {
         return this.props.order.items[treatment.ID].specialist
+    }
+
+    getSpecialists = treatment => {
+        return this.props.specialists[treatment.ID] || []
     }
 
     // onClickTreatment = treatment => {
@@ -127,7 +133,7 @@ class Treatment extends Component{
     render(){
     return(
         <div className="treatments">
-            <pre style={{textAlign: 'left'}}>{ JSON.stringify(this.props.order, null, 4) }</pre>
+            <pre style={{textAlign: 'left'}}>{ JSON.stringify(this.props.specialists, null, 4) }</pre>
             <Row>
               {(()=>{
                 let doms = []
@@ -165,7 +171,7 @@ class Treatment extends Component{
                                         <Specialist treatmentId={item.ID}
                                         selected={ selected }
                                         specialist={ selected && this.getSpecialist(item) }
-                                        specialists={ this.state.specialists }
+                                        specialists={ this.getSpecialists(item) }
                                         onSpecialistChange={ this.onSpecialistChange.bind(this, item) } />
                                     </Col>
                                 </Row>
@@ -197,10 +203,12 @@ class Treatment extends Component{
 }
 
 const mapStateToProps = state => ({
+    specialists: state.data.specialists,
     order: state.order,
 })
 
 const mapDispatchToProps = dispatch => ({
+    setSpecialists: (treatment, specialists) => dispatch(setSpecialists(treatment, specialists)),
     addTreatment: treatment => dispatch(addTreatment(treatment)),
     removeTreatment: treatment => dispatch(removeTreatment(treatment)),
     selectSpecialist: (treatment, specialist) => dispatch(selectSpecialist(treatment, specialist)),

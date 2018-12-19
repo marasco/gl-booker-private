@@ -1,5 +1,13 @@
 import API from '../API'
 
+export function setSpecialists(treatment, specialists) {
+  return {
+    type: 'setSpecialists',
+    treatment,
+    specialists,
+  }
+}
+
 export function addTreatment(treatment) {
   return {
     type: 'addTreatment',
