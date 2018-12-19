@@ -29,3 +29,10 @@ export function selectSpecialist(treatment, specialist) {
     specialist,
   }
 }
+
+export function selectDate(date) {
+  return {
+    type: 'selectDate',
+    date
+  }
+}

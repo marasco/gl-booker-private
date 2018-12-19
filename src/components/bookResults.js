@@ -6,14 +6,23 @@ import moment from "moment";
 
 class BookResults extends Component{
 
-    state = {
-        times:[],
-        loading:true,
-        specialist: this.props.data.specialist,
-        specialists: [],
-        treatment: this.props.data.treatment,
-        date: moment(this.props.data.date).format("YYYY-MM-DD"),
-    };
+    constructor(props) {
+        super(props)
+
+        let { items } = this.props.order
+        let keys = Object.keys(items)
+        let treatment = items[keys[0]].treatment
+        let specialist = items[keys[0]].specialist
+
+        this.state = {
+            times:[],
+            loading:true,
+            specialist,
+            specialists: [],
+            treatment,
+            date: moment(this.props.data.date).format("YYYY-MM-DD"),
+        };
+    }
     book = (slot, specialistId,specialistName) => {
       const treatmentId = this.state.treatment['ID'];
       const treatmentName = this.state.treatment['Name'];
@@ -25,6 +34,8 @@ class BookResults extends Component{
 
     }
     loadData = () => {
+        this.setState({ loading: true })
+
         this.loadSpeacialists(this.state.treatment['ID']).then((specialists)=>{
             this.setState({
                 specialists:specialists
@@ -37,8 +48,8 @@ class BookResults extends Component{
     }
 
     componentDidUpdate(prevProps) {
-        if( prevProps.data.date && this.props.data.date ) {
-            if( moment(prevProps.data.date).toISOString() !== moment(this.props.data.date).toISOString() ) {
+        if( prevProps.order.date && this.props.order.date ) {
+            if( moment(prevProps.order.date).toISOString() !== moment(this.props.order.date).toISOString() ) {
                 this.loadData()
             }
         }
@@ -71,7 +82,7 @@ class BookResults extends Component{
 
     loadTimes = () => {
         let query = {
-            fromDate: this.state.date+'T00:00:00-08:00',
+            fromDate: moment(this.props.order.date).format("YYYY-MM-DD")+'T00:00:00-08:00',
             "treatmentId[]": this.state.treatment['ID'],
             includeEmployees:true,
             format:24

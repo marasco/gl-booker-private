@@ -21,45 +21,52 @@ export default class Calendario extends React.Component {
   componentDidMount = () => {
     this.load()
   }
-  addToCart = (treatmentId,specialistId,date,time,treatmentName,specialistName,price)=>{
-    this.props.addToCart(treatmentId,specialistId,date,time,treatmentName,specialistName,price)
-  }
+  // addToCart = (treatmentId,specialistId,date,time,treatmentName,specialistName,price)=>{
+  //   this.props.addToCart(treatmentId,specialistId,date,time,treatmentName,specialistName,price)
+  // }
   load = () => {
+
   this.props.scrollDown()
     this.setState({loading: true})
     request
-    .get(API_URL + '/availability')
+    .post(API_URL + '/availability/itinerary-dates')
     .set('Authorization', 'Bearer xxxx')
-    .query({
+    .send({
         fromDate: moment().format('Y-MM-DD')+'T00:00:00-08:00',
         toDate: moment().add(1, 'month').format('Y-MM-DD')+'T00:00:00-08:00',
-        treatmentId: this.props.data.treatment.ID,
-        employeeId: (this.props.data.specialist && this.props.data.specialist.ID)?this.props.data.specialist.ID:null,
+        treatments: Object.keys(this.props.order.items).map(key => {
+          let {treatment, specialist} = this.props.order.items[key]
+          return {
+            id: treatment.ID,
+            employeeId: specialist.ID,
+          }
+        }),
+        includeEmployees: true,
     })
     .then(res => {
-      try {
-        let availability = res.body[0].serviceCategories[0].services[0].availability
+      if (res.body && res.body.availability) {
+        let availability = res.body.availability
         console.log('availability', availability)
-        this.setState({ availability, loading:false },()=>{
+        return this.setState({ availability, loading:false })
+      }
 
-        })
-      }
-      catch (error) {
-        console.error(error)
-        this.setState({loading:false})
-        throw new Error('No times available for this specialist, please try with another one');
-      }
+      throw new Error('No times available for this specialist, please try with another one');
     })
     .catch(e => {
       console.log(e)
       alert(e.message)
-      this.setState({loading:false})
+      this.props.prevStep();
     })
   }
 
   onChange = date => {
-    this.props.push({ date })
-    this.setState({ date })
+    this.props.selectDate(date)
+
+    if (this.props.isActiveStep) {
+      this.props.nextStep()
+    }
+    // this.props.push({ date })
+    // this.setState({ date })
   }
 
   tileDisabledCallback = ({activeStartDate, date, view }) => {
@@ -80,9 +87,6 @@ export default class Calendario extends React.Component {
           value={this.state.date}
           tileDisabled={ this.tileDisabledCallback }
         />
-          {
-            (this.state.date)? <BookResults addToCart={this.addToCart} scrollDown={this.props.scrollDown} data={this.props.data}/>:<span></span>
-          }
       </div>
       :
       <div className="col-xs-12 centered marginBottom40">

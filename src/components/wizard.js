@@ -2,15 +2,17 @@ import React, { Component } from 'react'
 import Treatment from './treatment'
 import Calendar from './calendar'
 import Cart from './cart'
+import BookResults from './bookResults';
 
 import { connect } from 'react-redux'
-import { setSpecialists, addTreatment, removeTreatment, selectSpecialist } from '../store/actions'
+import { setSpecialists, addTreatment, removeTreatment, selectDate, selectSpecialist } from '../store/actions'
 
 export const DEBUG_MODE = process.env.REACT_APP_DEBUG_MODE;
 
 class Wizard extends Component {
 
   state = {
+    step: 1,
     data: {
       date: null,
       treatment: null,
@@ -102,10 +104,16 @@ class Wizard extends Component {
       this.props.scrollDown();
   }
 
+  nextStep = () => {
+    this.setState(prev => ({ ...prev, step: prev.step + 1 }))
+  }
+
   render() {
     let treatments = React.createElement(Treatment, {
       order: this.props.order,
       data: this.props.data,
+      nextStep: this.nextStep,
+      isActiveStep: this.state.step === 1,
       addTreatment: this.props.addTreatment,
       setSpecialists: this.props.setSpecialists,
       removeTreatment: this.props.removeTreatment,
@@ -116,7 +124,11 @@ class Wizard extends Component {
       push: this.push
     })
     let calendar = React.createElement(Calendar, {
+      order: this.props.order,
+      nextStep: this.nextStep,
       addToCart: this.addToCart,
+      selectDate: this.props.selectDate,
+      isActiveStep: this.state.step === 2,
       // Pass shared data between sub-components.
       data: this.state.data,
       // Push sub-component data shared between sub-components.
@@ -151,15 +163,24 @@ class Wizard extends Component {
 
         <div className="col-sm-12">
 
-
           <div className="centered col-xs-12 ">
             { treatments }
           </div>
-          {
-              (this.state.data.specialist) ? <div className="centered col-xs-12">
-                  { calendar }
-              </div> : <span></span>
-          }
+
+          {this.state.step >= 2 && (
+            <div className="centered col-xs-12">
+              { calendar }
+            </div>
+          )}
+
+          {this.state.step >= 3 && (
+            <BookResults
+              order={this.props.order}
+              addToCart={this.addToCart}
+              scrollDown={this.props.scrollDown}
+              data={this.props.data}/>
+          )}
+
         </div>
         <div className="col-sm-12">
         { cart }
@@ -179,6 +200,7 @@ const mapDispatchToProps = dispatch => ({
     setSpecialists: (treatment, specialists) => dispatch(setSpecialists(treatment, specialists)),
     addTreatment: treatment => dispatch(addTreatment(treatment)),
     removeTreatment: treatment => dispatch(removeTreatment(treatment)),
+    selectDate: date => dispatch(selectDate(date)),
     selectSpecialist: (treatment, specialist) => dispatch(selectSpecialist(treatment, specialist)),
 })
 

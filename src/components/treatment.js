@@ -65,8 +65,7 @@ class Treatment extends Component{
         treatmentId: treatment.ID,
         })
         .then(res=>{
-            let specialists = res.body.Results.map(record => ({
-                data: record,
+            let specialists = res.body.Results.map(record => ({ ...record,
                 value: record.ID,
                 label: [record.LastName, record.FirstName].join(', '),
             }))
@@ -121,16 +120,27 @@ class Treatment extends Component{
     //     })
     // }
 
-    onClickNext = () => {
-        // Temporary fix to trigger calendar step.
-        let { treatment, specialist } = this.props.order.items[Object.keys(this.props.order.items)[0]]
-        this.props.push({ treatment, specialist })
+    // onClickNext = () => {
+    //     // Temporary fix to trigger calendar step.
+    //     let { treatment, specialist } = this.props.order.items[Object.keys(this.props.order.items)[0]]
+    //     this.props.push({ treatment, specialist })
+    // }
+
+    nextStep = () => {
+        let { items } = this.props.order
+        let keys = Object.keys(items)
+
+        if (keys.some(key => !items[key].specialist)) {
+            return alert('Please select a specialist for all treatments')
+        }
+
+        this.props.nextStep()
     }
 
     render(){
     return(
         <div className="treatments">
-            <pre style={{textAlign: 'left'}}>{ JSON.stringify(this.props.data, null, 4) }</pre>
+            <pre style={{textAlign: 'left'}}>{ JSON.stringify(this.props.order, null, 4) }</pre>
             <Row>
               {(()=>{
                 let doms = []
@@ -189,9 +199,11 @@ class Treatment extends Component{
 
             <div className="col-xs-12 centered">
             {this.state.page && this.state.treatments.length>0 && (
-                <Button  className="selectBtnModal" onClick={ this.loadTreatments }>Load More</Button>
+                <Button className="selectBtnModal" onClick={ this.loadTreatments }>Load More</Button>
             )}
-            <Button  className="selectBtnModal" onClick={ this.onClickNext }>Next</Button>
+            { Object.keys(this.props.order.items).length > 0 && this.props.isActiveStep && (
+                <Button  className="selectBtnModal" onClick={ this.nextStep }>Next</Button>
+            )}
             </div>
 
         </div>
