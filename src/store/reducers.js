@@ -1,63 +1,45 @@
 import { combineReducers } from 'redux'
 
 export const initialState = {
-  wizard: {
-    data: {
-      treatments: [],
-      specialists: {},
-    },
-    treatments: [],
+  order: {
+    items: {},
   },
 }
 
-function wizard(state = {}, action) {
+function order(state = {}, action) {
   switch (action.type) {
 
     case 'addTreatment':
       return {
         ...state,
-        treatments: [
-          ...state.treatments, {
-            treatmentId: action.treatmentId,
-            specialistId: null,
-          }
-        ],
-      }
-
-    case 'removeTreatment':
-      return {
-        ...state,
-        treatments: state.treatments.filter(item => {
-          return item.treatmentId !== action.treatmentId
-        })
-      }
-
-    case 'setSpecialists':
-      return {
-        ...state,
-        data: {
-          ...state.data,
-          specialists: {
-            ...state.data.specialists,
-            [action.treatmentId]: action.specialists
+        items: {
+          ...state.items,
+          [action.treatment.ID]: {
+            treatment: action.treatment,
+            specialist: null,
           }
         }
       }
 
+    case 'removeTreatment':
+      let items = { ...state.items }
+      delete(items[action.treatment.ID])
+      return { ...state, items }
+
     case 'selectSpecialist':
+      let treatment = { ...state.items[action.treatment.ID], specialist: action.specialist }
       return {
         ...state,
-        treatments: state.treatments.map(item => {
-          if (item.treatmentId === action.treatmentId) {
-            return { ...item, specialistId: action.specialistId || null }
-          }
-          return item
-        })
+        items: {
+          ...state.items,
+          [action.treatment.ID]: treatment
+        }
       }
+      return state
 
     default:
       return state
   }
 }
 
-export const reducers = combineReducers({ wizard })
+export const reducers = combineReducers({ order })

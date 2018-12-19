@@ -52,7 +52,7 @@ class Specialist extends React.Component {
         placeholder={"Select specialist..."}
         styles={customStyles}
         isDisabled={!this.props.selected}
-        value={ this.props.specialist }
+        value={ this.props.selected ? this.props.specialist : null }
         onChange={ this.props.onSpecialistChange }
         options={ (this.getOptions()) }
      />
