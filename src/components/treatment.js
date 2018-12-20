@@ -84,6 +84,7 @@ class Treatment extends Component{
             this.props.addTreatment(treatment)
             this.loadSpeacialists(treatment)
         }
+        this.props.goToStep(1)
     }
 
     isSelected = treatment => {
@@ -111,6 +112,7 @@ class Treatment extends Component{
 
     onSpecialistChange = (treatment, specialist) => {
         this.props.selectSpecialist(treatment, specialist)
+        this.props.goToStep(1)
     }
 
     // onSpecialistChange = specialist => {
