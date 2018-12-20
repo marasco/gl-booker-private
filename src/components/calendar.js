@@ -34,8 +34,8 @@ export default class Calendario extends React.Component {
     .send({
         fromDate: moment().format('Y-MM-DD')+'T00:00:00-08:00',
         toDate: moment().add(1, 'month').format('Y-MM-DD')+'T00:00:00-08:00',
-        treatments: Object.keys(this.props.order.items).map(key => {
-          let {treatment, specialist} = this.props.order.items[key]
+        treatments: Object.keys(this.props.order.treatments).map(key => {
+          let {treatment, specialist} = this.props.order.treatments[key]
           return {
             id: treatment.ID,
             employeeId: (specialist)?specialist.ID:null,

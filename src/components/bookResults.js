@@ -9,10 +9,10 @@ class BookResults extends Component{
     constructor(props) {
         super(props)
 
-        let { items } = this.props.order
-        let keys = Object.keys(items)
-        let treatment = items[keys[0]].treatment
-        let specialist = items[keys[0]].specialist
+        let { treatments } = this.props.order
+        let keys = Object.keys(treatments)
+        let treatment = treatments[keys[0]].treatment
+        let specialist = treatments[keys[0]].specialist
 
         this.state = {
             times:[],
@@ -79,8 +79,8 @@ class BookResults extends Component{
     loadTimes = () => {
         let query = {
             fromDate: moment(this.props.order.date).format("YYYY-MM-DD")+'T00:00:00-08:00',
-            treatments: Object.keys(this.props.order.items).map(key => {
-              let {treatment, specialist} = this.props.order.items[key]
+            treatments: Object.keys(this.props.order.treatments).map(key => {
+              let {treatment, specialist} = this.props.order.treatments[key]
               return {
                 id: treatment.ID,
                 employeeId: (specialist)?specialist.ID:null,

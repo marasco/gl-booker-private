@@ -6,7 +6,7 @@ export const initialState = {
   },
   order: {
     date: null,
-    items: {},
+    treatments: {},
     slots: [],
   },
 }
@@ -34,8 +34,8 @@ function order(state = {}, action) {
     case 'addTreatment':
       return {
         ...state,
-        items: {
-          ...state.items,
+        treatments: {
+          ...state.treatments,
           [action.treatment.ID]: {
             treatment: action.treatment,
             specialist: null,
@@ -44,16 +44,16 @@ function order(state = {}, action) {
       }
 
     case 'removeTreatment':
-      let items = { ...state.items }
-      delete(items[action.treatment.ID])
-      return { ...state, items }
+      let treatments = { ...state.treatments }
+      delete(treatments[action.treatment.ID])
+      return { ...state, treatments }
 
     case 'selectSpecialist':
-      let treatment = { ...state.items[action.treatment.ID], specialist: action.specialist }
+      let treatment = { ...state.treatments[action.treatment.ID], specialist: action.specialist }
       return {
         ...state,
-        items: {
-          ...state.items,
+        treatments: {
+          ...state.treatments,
           [action.treatment.ID]: treatment
         }
       }

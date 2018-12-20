@@ -88,11 +88,11 @@ class Treatment extends Component{
     }
 
     isSelected = treatment => {
-        return this.props.order.items.hasOwnProperty(treatment.ID)
+        return this.props.order.treatments.hasOwnProperty(treatment.ID)
     }
 
     getSpecialist = treatment => {
-        return this.props.order.items[treatment.ID].specialist
+        return this.props.order.treatments[treatment.ID].specialist
     }
 
     getSpecialists = treatment => {
@@ -124,16 +124,16 @@ class Treatment extends Component{
 
     // onClickNext = () => {
     //     // Temporary fix to trigger calendar step.
-    //     let { treatment, specialist } = this.props.order.items[Object.keys(this.props.order.items)[0]]
+    //     let { treatment, specialist } = this.props.order.treatments[Object.keys(this.props.order.treatments)[0]]
     //     this.props.push({ treatment, specialist })
     // }
 
     nextStep = () => {
       /*
-        let { items } = this.props.order
-        let keys = Object.keys(items)
+        let { treatments } = this.props.order
+        let keys = Object.keys(treatments)
 
-        if (keys.some(key => !items[key].specialist)) {
+        if (keys.some(key => !treatments[key].specialist)) {
             return alert('Please select a specialist for all treatments')
         }
         */
