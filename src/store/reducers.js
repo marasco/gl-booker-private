@@ -7,6 +7,7 @@ export const initialState = {
   order: {
     date: null,
     items: {},
+    slots: [],
   },
 }
 
@@ -62,6 +63,27 @@ function order(state = {}, action) {
       return {
         ...state,
         date: action.date
+      }
+
+    case 'orderAddItem':
+      return {
+        ...state,
+        slots: [ ...state.slots, action.slot ]
+      }
+
+    case 'orderRemoveItem':
+      return {
+        ...state,
+        slots: state.slots.filter(slot => {
+          return slot !== action.slot
+        })
+      }
+
+    case 'orderClearItems':
+    debugger
+      return {
+        ...state,
+        slots: [],
       }
 
     default:

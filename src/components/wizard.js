@@ -5,7 +5,7 @@ import Cart from './cart'
 import BookResults from './bookResults';
 
 import { connect } from 'react-redux'
-import { setSpecialists, addTreatment, removeTreatment, selectDate, selectSpecialist } from '../store/actions'
+import { setSpecialists, addTreatment, removeTreatment, selectDate, selectSpecialist, orderAddItem, orderRemoveItem, orderClearItems } from '../store/actions'
 
 export const DEBUG_MODE = process.env.REACT_APP_DEBUG_MODE;
 
@@ -36,60 +36,60 @@ class Wizard extends Component {
     this.setState(prev => ({ ...prev, data: { ...this.state.data, ...state } }))
   }
 
-  validate = () => {
-    let step = this.steps[this.state.step]
+  // validate = () => {
+  //   let step = this.steps[this.state.step]
 
-    if (!step.validator) {
-      return true
-    }
+  //   if (!step.validator) {
+  //     return true
+  //   }
 
-    try {
-      step.validator()
-      return true
-    }
-    catch (e) {
-      alert(e)
-    }
-  }
-  clearCart = () =>{
-    localStorage.removeItem('cart')
-    this.setState({cart: null})
+  //   try {
+  //     step.validator()
+  //     return true
+  //   }
+  //   catch (e) {
+  //     alert(e)
+  //   }
+  // }
+  // clearCart = () =>{
+  //   localStorage.removeItem('cart')
+  //   this.setState({cart: null})
 
-  }
-  removeItem = (index) =>{
-    let cart = this.state.cart;
-    cart.splice(index,1);
-    localStorage.setItem('cart', JSON.stringify(cart))
-    this.setState({cart: cart})
+  // }
+  // removeItem = (index) =>{
+  //   let cart = this.state.cart;
+  //   cart.splice(index,1);
+  //   localStorage.setItem('cart', JSON.stringify(cart))
+  //   this.setState({cart: cart})
 
-  }
-  addToCart = (treatmentId,specialistId,date,time,treatmentName,specialistName,price) =>{
-    let cart = localStorage.getItem('cart');
+  // }
+  // addToCart = (treatmentId,specialistId,date,time,treatmentName,specialistName,price) =>{
+  //   let cart = localStorage.getItem('cart');
 
-    if (cart){
-      cart = JSON.parse(cart)
-    }else{
-      cart = [];
-    }
-    let newObj = {
-      treatmentId:treatmentId,
-      specialistId:specialistId,
-      treatmentName: treatmentName,
-      specialistName: specialistName,
-      price: price,
-      fullDate: date.substring(0, 10) +
-         'T' + time + ':00-08:00',
-      date:date,
-      time:time,
-    }
+  //   if (cart){
+  //     cart = JSON.parse(cart)
+  //   }else{
+  //     cart = [];
+  //   }
+  //   let newObj = {
+  //     treatmentId:treatmentId,
+  //     specialistId:specialistId,
+  //     treatmentName: treatmentName,
+  //     specialistName: specialistName,
+  //     price: price,
+  //     fullDate: date.substring(0, 10) +
+  //        'T' + time + ':00-08:00',
+  //     date:date,
+  //     time:time,
+  //   }
 
 
-    cart.push(newObj)
-    localStorage.setItem('cart', JSON.stringify(cart))
-    this.setState({cart: cart})
-    this.scrollDown()
+  //   cart.push(newObj)
+  //   localStorage.setItem('cart', JSON.stringify(cart))
+  //   this.setState({cart: cart})
+  //   this.scrollDown()
 
-  }
+  // }
   componentDidMount = () =>{
     let items = localStorage.getItem('cart')
     if (items){
@@ -136,7 +136,7 @@ class Wizard extends Component {
       order: this.props.order,
       nextStep: this.nextStep,
       prevStep: this.prevStep,
-      addToCart: this.addToCart,
+      // addToCart: this.addToCart,
       selectDate: this.props.selectDate,
       isActiveStep: this.state.step === 2,
       // Pass shared data between sub-components.
@@ -146,13 +146,16 @@ class Wizard extends Component {
       scrollDown: this.scrollDown
     })
     let cart = React.createElement(Cart, {
+      order: this.props.order,
       items: this.state.cart,
       openCheckout: this.openCheckout,
       addMoreServices: this.addMoreServices,
       setAuthModal: this.props.setAuthModal,
-      addToCart: this.addToCart,
-      removeItem: this.removeItem,
-      clearCart: this.clearCart
+      // addToCart: this.addToCart,
+      // removeItem: this.removeItem,
+      orderRemoveItem: this.props.orderRemoveItem,
+      orderClearItems: this.props.orderClearItems,
+      // clearCart: this.clearCart
     })
 
     return (
@@ -186,7 +189,8 @@ class Wizard extends Component {
           {this.state.step >= 3 && (
             <BookResults
               order={this.props.order}
-              addToCart={this.addToCart}
+              orderAddItem={this.props.orderAddItem}
+              orderRemoveItem={this.props.orderRemoveItem}
               scrollDown={this.props.scrollDown}
               data={this.props.data}/>
           )}
@@ -207,6 +211,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+    orderAddItem: slot => dispatch(orderAddItem(slot)),
+    orderRemoveItem: slot => dispatch(orderRemoveItem(slot)),
+    orderClearItems: () => dispatch(orderClearItems()),
     setSpecialists: (treatment, specialists) => dispatch(setSpecialists(treatment, specialists)),
     addTreatment: treatment => dispatch(addTreatment(treatment)),
     removeTreatment: treatment => dispatch(removeTreatment(treatment)),

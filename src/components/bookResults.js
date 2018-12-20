@@ -23,12 +23,12 @@ class BookResults extends Component{
             date: moment(this.props.data.date).format("YYYY-MM-DD"),
         };
     }
-    book = (slot) => {
-      console.log('booking '+slot )
-//      this.props.addToCart(treatmentId,specialistId,date,slot,treatmentName,specialistName,price)
-      return true;
+//     book = (slot) => {
+//       console.log('booking '+slot )
+// //      this.props.addToCart(treatmentId,specialistId,date,slot,treatmentName,specialistName,price)
+//       return true;
 
-    }
+//     }
     loadData = () => {
         this.setState({ loading: true })
 
@@ -112,6 +112,7 @@ class BookResults extends Component{
                                         start: time,
                                         end: moment(time,"HH:mm").add(duration,"minutes").format("HH:mm"),
                                         startDate: item.startDateTime,
+                                        slot: item,
                                     })
                                     return item
                                 })
@@ -144,7 +145,7 @@ class BookResults extends Component{
             <div>
                 {(this.state.loading)?<div className="marginTop20 marginBottom40">Loading...</div>:
                     <div className="timetable marginTop20">
-                        <BookResultTable book={this.book} times={this.state.times} ></BookResultTable>
+                        <BookResultTable order={this.props.order} times={this.state.times} orderAddItem={this.props.orderAddItem} orderRemoveItem={this.props.orderRemoveItem}></BookResultTable>
                         {
                             (false)?
                                 <div className="col-xs-12 centered">

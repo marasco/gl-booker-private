@@ -11,6 +11,10 @@ class BookResultTable extends React.Component {
 
     }
 
+    isSelected = slot => {
+        return this.props.order.slots.indexOf(slot) >= 0
+    }
+
     showResults = () => {
         let rows = [];
         this.state.times.map((time,index) => {
@@ -22,7 +26,11 @@ class BookResultTable extends React.Component {
                     <td>
                         {(time.end)?time.end:""}
                     </td>
-                    <td><Button className="selectBtnModal" onClick={() => this.props.book(time.start)}> BOOK </Button></td>
+                    <td>{
+                        this.isSelected(time)
+                        ? <Button className="selectBtnModal" onClick={() => this.props.orderRemoveItem(time)}> CANCEL </Button>
+                        : <Button className="selectBtnModal" onClick={() => this.props.orderAddItem(time)}> BOOK </Button>
+                    }</td>
                 </tr>
             )
             return time
@@ -42,7 +50,7 @@ class BookResultTable extends React.Component {
                     <tr>
                         <th>START</th>
                         <th>END</th>
-                        <th>SELECT</th>
+                        <th width="200">SELECT</th>
                     </tr>
                     </thead>
                     {this.showResults()}

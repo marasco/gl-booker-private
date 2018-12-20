@@ -7,6 +7,7 @@ import request from 'superagent'
 import { API_URL } from '../App'
 import Select from 'react-select';
 import {withRouter} from "react-router-dom";
+import { connect } from 'react-redux'
 
 const customStyles = {
   control: styles => ({ ...styles, backgroundColor: 'white', height: '40', border:'solid 1px #333',borderRadius:0 }),
@@ -39,7 +40,7 @@ class Checkout extends Component {
       let cart = JSON.parse(localStorage.getItem('cart'))
 
       let sum = 0;
-      cart.map((item,index) => {
+      this.props.order.slots.map((item,index) => {
         sum+=item.price
         item.id = index
       })
@@ -339,4 +340,9 @@ class Checkout extends Component {
         );
     }
 }
-export default withRouter(Checkout);
+
+const mapStateToProps = state => ({
+    order: state.order,
+})
+
+export default connect(mapStateToProps)(withRouter(Checkout))

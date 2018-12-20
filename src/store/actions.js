@@ -36,3 +36,23 @@ export function selectDate(date) {
     date
   }
 }
+
+export function orderAddItem(slot) {
+  return {
+    type: 'orderAddItem',
+    slot,
+  }
+}
+
+export function orderRemoveItem(slot) {
+  return {
+    type: 'orderRemoveItem',
+    slot,
+  }
+}
+
+export function orderClearItems() {
+  return {
+    type: 'orderClearItems',
+  }
+}

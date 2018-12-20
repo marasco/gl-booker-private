@@ -6,11 +6,11 @@ class Cart extends Component{
     showItems = () => {
 
         let rows = [];
-        if (this.props.items){
-        this.props.items.map((item,index) => {
+        this.props.order.slots.map((item,index) => {
 
-          let dateFormatted = item.date.substring(0, 10) +
-           ' ' + item.time;
+          let dateFormatted = item.startDate.substring(0, 10) +
+           ' ' + item.slot.time;
+
 
 
             rows.push(
@@ -19,7 +19,7 @@ class Cart extends Component{
                 <div className="item col-xs-12">
                 <div className="desc col-xs-10">({index+1}) <strong>{item.treatmentName}</strong> with <i>{item.specialistName}</i> at {dateFormatted} - <strong>USD {item.price}</strong></div>
                 <div className="remove col-xs-2">
-                <span onClick={() => this.props.removeItem(index)} className="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                <span onClick={() => this.props.orderRemoveItem(item)} className="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
                 </div>
                 </div>
                 </div>
@@ -27,7 +27,6 @@ class Cart extends Component{
             )
             return item
         });
-        }
 
         return rows
     }
@@ -52,10 +51,10 @@ class Cart extends Component{
             </div>
 
             {
-              (this.props.items && this.props.items.length>0)?
+              (this.props.order.slots.length>0)?
                   <div className="centered row marginBottom20">
                   <div className="col-xs-12">
-                  <Button className="centered selectBtnModal marginTop20" onClick={this.props.clearCart}>Clear Items</Button>
+                  <Button className="centered selectBtnModal marginTop20" onClick={this.props.orderClearItems}>Clear Items</Button>
                   </div>
                       <div className="col-xs-12">
                           <Button className="selectBtnModal" onClick={()=>{
