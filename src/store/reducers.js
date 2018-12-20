@@ -59,7 +59,6 @@ function order(state = {}, action) {
       return state
 
     case 'selectDate':
-      debugger
       return {
         ...state,
         date: action.date

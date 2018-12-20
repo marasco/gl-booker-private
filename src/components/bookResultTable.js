@@ -22,10 +22,7 @@ class BookResultTable extends React.Component {
                     <td>
                         {(time.end)?time.end:""}
                     </td>
-                    <td>
-                        {(time.with)?time.with:""}
-                    </td>
-                    <td><Button className="selectBtnModal" onClick={() => this.props.book(time.slot,time.specialistId,time.with)}> BOOK </Button></td>
+                    <td><Button className="selectBtnModal" onClick={() => this.props.book(time.start)}> BOOK </Button></td>
                 </tr>
             )
             return time
@@ -45,7 +42,6 @@ class BookResultTable extends React.Component {
                     <tr>
                         <th>START</th>
                         <th>END</th>
-                        <th>WITH</th>
                         <th>SELECT</th>
                     </tr>
                     </thead>

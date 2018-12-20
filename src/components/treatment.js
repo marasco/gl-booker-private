@@ -127,14 +127,15 @@ class Treatment extends Component{
     // }
 
     nextStep = () => {
+      /*
         let { items } = this.props.order
         let keys = Object.keys(items)
 
         if (keys.some(key => !items[key].specialist)) {
             return alert('Please select a specialist for all treatments')
         }
-
-        this.props.nextStep()
+        */
+        this.props.goToStep(2)
     }
 
     render(){
@@ -201,9 +202,7 @@ class Treatment extends Component{
             {this.state.page && this.state.treatments.length>0 && (
                 <Button className="selectBtnModal" onClick={ this.loadTreatments }>Load More</Button>
             )}
-            { Object.keys(this.props.order.items).length > 0 && this.props.isActiveStep && (
                 <Button  className="selectBtnModal" onClick={ this.nextStep }>Next</Button>
-            )}
             </div>
 
         </div>

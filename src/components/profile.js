@@ -43,10 +43,11 @@ class Profile extends Component {
       updateProfile = () =>{
         if(!this.state.form) return false;
         console.log('updateForm[]',this.state.form);
-
+        let form = this.state.form
+        form.DateOfBirth = this.reConvertDate(form.DateOfBirth)
         request
         .put(API_URL + '/account/'+this.state.customer.ID+'?access_token='+this.state.access_token)
-        .send(this.state.form)
+        .send(form)
         .then(res => {
           console.log(res)
 
@@ -93,6 +94,14 @@ class Profile extends Component {
         dob = dob.replace(")/","");
 
         return moment(dob,'x').format('MM/DD/YYYY');
+    }
+    reConvertDate = (dob) => {
+        let ret = dob
+        dob = dob.split('/');
+        if (dob.length && dob.length === 3){
+          ret = dob[2]+'-'+dob[0]+'-'+dob[1]
+        }
+        return ret
     }
     render() {
         if (!this.state.customer) {

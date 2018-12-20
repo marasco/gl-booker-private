@@ -38,7 +38,7 @@ export default class Calendario extends React.Component {
           let {treatment, specialist} = this.props.order.items[key]
           return {
             id: treatment.ID,
-            employeeId: specialist.ID,
+            employeeId: (specialist)?specialist.ID:null,
           }
         }),
         includeEmployees: true,

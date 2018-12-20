@@ -112,11 +112,16 @@ class Wizard extends Component {
     this.setState(prev => ({ ...prev, step: prev.step + 1 }))
   }
 
+  goToStep = (n) => {
+    this.setState(prev => ({ ...prev, step: n }))
+  }
+
   render() {
     let treatments = React.createElement(Treatment, {
       order: this.props.order,
       data: this.props.data,
       nextStep: this.nextStep,
+      goToStep: this.goToStep,
       isActiveStep: this.state.step === 1,
       addTreatment: this.props.addTreatment,
       setSpecialists: this.props.setSpecialists,
