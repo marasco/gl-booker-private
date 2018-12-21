@@ -160,11 +160,7 @@ class Wizard extends Component {
 
     return (
       <div>
-        {
-          (DEBUG_MODE===1
-          )?
-          <pre>{ JSON.stringify(this.state.data, null, 2) }</pre>:<div></div>
-        }
+         
         <div className="centered col-xs-12 marginBottom20">
           <div className="centered col-xs-12">
               <h1 className="centered section-1">BOOK A SERVICE</h1>

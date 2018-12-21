@@ -143,7 +143,6 @@ class Treatment extends Component{
     render(){
     return(
         <div className="treatments">
-            <pre style={{textAlign: 'left'}}>{ JSON.stringify(this.props.order, null, 4) }</pre>
             <Row>
               {(()=>{
                 let doms = []
@@ -162,7 +161,6 @@ class Treatment extends Component{
                     doms.push(
 
                        <Col xs={12} sm={6} md={4} lg={3} className="item" key={"image" + item.ID}>
-                       <pre>{ selected ? 'T' : 'F' }</pre>
                             <div className={selected?"itemContent active":"itemContent"}>
                                 <Row className="border-bottom">
                                     <Col xs={12} className="image" style={{backgroundImage: "url("+img+")"}} alt={item.ID}></Col>

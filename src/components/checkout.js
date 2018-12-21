@@ -6,7 +6,8 @@ import { API_URL } from '../App'
 import Select from 'react-select';
 import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux'
-import { orderSetReservation, dataSaveOrder } from '../store/actions'
+import { orderSetReservation, dataSaveOrder,orderClearItems } from '../store/actions'
+import Cart from './cart'
 
 const customStyles = {
   control: styles => ({ ...styles, backgroundColor: 'white', height: '40', border:'solid 1px #333',borderRadius:0 }),
@@ -67,6 +68,7 @@ class Checkout extends Component {
     }
 
     componentDidMount = () => {
+      console.log('reservation',this.props.order.reservation);
       if (!this.props.order.reservation) {
         this.createIncompleteAppointment()
       }
@@ -241,9 +243,13 @@ class Checkout extends Component {
           }
           if (res.body.IsSuccess===true){
             this.props.dataSaveOrder(this.props.order)
+            this.props.orderClearItems()
             this.setState({message: 'Your appointment was made successfully.'})
             this.setState(prev => ({ ...prev, errors: null }))
             //msg+="Your appointment was created successfully");
+          }else if (res.body.ErrorMessage && res.body.ErrorMessage ==='invalid access token'){
+            alert("Your session has expired, you have to login again.")
+            this.setState({message: 'Your appointment failed: your session expired'})
           }else if (res.body.ErrorMessage){
             this.setState({message: 'Your appointment failed: '+res.body.ErrorMessage})
           }
@@ -331,10 +337,24 @@ class Checkout extends Component {
 
         return rows
     }
+
     render() {
 
 
 
+          let cart = React.createElement(Cart, {
+            order: this.props.order,
+            items: this.state.cart,
+            openCheckout: this.openCheckout,
+            addMoreServices: this.addMoreServices,
+            setAuthModal: this.props.setAuthModal,
+            // addToCart: this.addToCart,
+            // removeItem: this.removeItem,
+            orderRemoveItem: this.props.orderRemoveItem,
+            orderClearItems: this.props.orderClearItems,
+            readonly: true
+            // clearCart: this.clearCart
+          })
       let form = (
         <div>
 
@@ -406,7 +426,7 @@ class Checkout extends Component {
         </div>
         )
     return (
-        <div className="col-xs-12 col-sm-10 col-sm-offset col-md-8 col-md-offset-2">
+        <div className="col-xs-12 col-sm-12 col-lg-10 col-lg-offset-1">
             <div className="title"><h2>Checkout</h2></div>
             <div className="col-sm-8">
               <div className="checkout">
@@ -434,12 +454,12 @@ class Checkout extends Component {
                 </div>
               </div>
               <div className="col-xs-12">
-                {this.showItems()}
+                {cart}
               </div>
               <div className="col-xs-12">
-              <div className="total">
+              {/*<div className="total">
                 Total: USD {this.state.sum}
-              </div>
+              </div>*/}
               </div>
             </div>
 
@@ -455,6 +475,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  orderClearItems: order => dispatch(orderClearItems()),
   dataSaveOrder: order => dispatch(dataSaveOrder(order)),
   orderSetReservation: reservation => dispatch(orderSetReservation(reservation)),
 })
