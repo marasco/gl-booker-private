@@ -13,12 +13,14 @@ if (treatments){
 }
 export const initialState = {
   data: {
+    orders: [],
     specialists: {},
   },
   order: {
-    date: null,
+    date: null, 
     treatments: treatments,
-    slots: slots,
+    slots: slots, 
+    reservation: null, 
   },
 }
 
@@ -32,6 +34,15 @@ function data(state = {}, action) {
           ...state.specialists,
           [action.treatment.ID]: action.specialists
         }
+      }
+
+    case 'dataSaveOrder':
+      return {
+        ...state,
+        orders: [
+          ...state.orders,
+          action.order,
+        ]
       }
 
     default:
@@ -104,12 +115,21 @@ function order(state = {}, action) {
         slots: slots
       }
 
-    case 'orderClearItems':
-      localStorage.setItem('slots', JSON.stringify([]));
+    case 'orderClearItems': 
+      localStorage.setItem('slots', JSON.stringify([])); 
       return {
         ...state,
         slots: [],
       }
+
+    case 'orderSetReservation':
+      return {
+        ...state,
+        reservation: action.reservation,
+      }
+
+    case 'orderComplete':
+      return { ...initialState.order }
 
     default:
       return state

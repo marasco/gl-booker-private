@@ -1,4 +1,3 @@
-import API from '../API'
 
 export function setSpecialists(treatment, specialists) {
   return {
@@ -54,5 +53,29 @@ export function orderRemoveItem(slot) {
 export function orderClearItems() {
   return {
     type: 'orderClearItems',
+  }
+}
+
+export function orderSetReservation(reservation) {
+  return {
+    type: 'orderSetReservation',
+    reservation,
+  }
+}
+
+export function orderComplete(order) {
+  return dispatch => {
+    dispatch(dataSaveOrder(order))
+    dispatch({
+      type: 'orderComplete',
+      order,
+    })
+  }
+}
+
+export function dataSaveOrder(order) {
+  return {
+    type: 'dataSaveOrder',
+    order,
   }
 }

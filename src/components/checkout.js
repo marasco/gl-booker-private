@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom'
 import * as moment from 'moment'
-import NumberFormat from 'react-number-format';
 import {  FormGroup, Button, Label, FormControl, Form } from 'react-bootstrap';
 import request from 'superagent'
 import { API_URL } from '../App'
 import Select from 'react-select';
 import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux'
+import { orderSetReservation, dataSaveOrder } from '../store/actions'
 
 const customStyles = {
   control: styles => ({ ...styles, backgroundColor: 'white', height: '40', border:'solid 1px #333',borderRadius:0 }),
@@ -59,12 +58,47 @@ class Checkout extends Component {
           cardNumber:'4111-1111-1111-1111',
           cardExpiration:'11/2023',
           cardProvider:'Visa',
-          CVC:'333',
+          cardSecurityCode: '333',
           postalCode:'33108',
         }
       }
 
       console.log(this.state)
+    }
+
+    componentDidMount = () => {
+      if (!this.props.order.reservation) {
+        this.createIncompleteAppointment()
+      }
+    }
+
+    createIncompleteAppointment = () => {
+      let slot = this.props.order.slots[0]
+
+      if (!slot) {
+        return this.props.history.push('/')
+      }
+
+      request
+        .post(API_URL + '/appointment/reservation')
+        .send({
+          startDateTime: slot.startDate,
+          access_token: this.state.access_token,
+          treatments: slot.slot.availabilityItems.map(item => ({
+            id: item.serviceId,
+            slot: item.startDateTime,
+            employeeId: item.employeeId,
+          }))
+        })
+        .then(res => {
+          if (res.body.IncompleteAppointmentID) {
+            return this.props.orderSetReservation({
+              id: res.body.IncompleteAppointmentID
+            })
+          }
+          throw new Error('Could not place reservation');
+        })
+        .catch(error => alert(error.message))
     }
 
     removeCartItem = (id) => {
@@ -88,6 +122,7 @@ class Checkout extends Component {
       return true;
     }
       processCheckout = () =>{
+        console.log(this.props.order)
         let items = [];
         let minDate='2030-00-00T00:00:00-08:00';
         this.setState({message: 'Processing your payment'})
@@ -114,60 +149,133 @@ class Checkout extends Component {
           payment.cardExpiration=cardExp;
         }
         payment.cardType=payment.cardType.value;
-        let qty = items.length;
-        items.forEach(
-         function iterator( item, index ) {
-             /* each app */
-             let form = {
-               firstname: this.state.customer.FirstName,
-               lastname: this.state.customer.LastName,
-               email: this.state.customer.Email,
-               phone: this.state.customer.CellPhone,
-               customerId: this.state.customer.ID,
-               startDateTime: minDate,
-               treatments: [{id: item.id, slot: item.slot}],
-               payment: payment,
-               access_token: this.state.access_token
-             }
-             console.log(form);
-             request
-             .post(API_URL + '/appointment/?access_token='+this.state.access_token)
-             .send(form)
-             .then(res => {
-               console.log('response',res)
+        //let qty = items.length;
 
-               if (res.body.error) {
-                 throw new Error(res.body.error)
-               }
-               if (res.body.ArgumentErrors) {
-                 throw new Error(res.body.ArgumentErrors.map(error => error.ErrorMessage))
-               }
-               if (res.body.IsSuccess===true){
-                 this.removeCartItem(item.index);
-                 this.setState({message: 'Your appointment was made successfully.'})
-                 this.setState(prev => ({ ...prev, errors: null }))
-                 //msg+="Your appointment was created successfully");
-               }else if (res.body.ErrorMessage){
-                 this.setState({message: 'Your appointment failed: '+res.body.ErrorMessage})
+        let slot = this.props.order.slots[0]
+        let incompleteAppointmentId = this.props.order.reservation && this.props.order.reservation.id
 
-//                 alert('An error has ocurred: '+res.body.ErrorMessage);
-               }
+        let payload = {
+          firstname: this.state.customer.FirstName,
+          lastname: this.state.customer.LastName,
+          email: this.state.customer.Email,
+          phone: this.state.customer.CellPhone,
+          customerId: this.state.customer.ID,
+          incompleteAppointmentId,
+          startDateTime: slot.startDate,
+          treatments: slot.slot.availabilityItems.map(item => ({
+            id: item.serviceId,
+            slot: item.startDateTime,
+            employeeId: item.employeeId,
+          })),
+          payment,
+          access_token: this.state.access_token
+        }
+
+        this.createAppointment(payload)
+
+//         items.forEach(
+//          function iterator( item, index ) {
+//              /* each app */
+//              let form = {
+//                firstname: this.state.customer.FirstName,
+//                lastname: this.state.customer.LastName,
+//                email: this.state.customer.Email,
+//                phone: this.state.customer.CellPhone,
+//                customerId: this.state.customer.ID,
+//                startDateTime: minDate,
+//                treatments: [{id: item.id, slot: item.slot}],
+//                payment: payment,
+//                access_token: this.state.access_token
+//              }
+//              console.log(form);
+//              request
+//              .post(API_URL + '/appointment/?access_token='+this.state.access_token)
+//              .send(form)
+//              .then(res => {
+//                console.log('response',res)
+
+//                if (res.body.error) {
+//                  throw new Error(res.body.error)
+//                }
+//                if (res.body.ArgumentErrors) {
+//                  throw new Error(res.body.ArgumentErrors.map(error => error.ErrorMessage))
+//                }
+//                if (res.body.IsSuccess===true){
+//                  this.removeCartItem(item.index);
+//                  this.setState({message: 'Your appointment was made successfully.'})
+//                  this.setState(prev => ({ ...prev, errors: null }))
+//                  //msg+="Your appointment was created successfully");
+//                }else if (res.body.ErrorMessage){
+//                  this.setState({message: 'Your appointment failed: '+res.body.ErrorMessage})
+
+// //                 alert('An error has ocurred: '+res.body.ErrorMessage);
+//                }
 
 
-             })
+//              })
 
-             .catch(errors => {
-              console.error(errors)
-               this.setState({message: 'Your appointment failed: '+errors.message})
+//              .catch(errors => {
+//               console.error(errors)
+//                this.setState({message: 'Your appointment failed: '+errors.message})
 
-               this.setState(prev => ({ ...prev, errors }))
-             })
-         },
-         this
-       );
+//                this.setState(prev => ({ ...prev, errors }))
+//              })
+//          },
+//          this
+//        );
 
     }
 
+    createAppointment = payload => {
+      request
+        .post(API_URL + '/appointment')
+        .send(payload)
+        .then(res => {
+          console.log('response',res)
+
+          if (res.body.error) {
+            throw new Error(res.body.error)
+          }
+          if (res.body.ArgumentErrors) {
+            throw new Error(res.body.ArgumentErrors.map(error => error.ErrorMessage))
+          }
+          if (res.body.IsSuccess===true){
+            this.props.dataSaveOrder(this.props.order)
+            this.setState({message: 'Your appointment was made successfully.'})
+            this.setState(prev => ({ ...prev, errors: null }))
+            //msg+="Your appointment was created successfully");
+          }else if (res.body.ErrorMessage){
+            this.setState({message: 'Your appointment failed: '+res.body.ErrorMessage})
+          }
+      })
+      .catch(errors => {
+        console.error(errors)
+        this.setState({message: 'Your appointment failed: '+errors.message})
+        this.setState(prev => ({ ...prev, errors }))
+      })
+    }
+
+    cancelCheckout = () => {
+      if (this.props.order.reservation) {
+        this.cancelIncompleteAppointment()
+      }
+    }
+
+    cancelIncompleteAppointment = () => {
+      request
+        .delete(API_URL + '/appointment/reservation')
+        .send({
+          access_token: this.state.access_token,
+          incompleteAppointmentId: this.props.order.reservation.id
+        })
+        .then(res => {
+          if (res.body.IsSuccess) {
+            return this.props.history.push('/')
+          }
+          throw new Error('Could not cancel reservation');
+        })
+        .catch(error => alert(error.message))
+    }
 
     handleChange(value, key){
         this.setState(prev => ({payment:{...prev.payment,[key]:value}}))
@@ -204,10 +312,10 @@ class Checkout extends Component {
     showItems = () => {
 
         let rows = [];
-        let sum = 0;
+        //let sum = 0;
         if (this.state.cart){
         this.state.cart.map((item,index) => {
-          sum += item.price
+          //sum += item.price
           let dateFormatted = item.date.substring(0, 10) +
            ' ' + item.time;
 
@@ -278,9 +386,9 @@ class Checkout extends Component {
               <Label>CVC</Label>
               <FormControl
                   type="text"
-                  value={this.state.payment.CVC}
+                  value={this.state.payment.cardSecurityCode}
                   placeholder={"CVC"}
-                  onChange={e => this.handleChange(e.target.value,'CVC')}
+                  onChange={e => this.handleChange(e.target.value,'cardSecurityCode')}
               />
           </FormGroup>{' '}
           <FormGroup>
@@ -312,6 +420,7 @@ class Checkout extends Component {
                       }
                     </div>
                     <Button  className="selectBtnModal" onClick={()=>this.processCheckout()}>BOOK</Button>
+                    <Button  className="selectBtnModal" onClick={()=>this.cancelCheckout()}>CANCEL</Button>
                     </div>
                 </Form>
             </div>
@@ -345,4 +454,9 @@ const mapStateToProps = state => ({
     order: state.order,
 })
 
-export default connect(mapStateToProps)(withRouter(Checkout))
+const mapDispatchToProps = dispatch => ({
+  dataSaveOrder: order => dispatch(dataSaveOrder(order)),
+  orderSetReservation: reservation => dispatch(orderSetReservation(reservation)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Checkout))
