@@ -6,6 +6,7 @@ import { API_URL } from '../App'
 import Select from 'react-select';
 import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux'
+import { orderSetReservation } from '../store/actions'
 
 const customStyles = {
   control: styles => ({ ...styles, backgroundColor: 'white', height: '40', border:'solid 1px #333',borderRadius:0 }),
@@ -63,6 +64,41 @@ class Checkout extends Component {
       }
 
       console.log(this.state)
+    }
+
+    componentDidMount = () => {
+      if (!this.props.order.reservation) {
+        this.createIncompleteAppointment()
+      }
+    }
+
+    createIncompleteAppointment = () => {
+      let slot = this.props.order.slots[0]
+
+      if (!slot) {
+        return this.props.history.push('/')
+      }
+
+      request
+        .post(API_URL + '/appointment/reservation')
+        .send({
+          startDateTime: slot.startDate,
+          access_token: this.state.access_token,
+          treatments: slot.slot.availabilityItems.map(item => ({
+            id: item.serviceId,
+            slot: item.startDateTime,
+            employeeId: item.employeeId,
+          }))
+        })
+        .then(res => {
+          if (res.body.IncompleteAppointmentID) {
+            return this.props.orderSetReservation({
+              id: res.body.IncompleteAppointmentID
+            })
+          }
+          throw new Error('Could not place reservation');
+        })
+        .catch(error => alert(error.message))
     }
 
     removeCartItem = (id) => {
@@ -166,6 +202,27 @@ class Checkout extends Component {
 
     }
 
+    cancelCheckout = () => {
+      if (this.props.order.reservation) {
+        this.cancelIncompleteAppointment()
+      }
+    }
+
+    cancelIncompleteAppointment = () => {
+      request
+        .delete(API_URL + '/appointment/reservation')
+        .send({
+          access_token: this.state.access_token,
+          incompleteAppointmentId: this.props.order.reservation.id
+        })
+        .then(res => {
+          if (res.body.IsSuccess) {
+            return this.props.history.push('/')
+          }
+          throw new Error('Could not cancel reservation');
+        })
+        .catch(error => alert(error.message))
+    }
 
     handleChange(value, key){
         this.setState(prev => ({payment:{...prev.payment,[key]:value}}))
@@ -310,6 +367,7 @@ class Checkout extends Component {
                       }
                     </div>
                     <Button  className="selectBtnModal" onClick={()=>this.processCheckout()}>BOOK</Button>
+                    <Button  className="selectBtnModal" onClick={()=>this.cancelCheckout()}>CANCEL</Button>
                     </div>
                 </Form>
             </div>
@@ -343,4 +401,8 @@ const mapStateToProps = state => ({
     order: state.order,
 })
 
-export default connect(mapStateToProps)(withRouter(Checkout))
+const mapDispatchToProps = dispatch => ({
+  orderSetReservation: reservation => dispatch(orderSetReservation(reservation)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Checkout))

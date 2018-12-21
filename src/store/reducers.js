@@ -8,6 +8,7 @@ export const initialState = {
     date: null,
     treatments: {},
     slots: [],
+    reservation: null,
   },
 }
 
@@ -80,10 +81,15 @@ function order(state = {}, action) {
       }
 
     case 'orderClearItems':
-    debugger
       return {
         ...state,
         slots: [],
+      }
+
+    case 'orderSetReservation':
+      return {
+        ...state,
+        reservation: action.reservation,
       }
 
     default:

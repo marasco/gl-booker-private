@@ -55,3 +55,10 @@ export function orderClearItems() {
     type: 'orderClearItems',
   }
 }
+
+export function orderSetReservation(reservation) {
+  return {
+    type: 'orderSetReservation',
+    reservation,
+  }
+}
