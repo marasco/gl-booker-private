@@ -25,7 +25,12 @@ export default class Calendario extends React.Component {
   //   this.props.addToCart(treatmentId,specialistId,date,time,treatmentName,specialistName,price)
   // }
   load = () => {
+    console.log('treatments',this.props.order.treatments);
 
+    if (Object.keys(this.props.order.treatments).length ===0){
+      alert('Please, select one or more treatments first.');
+      return false;
+    }
   this.props.scrollDown()
     this.setState({loading: true})
     request
@@ -50,7 +55,7 @@ export default class Calendario extends React.Component {
         return this.setState({ availability, loading:false })
       }
 
-      throw new Error('No times available for this specialist, please try with another one');
+      throw new Error('Sorry, there is no availavility for the selected services');
     })
     .catch(e => {
       console.log(e)

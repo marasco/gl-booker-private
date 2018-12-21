@@ -68,7 +68,7 @@ function order(state = {}, action) {
     case 'orderAddItem':
       return {
         ...state,
-        slots: [ ...state.slots, action.slot ]
+        slots: [ /*...state.slots,*/ action.slot ]
       }
 
     case 'orderRemoveItem':

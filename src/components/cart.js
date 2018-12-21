@@ -6,6 +6,7 @@ class Cart extends Component{
     showItems = () => {
 
         let rows = [];
+        console.log('order:',this.props.order)
         this.props.order.slots.map((item,index) => {
 
           let dateFormatted = item.startDate.substring(0, 10) +
