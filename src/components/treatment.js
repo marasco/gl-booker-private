@@ -202,7 +202,7 @@ class Treatment extends Component{
 
             <div className="col-xs-12 centered">
             {this.state.page && this.state.treatments.length>0 && (
-                <Button className="selectBtnModal" onClick={ this.loadTreatments }>Load More</Button>
+                <Button className="selectBtnModal" style={{marginLeft: "-40px", marginRight: "20px"}} onClick={ this.loadTreatments }>Load More</Button>
             )}
                 <Button  className="selectBtnModal" onClick={ this.nextStep }>Next</Button>
             </div>
