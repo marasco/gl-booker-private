@@ -1,5 +1,10 @@
 import { combineReducers } from 'redux'
-
+let slots = localStorage.getItem('slots')
+if (slots){
+  slots = JSON.parse(slots)
+}else{
+  slots = []
+}
 export const initialState = {
   data: {
     specialists: {},
@@ -7,7 +12,7 @@ export const initialState = {
   order: {
     date: null,
     treatments: {},
-    slots: [],
+    slots: slots,
   },
 }
 
@@ -66,21 +71,24 @@ function order(state = {}, action) {
       }
 
     case 'orderAddItem':
+      localStorage.setItem('slots', JSON.stringify([action.slot]));
       return {
         ...state,
         slots: [ /*...state.slots,*/ action.slot ]
       }
 
     case 'orderRemoveItem':
+      let slots = state.slots.filter(slot => {
+        return slot !== action.slot
+      })
+      localStorage.setItem('slots', JSON.stringify(slots));
       return {
         ...state,
-        slots: state.slots.filter(slot => {
-          return slot !== action.slot
-        })
+        slots: slots
       }
 
     case 'orderClearItems':
-    debugger
+      localStorage.setItem('slots', JSON.stringify([]));
       return {
         ...state,
         slots: [],
