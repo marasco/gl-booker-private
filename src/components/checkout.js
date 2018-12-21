@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom'
 import * as moment from 'moment'
-import NumberFormat from 'react-number-format';
 import {  FormGroup, Button, Label, FormControl, Form } from 'react-bootstrap';
 import request from 'superagent'
 import { API_URL } from '../App'
@@ -113,7 +111,7 @@ class Checkout extends Component {
           payment.cardExpiration=cardExp;
         }
         payment.cardType=payment.cardType.value;
-        let qty = items.length;
+        //let qty = items.length;
         items.forEach(
          function iterator( item, index ) {
              /* each app */
@@ -203,10 +201,10 @@ class Checkout extends Component {
     showItems = () => {
 
         let rows = [];
-        let sum = 0;
+        //let sum = 0;
         if (this.state.cart){
         this.state.cart.map((item,index) => {
-          sum += item.price
+          //sum += item.price
           let dateFormatted = item.date.substring(0, 10) +
            ' ' + item.time;
 
