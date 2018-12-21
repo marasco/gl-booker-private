@@ -23,16 +23,20 @@ class Appointments extends Component {
                     "customerId": this.state.loggedUser.Customer.CustomerID,
                     "access_token": this.state.loggedUser.access_token,
                     "fromStartDate": "2018-01-01",
-                    "toStartDate": "2018-12-31",
+                    "toStartDate": "2019-12-31",
                 })
                 .then(res=>{
                     console.log('xhr.response:',res.body.Results)
                     if( res.body.Results && res.body.Results.length ) {
                         this.setState({
                             appointments: res.body.Results.map(appointment => {
+
+
+
                                 return {
                                     id: appointment.ID,
                                     startDate: this.convertDate(appointment.StartDateTime),
+                                    treatments: appointment.AppointmentTreatments,
                                     treatment:{
                                         name: appointment.Treatment.Name
                                     },
@@ -65,7 +69,7 @@ class Appointments extends Component {
         dob = dob.replace("/Date(","");
         dob = dob.replace(")/","");
 
-        return moment(dob,'x').format('MM/DD/YYYY');
+        return moment(dob,'x').format('MM/DD/YYYY HH:mm');
     }
 
 
@@ -79,10 +83,26 @@ class Appointments extends Component {
                   <div className="col-xs-12">No appointments yet</div></div>
         }
         let appointments = this.state.appointments.map(appointment=>{
+          console.log('app',appointment)
             return <div className="row" key={appointment.id+"row"}>
                     <div className="col-xs-12">
                         <div className="item col-xs-12">
-                            <div className="desc col-xs-12"><strong>{appointment.treatment.name}</strong> with <i>{ appointment.specialist.lastName + ", " + appointment.specialist.firstName }</i> at {appointment.startDate} - <strong>USD {appointment.payment.price}</strong> - {appointment.status.name}</div>
+                            <div className="desc col-xs-12">
+                            {(()=>{
+                              let items=[]
+                              appointment.treatments.map((treat,i,arr)=>{
+                                let divider = i<arr.length-1 && <br/>;
+                                let spec=<span>{treat.Employee.LastName}, {treat.Employee.FirstName}</span>
+                                items.push(<span><strong>{treat.Treatment.Name}</strong> <i>(with {spec})</i>{divider}</span>);
+                              })
+                              return items
+                              }
+                            )()}
+
+
+                              <br />at {appointment.startDate} -
+                              <br /><strong>USD {appointment.payment.price}.00</strong>
+                              <br />{appointment.status.name}</div>
                         </div>
                     </div>
             </div>

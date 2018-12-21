@@ -6,7 +6,7 @@ import { API_URL } from '../App'
 import Select from 'react-select';
 import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux'
-import { orderSetReservation, dataSaveOrder,orderClearItems } from '../store/actions'
+import { orderSetReservation, dataSaveOrder,orderClearItems,orderClearReservation } from '../store/actions'
 import Cart from './cart'
 
 const customStyles = {
@@ -172,7 +172,6 @@ class Checkout extends Component {
           payment,
           access_token: this.state.access_token
         }
-
         this.createAppointment(payload)
 
 //         items.forEach(
@@ -246,6 +245,8 @@ class Checkout extends Component {
             this.props.orderClearItems()
             this.setState({message: 'Your appointment was made successfully.'})
             this.setState(prev => ({ ...prev, errors: null }))
+            return this.props.history.push('/appointments')
+
             //msg+="Your appointment was created successfully");
           }else if (res.body.ErrorMessage && res.body.ErrorMessage ==='invalid access token'){
             alert("Your session has expired, you have to login again.")
@@ -276,6 +277,7 @@ class Checkout extends Component {
         })
         .then(res => {
           if (res.body.IsSuccess) {
+            return this.props.orderClearReservation()
             return this.props.history.push('/')
           }
           throw new Error('Could not cancel reservation');
@@ -476,6 +478,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   orderClearItems: order => dispatch(orderClearItems()),
+  orderClearReservation: order => dispatch(orderClearReservation()),
   dataSaveOrder: order => dispatch(dataSaveOrder(order)),
   orderSetReservation: reservation => dispatch(orderSetReservation(reservation)),
 })

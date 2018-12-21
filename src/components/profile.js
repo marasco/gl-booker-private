@@ -114,7 +114,7 @@ class Profile extends Component {
     }
     render() {
         if (!this.state || !this.state.customer) {
-          alert("You are not logged in")
+          alert("User Successfully Logged out")
             return (<Redirect to="/" />)
         }
 

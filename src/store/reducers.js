@@ -17,10 +17,10 @@ export const initialState = {
     specialists: {},
   },
   order: {
-    date: null, 
+    date: null,
     treatments: treatments,
-    slots: slots, 
-    reservation: null, 
+    slots: slots,
+    reservation: null,
   },
 }
 
@@ -115,8 +115,8 @@ function order(state = {}, action) {
         slots: slots
       }
 
-    case 'orderClearItems': 
-      localStorage.setItem('slots', JSON.stringify([])); 
+    case 'orderClearItems':
+      localStorage.setItem('slots', JSON.stringify([]));
       return {
         ...state,
         slots: [],
@@ -126,6 +126,12 @@ function order(state = {}, action) {
       return {
         ...state,
         reservation: action.reservation,
+      }
+
+    case 'orderClearReservation':
+      return {
+        ...state,
+        reservation: null,
       }
 
     case 'orderComplete':
