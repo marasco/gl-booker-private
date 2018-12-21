@@ -62,3 +62,20 @@ export function orderSetReservation(reservation) {
     reservation,
   }
 }
+
+export function orderComplete(order) {
+  return dispatch => {
+    dispatch(dataSaveOrder(order))
+    dispatch({
+      type: 'orderComplete',
+      order,
+    })
+  }
+}
+
+export function dataSaveOrder(order) {
+  return {
+    type: 'dataSaveOrder',
+    order,
+  }
+}

@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 
 export const initialState = {
   data: {
+    orders: [],
     specialists: {},
   },
   order: {
@@ -22,6 +23,15 @@ function data(state = {}, action) {
           ...state.specialists,
           [action.treatment.ID]: action.specialists
         }
+      }
+
+    case 'dataSaveOrder':
+      return {
+        ...state,
+        orders: [
+          ...state.orders,
+          action.order,
+        ]
       }
 
     default:
@@ -91,6 +101,9 @@ function order(state = {}, action) {
         ...state,
         reservation: action.reservation,
       }
+
+    case 'orderComplete':
+      return { ...initialState.order }
 
     default:
       return state

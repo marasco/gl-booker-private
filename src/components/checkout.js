@@ -6,7 +6,7 @@ import { API_URL } from '../App'
 import Select from 'react-select';
 import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux'
-import { orderSetReservation } from '../store/actions'
+import { orderSetReservation, dataSaveOrder } from '../store/actions'
 
 const customStyles = {
   control: styles => ({ ...styles, backgroundColor: 'white', height: '40', border:'solid 1px #333',borderRadius:0 }),
@@ -58,7 +58,7 @@ class Checkout extends Component {
           cardNumber:'4111-1111-1111-1111',
           cardExpiration:'11/2023',
           cardProvider:'Visa',
-          CVC:'333',
+          cardSecurityCode: '333',
           postalCode:'33108',
         }
       }
@@ -122,6 +122,7 @@ class Checkout extends Component {
       return true;
     }
       processCheckout = () =>{
+        console.log(this.props.order)
         let items = [];
         let minDate='2030-00-00T00:00:00-08:00';
         this.setState({message: 'Processing your payment'})
@@ -149,57 +150,109 @@ class Checkout extends Component {
         }
         payment.cardType=payment.cardType.value;
         //let qty = items.length;
-        items.forEach(
-         function iterator( item, index ) {
-             /* each app */
-             let form = {
-               firstname: this.state.customer.FirstName,
-               lastname: this.state.customer.LastName,
-               email: this.state.customer.Email,
-               phone: this.state.customer.CellPhone,
-               customerId: this.state.customer.ID,
-               startDateTime: minDate,
-               treatments: [{id: item.id, slot: item.slot}],
-               payment: payment,
-               access_token: this.state.access_token
-             }
-             console.log(form);
-             request
-             .post(API_URL + '/appointment/?access_token='+this.state.access_token)
-             .send(form)
-             .then(res => {
-               console.log('response',res)
 
-               if (res.body.error) {
-                 throw new Error(res.body.error)
-               }
-               if (res.body.ArgumentErrors) {
-                 throw new Error(res.body.ArgumentErrors.map(error => error.ErrorMessage))
-               }
-               if (res.body.IsSuccess===true){
-                 this.removeCartItem(item.index);
-                 this.setState({message: 'Your appointment was made successfully.'})
-                 this.setState(prev => ({ ...prev, errors: null }))
-                 //msg+="Your appointment was created successfully");
-               }else if (res.body.ErrorMessage){
-                 this.setState({message: 'Your appointment failed: '+res.body.ErrorMessage})
+        let slot = this.props.order.slots[0]
+        let incompleteAppointmentId = this.props.order.reservation && this.props.order.reservation.id
 
-//                 alert('An error has ocurred: '+res.body.ErrorMessage);
-               }
+        let payload = {
+          firstname: this.state.customer.FirstName,
+          lastname: this.state.customer.LastName,
+          email: this.state.customer.Email,
+          phone: this.state.customer.CellPhone,
+          customerId: this.state.customer.ID,
+          incompleteAppointmentId,
+          startDateTime: slot.startDate,
+          treatments: slot.slot.availabilityItems.map(item => ({
+            id: item.serviceId,
+            slot: item.startDateTime,
+            employeeId: item.employeeId,
+          })),
+          payment,
+          access_token: this.state.access_token
+        }
+
+        this.createAppointment(payload)
+
+//         items.forEach(
+//          function iterator( item, index ) {
+//              /* each app */
+//              let form = {
+//                firstname: this.state.customer.FirstName,
+//                lastname: this.state.customer.LastName,
+//                email: this.state.customer.Email,
+//                phone: this.state.customer.CellPhone,
+//                customerId: this.state.customer.ID,
+//                startDateTime: minDate,
+//                treatments: [{id: item.id, slot: item.slot}],
+//                payment: payment,
+//                access_token: this.state.access_token
+//              }
+//              console.log(form);
+//              request
+//              .post(API_URL + '/appointment/?access_token='+this.state.access_token)
+//              .send(form)
+//              .then(res => {
+//                console.log('response',res)
+
+//                if (res.body.error) {
+//                  throw new Error(res.body.error)
+//                }
+//                if (res.body.ArgumentErrors) {
+//                  throw new Error(res.body.ArgumentErrors.map(error => error.ErrorMessage))
+//                }
+//                if (res.body.IsSuccess===true){
+//                  this.removeCartItem(item.index);
+//                  this.setState({message: 'Your appointment was made successfully.'})
+//                  this.setState(prev => ({ ...prev, errors: null }))
+//                  //msg+="Your appointment was created successfully");
+//                }else if (res.body.ErrorMessage){
+//                  this.setState({message: 'Your appointment failed: '+res.body.ErrorMessage})
+
+// //                 alert('An error has ocurred: '+res.body.ErrorMessage);
+//                }
 
 
-             })
+//              })
 
-             .catch(errors => {
-              console.error(errors)
-               this.setState({message: 'Your appointment failed: '+errors.message})
+//              .catch(errors => {
+//               console.error(errors)
+//                this.setState({message: 'Your appointment failed: '+errors.message})
 
-               this.setState(prev => ({ ...prev, errors }))
-             })
-         },
-         this
-       );
+//                this.setState(prev => ({ ...prev, errors }))
+//              })
+//          },
+//          this
+//        );
 
+    }
+
+    createAppointment = payload => {
+      request
+        .post(API_URL + '/appointment')
+        .send(payload)
+        .then(res => {
+          console.log('response',res)
+
+          if (res.body.error) {
+            throw new Error(res.body.error)
+          }
+          if (res.body.ArgumentErrors) {
+            throw new Error(res.body.ArgumentErrors.map(error => error.ErrorMessage))
+          }
+          if (res.body.IsSuccess===true){
+            this.props.dataSaveOrder(this.props.order)
+            this.setState({message: 'Your appointment was made successfully.'})
+            this.setState(prev => ({ ...prev, errors: null }))
+            //msg+="Your appointment was created successfully");
+          }else if (res.body.ErrorMessage){
+            this.setState({message: 'Your appointment failed: '+res.body.ErrorMessage})
+          }
+      })
+      .catch(errors => {
+        console.error(errors)
+        this.setState({message: 'Your appointment failed: '+errors.message})
+        this.setState(prev => ({ ...prev, errors }))
+      })
     }
 
     cancelCheckout = () => {
@@ -333,9 +386,9 @@ class Checkout extends Component {
               <Label>CVC</Label>
               <FormControl
                   type="text"
-                  value={this.state.payment.CVC}
+                  value={this.state.payment.cardSecurityCode}
                   placeholder={"CVC"}
-                  onChange={e => this.handleChange(e.target.value,'CVC')}
+                  onChange={e => this.handleChange(e.target.value,'cardSecurityCode')}
               />
           </FormGroup>{' '}
           <FormGroup>
@@ -402,6 +455,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  dataSaveOrder: order => dispatch(dataSaveOrder(order)),
   orderSetReservation: reservation => dispatch(orderSetReservation(reservation)),
 })
 
