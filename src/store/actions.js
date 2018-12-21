@@ -1,4 +1,3 @@
-import API from '../API'
 
 export function setSpecialists(treatment, specialists) {
   return {
