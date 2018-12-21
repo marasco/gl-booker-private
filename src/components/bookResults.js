@@ -6,25 +6,32 @@ import moment from "moment";
 
 class BookResults extends Component{
 
-    state = {
-        times:[],
-        loading:true,
-        specialist: this.props.data.specialist,
-        specialists: [],
-        treatment: this.props.data.treatment,
-        date: moment(this.props.data.date).format("YYYY-MM-DD"),
-    };
-    book = (slot, specialistId,specialistName) => {
-      const treatmentId = this.state.treatment['ID'];
-      const treatmentName = this.state.treatment['Name'];
-      const price = this.state.treatment['Price']['Amount'];
-      const date = this.state.date
-      console.log('booking '+slot + '/'+specialistId+'/'+treatmentId+'/'+date)
-      this.props.addToCart(treatmentId,specialistId,date,slot,treatmentName,specialistName,price)
-      return true;
+    constructor(props) {
+        super(props)
 
+        let { treatments } = this.props.order
+        let keys = Object.keys(treatments)
+        let treatment = treatments[keys[0]].treatment
+        let specialist = treatments[keys[0]].specialist
+
+        this.state = {
+            times:[],
+            loading:true,
+            specialist,
+            specialists: [],
+            treatment,
+            date: moment(this.props.data.date).format("YYYY-MM-DD"),
+        };
     }
+//     book = (slot) => {
+//       console.log('booking '+slot )
+// //      this.props.addToCart(treatmentId,specialistId,date,slot,treatmentName,specialistName,price)
+//       return true;
+
+//     }
     loadData = () => {
+        this.setState({ loading: true })
+
         this.loadSpeacialists(this.state.treatment['ID']).then((specialists)=>{
             this.setState({
                 specialists:specialists
@@ -37,8 +44,8 @@ class BookResults extends Component{
     }
 
     componentDidUpdate(prevProps) {
-        if( prevProps.data.date && this.props.data.date ) {
-            if( moment(prevProps.data.date).toISOString() !== moment(this.props.data.date).toISOString() ) {
+        if( prevProps.order.date && this.props.order.date ) {
+            if( moment(prevProps.order.date).toISOString() !== moment(this.props.order.date).toISOString() ) {
                 this.loadData()
             }
         }
@@ -71,59 +78,49 @@ class BookResults extends Component{
 
     loadTimes = () => {
         let query = {
-            fromDate: this.state.date+'T00:00:00-08:00',
-            "treatmentId[]": this.state.treatment['ID'],
+            fromDate: moment(this.props.order.date).format("YYYY-MM-DD")+'T00:00:00-08:00',
+            treatments: Object.keys(this.props.order.treatments).map(key => {
+              let {treatment, specialist} = this.props.order.treatments[key]
+              return {
+                id: treatment.ID,
+                employeeId: (specialist)?specialist.ID:null,
+              }
+            }),
             includeEmployees:true,
             format:24
         }
-        if( this.state.specialist['ID'] )
-            query.employeeId = this.state.specialist['ID']
 
         request
-            .get(API_URL + '/availability/1day')
+            .post(API_URL + '/availability/itinerary/1day')
             .set('Authorization', 'Bearer xxxx')
-            .query(query)
+            .send(query)
             .then(res => {
                 try {
                     let times = []
-                    if( res && res.body ) {
+                    if( res && res.body  && res.body.itineraryList) {
 
-                        res.body.map(loc=>{
-                            loc.serviceCategories.map(servCat=>{
-                                if( servCat.services ) {
-                                    servCat.services.map(service=>{
-                                        let duration = service.duration;
-                                        if( service.availability ) {
-                                            service.availability.map(availability=>{
-                                                if( availability.employees && availability.slots ) {
-                                                    availability.employees.map(employeeId => {
-                                                        availability.slots.map(slot=>{
-                                                            let specialist = (this.state.specialists[employeeId])?this.state.specialists[employeeId]:null;
-                                                            if( specialist ) {
-                                                                times.push({
-                                                                    start: slot,
-                                                                    end: moment(slot,"HH:mm").add(duration,"minutes").format("HH:mm"),
-                                                                    with: specialist.LastName+", "+specialist.FirstName,
-                                                                    slot: slot,
-                                                                    specialistId: specialist.ID
-                                                                })
-                                                            }
-                                                            return slot
-                                                        })
-                                                        return employeeId
-                                                    })
-                                                }
-                                                return availability
-                                            })
-                                        }
-                                        return service
+                        res.body.itineraryList.map(itinerary=>{
+                            if( itinerary.availabilities ) {
+                                itinerary.availabilities.map(item=>{
+
+                                    let duration=0
+                                    item.availabilityItems.map(service=>{
+                                        duration = duration + service.duration
                                     })
-                                }
-                                return servCat
-                            })
-                            return loc
+                                    let time = item.time.substring(0,5);
+                                    times.push({
+                                        start: time,
+                                        end: moment(time,"HH:mm").add(duration,"minutes").format("HH:mm"),
+                                        startDate: item.startDateTime,
+                                        slot: item,
+                                    })
+                                    return item
+                                })
+                            }
+                            return itinerary
                         })
                     }
+                    console.log('times',times)
                     this.setState({
                         times:times,
                         loading:false
@@ -148,7 +145,7 @@ class BookResults extends Component{
             <div>
                 {(this.state.loading)?<div className="marginTop20 marginBottom40">Loading...</div>:
                     <div className="timetable marginTop20">
-                        <BookResultTable book={this.book} times={this.state.times} specialists={this.state.specialists}></BookResultTable>
+                        <BookResultTable order={this.props.order} times={this.state.times} orderAddItem={this.props.orderAddItem} orderRemoveItem={this.props.orderRemoveItem}></BookResultTable>
                         {
                             (false)?
                                 <div className="col-xs-12 centered">

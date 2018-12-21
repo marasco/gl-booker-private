@@ -68,11 +68,16 @@ class Appointments extends Component {
         return moment(dob,'x').format('MM/DD/YYYY');
     }
 
+
     componentDidMount = () => {
         this.load();
     }
 
     render() {
+        if (!this.state.appointments){
+          return <div className="row" key="emptyApps">
+                  <div className="col-xs-12">No appointments yet</div></div>
+        }
         let appointments = this.state.appointments.map(appointment=>{
             return <div className="row" key={appointment.id+"row"}>
                     <div className="col-xs-12">

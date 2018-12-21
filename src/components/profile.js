@@ -6,6 +6,7 @@ import NumberFormat from 'react-number-format';
 import {  FormGroup, Button, Label, FormControl, Form } from 'react-bootstrap';
 import request from 'superagent'
 import { API_URL } from '../App'
+import {withRouter} from "react-router-dom";
 
 class Profile extends Component {
     formFields = {
@@ -17,36 +18,43 @@ class Profile extends Component {
         CellPhone:{label:'Phone number',value:''},
     }
 
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
 
         let user = JSON.parse(localStorage.getItem('loggedUser'))
         console.log('user',user)
         let cust_data = user && user.Customer.Customer
-        cust_data.DateOfBirth = this.convertDate(cust_data.DateOfBirth)
-        this.state = {
-            customer: cust_data,
-            form: {
-                FirstName: cust_data.FirstName,
-                LastName: cust_data.LastName,
-                Email: cust_data.Email,
-                Password: cust_data.Password,
-                DateOfBirth: cust_data.DateOfBirth,
-                CellPhone: cust_data.CellPhone,
-            },
-            access_token: user && user.access_token
-        }
+        if (!cust_data){
+            console.log('not logged in');
+            return props.history.push('/');
 
-        this.logout = this.logout.bind(this)
+        }else{
+          cust_data.DateOfBirth = this.convertDate(cust_data.DateOfBirth)
+          this.state = {
+              customer: cust_data,
+              form: {
+                  FirstName: cust_data.FirstName,
+                  LastName: cust_data.LastName,
+                  Email: cust_data.Email,
+                  Password: cust_data.Password,
+                  DateOfBirth: cust_data.DateOfBirth,
+                  CellPhone: cust_data.CellPhone,
+              },
+              access_token: user && user.access_token
+          }
+
+          this.logout = this.logout.bind(this)
+        }
     }
 
       updateProfile = () =>{
         if(!this.state.form) return false;
         console.log('updateForm[]',this.state.form);
-
+        let form = this.state.form
+        form.DateOfBirth = this.reConvertDate(form.DateOfBirth)
         request
         .put(API_URL + '/account/'+this.state.customer.ID+'?access_token='+this.state.access_token)
-        .send(this.state.form)
+        .send(form)
         .then(res => {
           console.log(res)
 
@@ -60,6 +68,8 @@ class Profile extends Component {
           if (res.body.IsSuccess===true){
             this.setState(prev => ({ ...prev, errors: null }))
             alert("Your profile was saved successfully")
+          }else if (res.body.ErrorMessage && res.body.ErrorMessage ==='invalid access token'){
+            alert("Your session has expired, you have to login again.")
           }else{
             alert('An error has ocurred. Try Later.');
           }
@@ -94,8 +104,17 @@ class Profile extends Component {
 
         return moment(dob,'x').format('MM/DD/YYYY');
     }
+    reConvertDate = (dob) => {
+        let ret = dob
+        dob = dob.split('/');
+        if (dob.length && dob.length === 3){
+          ret = dob[2]+'-'+dob[0]+'-'+dob[1]
+        }
+        return ret
+    }
     render() {
-        if (!this.state.customer) {
+        if (!this.state || !this.state.customer) {
+          alert("You are not logged in")
             return (<Redirect to="/" />)
         }
 
@@ -135,4 +154,4 @@ class Profile extends Component {
         );
     }
 }
-export default Profile;
+export default  withRouter(Profile);

@@ -4,6 +4,8 @@ import '../App.css';
 import Specialist from './specialist';
 import request from 'superagent'
 import { API_URL } from '../App'
+
+
 class Treatment extends Component{
     constructor(props){
         super(props)
@@ -54,47 +56,94 @@ class Treatment extends Component{
         }
     }
 
-    loadSpeacialists = treatmentId => {
+    loadSpeacialists = treatment => {
         request
         .get(API_URL + '/employees')
         .set('Authorization', 'Bearer xxxx')
         .query({
         pageSize: 100,
-        treatmentId,
+        treatmentId: treatment.ID,
         })
         .then(res=>{
-            this.setState({
-                specialists: res.body.Results.map(record => ({ ...record,
+            let specialists = res.body.Results.map(record => ({ ...record,
                 value: record.ID,
                 label: [record.LastName, record.FirstName].join(', '),
-                }))
-            })
+            }))
+
+            this.props.setSpecialists(treatment, specialists);
+            // this.setState({ specialists })
         }).catch(error => {
             console.log(error)
         });
     }
 
     onClickTreatment = treatment => {
-        let specialist = null
-        if( this.props.data.treatment && this.props.data.treatment.ID && this.props.data.treatment.ID === treatment.ID && this.props.data.specialist ) {
-            specialist = this.props.data.specialist
+        if (this.isSelected(treatment)) {
+            this.props.removeTreatment(treatment)
+        } else {
+            this.props.addTreatment(treatment)
+            this.loadSpeacialists(treatment)
         }
-
-        this.props.push({ treatment, specialist: specialist, date: null })
-        this.setState({treatment, specialist: specialist, specialists: [] })
-        this.loadSpeacialists(treatment.ID)
+        this.props.goToStep(1)
     }
 
-    onSpecialistChange = specialist => {
-        this.props.push({ specialist:null, date: null })
-        this.setState({ specialist },()=>{
-            this.props.push({ specialist, date: null })
-        })
+    isSelected = treatment => {
+        return this.props.order.treatments.hasOwnProperty(treatment.ID)
+    }
+
+    getSpecialist = treatment => {
+        return this.props.order.treatments[treatment.ID].specialist
+    }
+
+    getSpecialists = treatment => {
+        return this.props.data.specialists[treatment.ID] || []
+    }
+
+    // onClickTreatment = treatment => {
+    //     let specialist = null
+    //     if( this.props.data.treatment && this.props.data.treatment.ID && this.props.data.treatment.ID === treatment.ID && this.props.data.specialist ) {
+    //         specialist = this.props.data.specialist
+    //     }
+
+    //     this.props.push({ treatment, specialist: specialist, date: null })
+    //     this.setState({treatment, specialist: specialist, specialists: [] })
+    //     this.loadSpeacialists(treatment.ID)
+    // }
+
+    onSpecialistChange = (treatment, specialist) => {
+        this.props.selectSpecialist(treatment, specialist)
+        this.props.goToStep(1)
+    }
+
+    // onSpecialistChange = specialist => {
+    //     this.props.push({ specialist:null, date: null })
+    //     this.setState({ specialist },()=>{
+    //         this.props.push({ specialist, date: null })
+    //     })
+    // }
+
+    // onClickNext = () => {
+    //     // Temporary fix to trigger calendar step.
+    //     let { treatment, specialist } = this.props.order.treatments[Object.keys(this.props.order.treatments)[0]]
+    //     this.props.push({ treatment, specialist })
+    // }
+
+    nextStep = () => {
+      /*
+        let { treatments } = this.props.order
+        let keys = Object.keys(treatments)
+
+        if (keys.some(key => !treatments[key].specialist)) {
+            return alert('Please select a specialist for all treatments')
+        }
+        */
+        this.props.goToStep(2)
     }
 
     render(){
     return(
         <div className="treatments">
+            <pre style={{textAlign: 'left'}}>{ JSON.stringify(this.props.order, null, 4) }</pre>
             <Row>
               {(()=>{
                 let doms = []
@@ -106,13 +155,15 @@ class Treatment extends Component{
                 items.map((item,i)=>{
                     //count++
                     let img = item.ImageURL;
+                    let selected = this.isSelected(item)
                     if (!img || img.length===0){
                         img = '/sample.png';
                     }
                     doms.push(
 
                        <Col xs={12} sm={6} md={4} lg={3} className="item" key={"image" + item.ID}>
-                            <div className={this.state.treatment === item?"itemContent active":"itemContent"}>
+                       <pre>{ selected ? 'T' : 'F' }</pre>
+                            <div className={selected?"itemContent active":"itemContent"}>
                                 <Row className="border-bottom">
                                     <Col xs={12} className="image" style={{backgroundImage: "url("+img+")"}} alt={item.ID}></Col>
                                 </Row>
@@ -122,16 +173,16 @@ class Treatment extends Component{
                                 <Row className="border-bottom">
                                     <Col xs={12} className="padding-0">
                                     <Col xs={12} sm={8} className="padding-0"><div className="duration">{item.TreatmentDuration} MIN - {item.Price.CurrencyCode} {item.Price.Amount}</div></Col>
-                                    <Col xs={12} sm={4} className="padding-0"><div className="selectBtn" onClick={() => this.onClickTreatment(item) }>SELECT</div></Col>
+                                    <Col xs={12} sm={4} className="padding-0"><div className="selectBtn" onClick={() => this.onClickTreatment(item) }>{ selected ? 'CANCEL' : 'SELECT' }</div></Col>
                                     </Col>
                                 </Row>
                                 <Row>
                                     <Col xs={12} sm={12}>
                                         <Specialist treatmentId={item.ID}
-                                        selected={ this.state.treatment === item }
-                                        specialist={ this.state.specialist }
-                                        specialists={ this.state.specialists }
-                                        onSpecialistChange={ this.onSpecialistChange } />
+                                        selected={ selected }
+                                        specialist={ selected && this.getSpecialist(item) }
+                                        specialists={ this.getSpecialists(item) }
+                                        onSpecialistChange={ this.onSpecialistChange.bind(this, item) } />
                                     </Col>
                                 </Row>
                             </div>
@@ -149,14 +200,16 @@ class Treatment extends Component{
 
             </Row>
 
+            <div className="col-xs-12 centered">
             {this.state.page && this.state.treatments.length>0 && (
-                <div className="col-xs-12 centered">
-                <Button  className="selectBtnModal" onClick={ this.loadTreatments }>Load More</Button>
-                </div>
+                <Button className="selectBtnModal" onClick={ this.loadTreatments }>Load More</Button>
             )}
+                <Button  className="selectBtnModal" onClick={ this.nextStep }>Next</Button>
+            </div>
 
         </div>
         );
     }
 }
-export default Treatment;
+
+export default Treatment
