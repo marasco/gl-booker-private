@@ -5,13 +5,19 @@ if (slots){
 }else{
   slots = []
 }
+let treatments = localStorage.getItem('treatments')
+if (treatments){
+  treatments = JSON.parse(treatments)
+}else{
+  treatments = {}
+}
 export const initialState = {
   data: {
     specialists: {},
   },
   order: {
     date: null,
-    treatments: {},
+    treatments: treatments,
     slots: slots,
   },
 }
@@ -34,33 +40,44 @@ function data(state = {}, action) {
 }
 
 function order(state = {}, action) {
+  let data = null
   switch (action.type) {
 
     case 'addTreatment':
+      data = {
+        ...state.treatments,
+        [action.treatment.ID]: {
+          treatment: action.treatment,
+          specialist: null,
+        }
+      }
+      console.log('add_treat t=>',data)
+
+      localStorage.setItem('treatments', JSON.stringify(data));
+
       return {
         ...state,
-        treatments: {
-          ...state.treatments,
-          [action.treatment.ID]: {
-            treatment: action.treatment,
-            specialist: null,
-          }
-        }
+        treatments: data
       }
 
     case 'removeTreatment':
-      let treatments = { ...state.treatments }
-      delete(treatments[action.treatment.ID])
-      return { ...state, treatments }
+      let data = { ...state.treatments }
+      delete(data[action.treatment.ID])
+      console.log('remove_treat t=>',data)
+      localStorage.setItem('treatments', JSON.stringify(data));
+
+      return { ...state, treatments: data }
 
     case 'selectSpecialist':
       let treatment = { ...state.treatments[action.treatment.ID], specialist: action.specialist }
+      data = {
+        ...state.treatments,
+        [action.treatment.ID]: treatment
+      }
+      localStorage.setItem('treatments', JSON.stringify(data));
       return {
         ...state,
-        treatments: {
-          ...state.treatments,
-          [action.treatment.ID]: treatment
-        }
+        treatments: data
       }
       return state
 

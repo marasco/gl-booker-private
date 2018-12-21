@@ -3,34 +3,44 @@ import { Button } from 'react-bootstrap';
 import {withRouter} from 'react-router-dom'
 
 class Cart extends Component{
-    showItems = () => {
+  renderList = (treats, avail)=> {
+    console.log('typeof treats',typeof treats)
+    console.log('treats',treats)
+    let itemResult=[]
+      let dateFormatted = avail.startDateTime.substring(0, 10) +
+       ' ' + avail.startDateTime.substring(11, 16);
+       if (typeof treats==='object'){
+         let i=1
+         console.log('loggin svcs')
 
-        let rows = [];
-        console.log('order:',this.props.order)
-        this.props.order.slots.map((item,index) => {
+         Object.keys(treats).forEach(function(index) {
+            let service= treats[index]
+            console.log('service', service)
+            let treatmentName=''
+            let treatmentPrice=0
+            if (service.treatment.ID === avail.serviceId){
+              treatmentName = service.treatment.Name;
+              treatmentPrice = service.treatment.Price.Amount;
+              itemResult.push(<div className="cartObject">
+              ({i}) <strong>{treatmentName}</strong> at {dateFormatted} - <strong>USD {treatmentPrice}.00</strong>
+              </div>)
+            }
 
-          let dateFormatted = item.startDate.substring(0, 10) +
-           ' ' + item.slot.time;
+
+            return service
+
+});
 
 
-
-            rows.push(
-                <div className="row"  key={item.treatmentId+'key'+index}>
-                <div className="col-xs-12">
-                <div className="item col-xs-12">
-                <div className="desc col-xs-10">({index+1}) <strong>{item.treatmentName}</strong> with <i>{item.specialistName}</i> at {dateFormatted} - <strong>USD {item.price}</strong></div>
-                <div className="remove col-xs-2">
-                <span onClick={() => this.props.orderRemoveItem(item)} className="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
-                </div>
-                </div>
-                </div>
-                </div>
-            )
-            return item
-        });
-
-        return rows
     }
+      return (
+
+          <div className="desc col-xs-10">
+            {itemResult}
+          </div>
+
+      )
+  }
 
     checkout = () => {
         let loggedUser = JSON.parse(localStorage.getItem('loggedUser'))
@@ -48,7 +58,32 @@ class Cart extends Component{
             <div className="cart centered">
             <div className="title">Your treatments cart</div>
             <div className="list">
-              {this.showItems()}
+             {(()=>{
+                let rows = [];
+                console.log('order:',this.props.order)
+                const treats = this.props.order.treatments
+                console.log('treats',treats)
+                this.props.order.slots.map((item,index) => {
+                  let items =item.slot.availabilityItems.map(this.renderList.bind(this, treats));
+
+                  rows.push(
+                    <div className="row"  key={'xxxkey'}>
+                    <div className="col-xs-12">
+                    <div className="item col-xs-12">
+                      {items}
+                    <div className="remove col-xs-2">
+                    <span onClick={() => this.props.orderRemoveItem(item)} className="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                  )
+
+                  return item
+                })
+                console.log('rows',rows)
+                return rows
+              })()}
             </div>
 
             {

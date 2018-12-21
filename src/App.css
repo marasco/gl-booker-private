@@ -12,6 +12,9 @@ a:hover{
   border-bottom: solid 1px black;
   text-decoration: none;
 }
+.cartObject {
+  line-height: 30px
+}
 a{
   cursor:pointer;
   color: black;
