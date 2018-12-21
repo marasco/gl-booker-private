@@ -104,13 +104,19 @@ class BookResults extends Component{
                                 itinerary.availabilities.map(item=>{
 
                                     let duration=0
+                                    let startTime=item.startDateTime.substring(11,16)
+                                    let lastTime=item.startDateTime
                                     item.availabilityItems.map(service=>{
-                                        duration = duration + service.duration
+                                        duration = service.duration
+                                        lastTime=service.startDateTime.substring(11,16)
+
                                     })
-                                    let time = item.time.substring(0,5);
+                                    console.log('adding '+duration+' to '+lastTime)
+                                    let end = moment(lastTime,"HH::mm").add(duration,"minutes").format("HH:mm");
+                                    //let time = item.time.substring(0,5);
                                     times.push({
-                                        start: time,
-                                        end: moment(time,"HH:mm").add(duration,"minutes").format("HH:mm"),
+                                        start: startTime,
+                                        end: end,
                                         startDate: item.startDateTime,
                                         slot: item,
                                     })
