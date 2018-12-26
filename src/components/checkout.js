@@ -6,8 +6,11 @@ import { API_URL } from '../App'
 import Select from 'react-select';
 import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
+import { timerStartTimer } from '../store/timer'
 import { orderSetReservation, dataSaveOrder,orderClearItems,orderClearReservation } from '../store/actions'
 import Cart from './cart'
+import Timer from './timer'
 
 const customStyles = {
   control: styles => ({ ...styles, backgroundColor: 'white', height: '40', border:'solid 1px #333',borderRadius:0 }),
@@ -94,13 +97,17 @@ class Checkout extends Component {
         })
         .then(res => {
           if (res.body.IncompleteAppointmentID) {
+            this.props.timerStartTimer()
             return this.props.orderSetReservation({
               id: res.body.IncompleteAppointmentID
             })
           }
           throw new Error('Could not place reservation');
         })
-        .catch(error => alert(error.message))
+        .catch(error => {
+          console.log(error)
+          alert(error.message)
+        })
     }
 
     removeCartItem = (id) => {
@@ -342,6 +349,10 @@ class Checkout extends Component {
 
     render() {
 
+      if (this.props.timer && this.props.timer.expired === true) {
+        return <Redirect to="/" />
+      }
+
 
 
           let cart = React.createElement(Cart, {
@@ -359,6 +370,8 @@ class Checkout extends Component {
           })
       let form = (
         <div>
+
+          <Timer timer={this.props.timer} />
 
           <div>
           <FormGroup>
@@ -474,9 +487,11 @@ class Checkout extends Component {
 
 const mapStateToProps = state => ({
     order: state.order,
+    timer: state.timer,
 })
 
 const mapDispatchToProps = dispatch => ({
+  timerStartTimer: () => dispatch(timerStartTimer()),
   orderClearItems: order => dispatch(orderClearItems()),
   orderClearReservation: order => dispatch(orderClearReservation()),
   dataSaveOrder: order => dispatch(dataSaveOrder(order)),

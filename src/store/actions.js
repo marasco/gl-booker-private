@@ -85,3 +85,10 @@ export function dataSaveOrder(order) {
     order,
   }
 }
+
+export function timerSetExpiration(date) {
+  return {
+    type: 'timerSetExpiration',
+    date,
+  }
+}

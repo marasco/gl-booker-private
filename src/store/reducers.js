@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import { timer } from './timer'
 let slots = localStorage.getItem('slots')
 if (slots){
   slots = JSON.parse(slots)
@@ -22,6 +23,7 @@ export const initialState = {
     slots: slots,
     reservation: null,
   },
+  timer: {},
 }
 
 function data(state = {}, action) {
@@ -142,4 +144,4 @@ function order(state = {}, action) {
   }
 }
 
-export const reducers = combineReducers({ data, order })
+export const reducers = combineReducers({ data, order, timer })
