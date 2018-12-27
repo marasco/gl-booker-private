@@ -64,20 +64,23 @@ class Auth extends Component {
             .post(API_URL + '/account')
             .send(form)
             .then(res => {
-                if (res.body.error) {
-                    throw new Error(res.body.error)
-                }
 
                 if (res.body.ArgumentErrors) {
                     throw res.body.ArgumentErrors.map(error => error.ErrorMessage)
                 }
 
-                this.setState(prev => ({...prev, errors: null}),()=>{
-                    this.login(form.Email,form.Password)
-                })
+                if (res.body.ErrorMessage) {
+                    throw ([{param: 'Error', msg: res.body.ErrorMessage}])
+                }
+                if (res.body.IsSuccess===true){
+                  this.setState(prev => ({...prev, errors: null}),()=>{
+                      this.login(form.Email,form.Password)
+                  })
+                }
             })
 
             .catch(errors => {
+              console.log('errors',errors);debugger;
                 if (errors.status) {
                     // Handle non-200 gracefully.
                     errors = errors.response.body.errors
@@ -189,9 +192,14 @@ class Auth extends Component {
                     <Col>
                         {this.state.errors && (
                             <ul>
-                                {this.state.errors.map(error => (
-                                    <li key={error}>{JSON.stringify(error)}</li>
-                                ))}
+                                {this.state.errors.map(error => {
+                                  return (typeof error === 'object')?
+                                  <li key={error.param}>{error.param}: {error.msg}</li>:
+                                  <p>{error}</p>
+                                }
+
+
+                                )}
                             </ul>
                         )}
                         {

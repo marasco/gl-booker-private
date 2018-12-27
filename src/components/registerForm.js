@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {  FormGroup, Button, Col, Label, FormControl, Form } from 'react-bootstrap';
+import NumberFormat from 'react-number-format';
 
 
 class RegisterForm extends Component {
@@ -28,13 +29,34 @@ class RegisterForm extends Component {
     render() {
         let fields = Object.keys(this.formFields).map(x =>  <FormGroup key={x} id={"form" + x}>
             <Label>{this.formFields[x].label+ ': '}</Label>
+
+{
+            (x==='CellPhone')?
+
+              <NumberFormat
+              value={this.state.form[x]}
+              placeholder={"Your phone number"}
+              className="form-control"
+              onChange={e => this.handleChange(e.target.value,x)}
+              format="###-###-####" />
+            : (x==='DateOfBirth')?
+            <NumberFormat
+            value={this.state.form[x]}
+            placeholder={"MM/DD/YYYY"}
+            className="form-control"
+            onChange={e => this.handleChange(e.target.value,x)}
+            format="##/##/####" />
+              :
             <FormControl
-                type="text"
+                type={(x==='Password')?"password":"text"}
                 value={this.state.form[x]}
-                placeholder={(x==="DateOfBirth")?"Enter your " + x+" (mm/dd/yyyy)":"Enter your " + x}
+                placeholder={"Enter your " + x}
                 onChange={e => this.handleChange(e.target.value,x)}
             />
-            </FormGroup>)
+          }
+            </FormGroup>
+
+          )
     return (
         <div>
         <div className="UserCreation">
