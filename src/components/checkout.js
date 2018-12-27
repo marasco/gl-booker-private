@@ -7,7 +7,7 @@ import Select from 'react-select';
 import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { timerStartTimer, timerClearTimer } from '../store/timer'
+import { timerStartTimer } from '../store/timer'
 import { orderSetReservation, dataSaveOrder,orderClearItems,orderClearReservation } from '../store/actions'
 import Cart from './cart'
 import Timer from './timer'
@@ -98,12 +98,13 @@ class Checkout extends Component {
         })
         .then(res => {
           if (res.body.IncompleteAppointmentID) {
-            this.props.timerStartTimer()
-            return this.props.orderSetReservation({
+            this.props.orderSetReservation({
               id: res.body.IncompleteAppointmentID
             })
+            this.props.timerStartTimer()
+          } else {
+            throw new Error('Could not place reservation');
           }
-          throw new Error('Could not place reservation');
         })
         .catch(error => {
           console.log(error)
@@ -253,6 +254,7 @@ class Checkout extends Component {
             this.props.orderClearItems()
             this.setState({message: 'Your appointment was made successfully.'})
             this.setState(prev => ({ ...prev, errors: null }))
+            this.props.orderClearReservation()
             return this.props.history.push('/appointments')
 
             //msg+="Your appointment was created successfully");
@@ -274,7 +276,6 @@ class Checkout extends Component {
       if (this.props.order.reservation) {
         this.cancelIncompleteAppointment()
       }
-      this.props.history.push('/')
     }
 
     cancelIncompleteAppointment = () => {
@@ -286,7 +287,7 @@ class Checkout extends Component {
         })
         .then(res => {
           if (res.body.IsSuccess) {
-            return this.props.orderClearReservation()
+            this.props.orderClearReservation()
             return this.props.history.push('/')
           }
           throw new Error('Could not cancel reservation');
@@ -351,7 +352,7 @@ class Checkout extends Component {
 
     render() {
 
-      if (this.props.timer && this.props.timer.expired === true) {
+      if (!this.props.order.slots.length) {
         return <Redirect to="/" />
       }
 
@@ -373,7 +374,7 @@ class Checkout extends Component {
       let form = (
         <div>
 
-          <Timer timer={this.props.timer} />
+          <Timer/>
 
           <div>
           <FormGroup>
@@ -458,6 +459,7 @@ class Checkout extends Component {
                     </div>
                     <Button  className="selectBtnModal" onClick={()=>this.processCheckout()}>BOOK</Button>
                     <Button  className="selectBtnModal" onClick={()=>this.cancelCheckout()}>CANCEL</Button>
+                    <Button  className="selectBtnModal" onClick={()=>this.props.history.push('/')}>ADD MORE TREATMENTS</Button>
                     </div>
                 </Form>
             </div>
@@ -493,7 +495,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  timerClearTimer: () => dispatch(timerClearTimer()),
   timerStartTimer: () => dispatch(timerStartTimer()),
   orderClearItems: order => dispatch(orderClearItems()),
   orderClearReservation: order => dispatch(orderClearReservation()),

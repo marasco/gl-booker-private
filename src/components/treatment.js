@@ -4,6 +4,7 @@ import '../App.css';
 import Specialist from './specialist';
 import request from 'superagent'
 import { API_URL } from '../App'
+import Timer from './timer'
 
 
 class Treatment extends Component{
@@ -143,6 +144,7 @@ class Treatment extends Component{
     render(){
     return(
         <div className="treatments">
+            <Timer/>
             <Row>
               {(()=>{
                 let doms = []

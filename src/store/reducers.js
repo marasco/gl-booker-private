@@ -29,7 +29,7 @@ export const initialState = {
     slots: slots,
     reservation: reservation,
   },
-  timer: {},
+  timer: null,
 }
 
 function data(state = {}, action) {

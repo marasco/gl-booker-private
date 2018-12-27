@@ -1,9 +1,27 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { timerStartTimer } from '../store/timer'
 
-function Timer(props) {
-  return (props.timer && props.timer.expired === false && (
-    <pre>{props.timer.timeLeft}</pre>
-  ))
+class Timer extends Component {
+
+  componentDidMount = () => {
+    this.props.timerStartTimer()
+  }
+
+  render() {
+    return (this.props.timer && (
+      <pre>{this.props.timer.timeLeft}</pre>
+    ))
+  }
+
 }
 
-export default Timer;
+const mapStateToProps = state => ({
+    timer: state.timer,
+})
+
+const mapDispatchToProps = dispatch => ({
+  timerStartTimer: () => dispatch(timerStartTimer()),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Timer)

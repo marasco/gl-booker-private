@@ -1,10 +1,15 @@
 import * as moment from 'moment'
+import { orderClearReservation } from './actions'
 
 export function timerStartTimer() {
   return (dispatch, getState) => {
-    let { timer } = getState()
+    let { timer, order } = getState()
 
-    let expirationDate = moment().add(10, 'minutes')
+    if (!order.reservation) {
+      return
+    }
+
+    let expirationDate = moment().add(1, 'minutes')
     let cachedExpirationDate = localStorage.getItem('expirationDate')
 
     if (cachedExpirationDate) {
@@ -46,13 +51,9 @@ export function timerRefreshTimer(expirationDate) {
 
 export function timerExpired() {
   return (dispatch, getState) => {
-    dispatch(timerClearTimer())
+    dispatch(orderClearReservation())
 
     alert('Timeout')
-
-    return dispatch({
-      type: 'timerExpired',
-    })
   }
 }
 
@@ -73,7 +74,6 @@ export function timer(state = {}, action) {
 
     case 'startTimer':
       return {
-        expired: false,
         timeLeft: null,
         expirationDate: action.expirationDate,
         intervalHandler: action.intervalHandler,
@@ -85,14 +85,8 @@ export function timer(state = {}, action) {
         timeLeft: action.timeLeft,
       }
 
-    case 'timerExpired':
-      return {
-        ...state,
-        expired: true,
-      }
-
     case 'clearTimer':
-      return {}
+      return null
 
     default:
       return state

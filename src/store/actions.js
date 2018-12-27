@@ -1,3 +1,4 @@
+import { timerClearTimer } from './timer'
 
 export function setSpecialists(treatment, specialists) {
   return {
@@ -64,8 +65,12 @@ export function orderSetReservation(reservation) {
 }
 
 export function orderClearReservation() {
-  return {
-    type: 'orderClearReservation'
+  return (dispatch, getState) => {
+    dispatch({
+      type: 'orderClearReservation'
+    })
+    dispatch(orderClearItems())
+    dispatch(timerClearTimer())
   }
 }
 
