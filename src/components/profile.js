@@ -67,11 +67,61 @@ class Profile extends Component {
           }
           if (res.body.IsSuccess===true){
             this.setState(prev => ({ ...prev, errors: null }))
+            this.refreshCustomerData()
             alert("Your profile was saved successfully")
           }else if (res.body.ErrorMessage && res.body.ErrorMessage ==='invalid access token'){
             alert("Your session has expired, you have to login again.")
           }else{
             alert('An error has ocurred. Try Later.');
+          }
+
+
+        })
+
+        .catch(errors => {
+          alert(errors.message)
+          this.setState(prev => ({ ...prev, errors }))
+        })
+      }
+
+      refreshCustomerData = () =>{
+        request
+        .get(API_URL + '/account/'+this.state.customer.ID+'?access_token='+this.state.access_token)
+        .then(res => {
+
+
+          if (res.body.error) {
+            throw new Error(res.body.error)
+          }
+
+          if (res.body.ArgumentErrors) {
+            throw new Error(res.body.ArgumentErrors.map(error => error.ErrorMessage))
+          }
+          if (res.body.IsSuccess===true){
+            console.log(res.body)
+            if (res.body.Customer){
+              let user = JSON.parse(localStorage.getItem('loggedUser'))
+              user.Customer = res.body.Customer
+              localStorage.setItem('loggedUser', JSON.stringify(user))
+              this.setState(
+                  prev => ({ ...prev,
+                    customer: user.Customer.Customer,
+                    form: {
+                        FirstName: user.Customer.Customer.FirstName,
+                        LastName: user.Customer.Customer.LastName,
+                        Email: user.Customer.Customer.Email,
+                        Password: user.Customer.Customer.Password,
+                        DateOfBirth: user.Customer.Customer.DateOfBirth,
+                        CellPhone: user.Customer.Customer.CellPhone}
+
+                   })
+              )
+            }
+//            this.setState(prev => ({ ...prev, errors: null }))
+          }else if (res.body.ErrorMessage && res.body.ErrorMessage ==='invalid access token'){
+            alert("Your session has expired, you have to login again.")
+          }else{
+            alert('An error has ocurred. We cannot get your profile data. Try Later.');
           }
 
 
@@ -97,6 +147,8 @@ class Profile extends Component {
     logout() {
         localStorage.removeItem('loggedUser')
         this.setState(prev => ({ ...prev, customer: null }))
+        return this.props.history.push('/');
+
     }
     convertDate = (dob) => {
         dob = dob.replace("/Date(","");
@@ -113,10 +165,7 @@ class Profile extends Component {
         return ret
     }
     render() {
-        if (!this.state || !this.state.customer) {
-          alert("User Successfully Logged out")
-            return (<Redirect to="/" />)
-        }
+
 
         let fields = Object.keys(this.formFields).map(x =>  <FormGroup key={x} id={"form" + x}>
             <Label>{this.formFields[x].label+ ': '}</Label>
