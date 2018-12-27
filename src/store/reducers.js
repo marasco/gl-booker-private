@@ -12,6 +12,12 @@ if (treatments){
 }else{
   treatments = {}
 }
+let reservation = localStorage.getItem('reservation')
+if (reservation) {
+  reservation = JSON.parse(reservation)
+}else{
+  reservation = null
+}
 export const initialState = {
   data: {
     orders: [],
@@ -21,7 +27,7 @@ export const initialState = {
     date: null,
     treatments: treatments,
     slots: slots,
-    reservation: null,
+    reservation: reservation,
   },
   timer: {},
 }
@@ -125,12 +131,14 @@ function order(state = {}, action) {
       }
 
     case 'orderSetReservation':
+      localStorage.setItem('reservation', JSON.stringify(action.reservation));
       return {
         ...state,
         reservation: action.reservation,
       }
 
     case 'orderClearReservation':
+      localStorage.removeItem('reservation');
       return {
         ...state,
         reservation: null,

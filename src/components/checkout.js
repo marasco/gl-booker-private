@@ -7,7 +7,7 @@ import Select from 'react-select';
 import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { timerStartTimer } from '../store/timer'
+import { timerStartTimer, timerClearTimer } from '../store/timer'
 import { orderSetReservation, dataSaveOrder,orderClearItems,orderClearReservation } from '../store/actions'
 import Cart from './cart'
 import Timer from './timer'
@@ -75,6 +75,7 @@ class Checkout extends Component {
       if (!this.props.order.reservation) {
         this.createIncompleteAppointment()
       }
+      this.props.timerStartTimer()
     }
 
     createIncompleteAppointment = () => {
@@ -273,6 +274,7 @@ class Checkout extends Component {
       if (this.props.order.reservation) {
         this.cancelIncompleteAppointment()
       }
+      this.props.history.push('/')
     }
 
     cancelIncompleteAppointment = () => {
@@ -491,6 +493,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  timerClearTimer: () => dispatch(timerClearTimer()),
   timerStartTimer: () => dispatch(timerStartTimer()),
   orderClearItems: order => dispatch(orderClearItems()),
   orderClearReservation: order => dispatch(orderClearReservation()),

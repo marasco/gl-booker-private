@@ -112,7 +112,9 @@ class Appointments extends Component {
             <div className="cart centered">
                 <div className="title">My Appointments</div>
                 <div className="list">
-                    {appointments}
+                    {this.state.appointments.length ? appointments : (
+                        <p>You don’t have any bookings yet</p>
+                    )}
                 </div>
             </div>
         )

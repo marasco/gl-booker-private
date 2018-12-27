@@ -4,7 +4,15 @@ export function timerStartTimer() {
   return (dispatch, getState) => {
     let { timer } = getState()
 
-    let expirationDate = moment().add(1, 'minutes')
+    let expirationDate = moment().add(10, 'minutes')
+    let cachedExpirationDate = localStorage.getItem('expirationDate')
+
+    if (cachedExpirationDate) {
+      expirationDate = moment(JSON.parse(cachedExpirationDate))
+    }
+
+    dispatch(timerRefreshTimer(expirationDate))
+    localStorage.setItem('expirationDate', JSON.stringify(expirationDate));
 
     if (timer && timer.intervalHandler) {
       clearInterval(timer.intervalHandler)
@@ -38,13 +46,24 @@ export function timerRefreshTimer(expirationDate) {
 
 export function timerExpired() {
   return (dispatch, getState) => {
-    let { timer } = getState()
+    dispatch(timerClearTimer())
 
-    clearInterval(timer.intervalHandler)
     alert('Timeout')
 
     return dispatch({
       type: 'timerExpired',
+    })
+  }
+}
+
+export function timerClearTimer() {
+  return (dispatch, getState) => {
+    let { timer } = getState()
+    localStorage.removeItem('expirationDate')
+    clearInterval(timer.intervalHandler)
+
+    return dispatch({
+      type: 'clearTimer'
     })
   }
 }
@@ -71,6 +90,9 @@ export function timer(state = {}, action) {
         ...state,
         expired: true,
       }
+
+    case 'clearTimer':
+      return {}
 
     default:
       return state
