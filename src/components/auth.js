@@ -140,6 +140,7 @@ class Auth extends Component {
             errors: null,
             showSection: 'forgotpassword'
         })
+        console.log('open forgot')
     }
 
     formatDate = (userDate) => {
@@ -171,6 +172,10 @@ class Auth extends Component {
     }
 
     close = () => {
+      this.setState({
+        showSection:'signin',
+        title: 'Sign In'
+      })
         this.props.setAuthModal(false);
     }
 

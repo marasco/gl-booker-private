@@ -15,9 +15,15 @@ class App extends React.Component {
   }
 
   setAuthModal = (status) => {
+    if (status){
       this.setState({
-          showAuthModal:status
+          showAuthModal: status
       })
+    }else{
+      this.setState({
+          showAuthModal: status
+      })
+    }
   }
 
   scrollUp = () => {
@@ -40,7 +46,7 @@ class App extends React.Component {
     let loggedUser = JSON.parse(localStorage.getItem('loggedUser'))
     return (
       <div className="App fluid-container">
-         <Auth scrollDown={this.scrollDown} setAuthModal={this.setAuthModal} showAuthModal={this.state.showAuthModal}/>
+         <Auth scrollDown={this.scrollDown} setAuthModal={this.setAuthModal} showSection={this.state.showSection} showAuthModal={this.state.showAuthModal}/>
          <Navbar>
             <Navbar.Header>
                 <Nav>
