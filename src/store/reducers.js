@@ -143,13 +143,6 @@ function order(state = {}, action) {
         slots: [],
       }
 
-    case 'orderSetReservation':
-      localStorage.setItem('reservation', JSON.stringify(action.reservation));
-      return {
-        ...state,
-        reservation: action.reservation,
-      }
-
     case 'orderAddReservation':
       let reservations = JSON.parse(localStorage.getItem('reservation'))
       if (!reservations){

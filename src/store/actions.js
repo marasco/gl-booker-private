@@ -65,13 +65,6 @@ export function orderClearItems() {
   }
 }
 
-export function orderSetReservation(reservation) {
-  return {
-    type: 'orderSetReservation',
-    reservation,
-  }
-}
-
 export function orderAddReservation(reservation) {
   return {
     type: 'orderAddReservation',
