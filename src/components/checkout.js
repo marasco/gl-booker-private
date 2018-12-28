@@ -7,8 +7,8 @@ import Select from 'react-select';
 import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { timerStartTimer } from '../store/timer' 
-import { orderAddReservation, dataSaveOrder,removeTreatments,orderClearItems,orderClearReservation } from '../store/actions'
+import { timerStartTimer } from '../store/timer'
+import { orderAddReservation, dataSaveOrder, removeTreatments, orderClearItems, orderCancelReservation, orderClearReservation } from '../store/actions'
 import Cart from './cart'
 import Timer from './timer'
 
@@ -59,6 +59,7 @@ class Checkout extends Component {
         customer: user && user.Customer.Customer,
         access_token: user && user.access_token,
         cart: cart,
+        showPromoCode: false,
         payment: {
           cardName:'Sandbox Card',
           cardType:{value:2,label:'Visa'},
@@ -69,10 +70,16 @@ class Checkout extends Component {
           postalCode:'33108',
         }
       }
+      this.showPromoCode = this.showPromoCode.bind(this);
 
       console.log(this.state)
     }
-
+    showPromoCode() {
+      let showPromoCode = !this.state.showPromoCode;
+      this.setState({
+        showPromoCode
+      })
+    }
     componentDidMount = () => {
       console.log('reservation',this.props.order.reservation);
       this.createIncompleteAppointments()
@@ -123,7 +130,7 @@ class Checkout extends Component {
                         this.props.timerStartTimer()
                       }
                     } else {
-                      throw new Error('Could not place reservation');
+                      throw new Error("We're sorry, but the appointment time you requested is no longer available");
                     }
                   })
                   .catch(error => {
@@ -220,6 +227,7 @@ class Checkout extends Component {
                   employeeId: item.employeeId,
                 })),
                 payment,
+                cuponCode: this.state.cuponCode,
                 access_token: this.state.access_token
               }
               // work with promises
@@ -279,7 +287,7 @@ class Checkout extends Component {
         })
     }
 
-    cancelCheckout = () => { 
+    cancelCheckout = () => {
       if (this.props.order.reservation && this.props.order.reservation.length) {
         this.props.order.reservation.map(item => {
           this.cancelIncompleteAppointment(item.id)
@@ -303,11 +311,16 @@ class Checkout extends Component {
           }
           throw new Error('Could not cancel reservation');
         })
-        .catch(error => alert(error.message)) 
+        .catch(error => alert(error.message))
     }
 
     handleChange(value, key){
         this.setState(prev => ({payment:{...prev.payment,[key]:value}}))
+    }
+
+    handleCuponChange(value) {
+
+      this.setState(prev => ({ cuponCode: value }));
     }
 
     convertDate = (dob) => {
@@ -454,6 +467,18 @@ class Checkout extends Component {
           </div>
         </div>
         )
+
+    let promoCodeForm = (
+      <FormGroup>
+        <Label>Apply Promo Code</Label>
+        <FormControl
+          type="text"
+          value={this.state.cuponCode}
+          placeholder={"Promo Code"}
+          onChange={e => this.handleCuponChange(e.target.value)}
+        />
+      </FormGroup>
+    );
     return (
         <div className="col-xs-12 col-sm-12 col-lg-10 col-lg-offset-1">
             <div className="title"><h2>Checkout</h2></div>
@@ -483,14 +508,17 @@ class Checkout extends Component {
                 You are booking
                 </div>
               </div>
+
+              <div className="col-xs-12">
+                 <div className="col-xs-10">
+                   {!this.state.showPromoCode && <a onClick={this.showPromoCode}>Apply a promo code</a>}
+                   {this.state.showPromoCode && promoCodeForm}
+                 </div>
+               </div>
+
               <div className="col-xs-12">
                 {cart}
-              </div>
-              <div className="col-xs-12">
-              {/*<div className="total">
-                Total: USD {this.state.sum}
-              </div>*/}
-              </div>
+              </div> 
             </div>
 
 
