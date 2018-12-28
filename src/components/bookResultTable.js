@@ -11,13 +11,37 @@ class BookResultTable extends React.Component {
 
     }
 
+    addItem = time => {
+        let index = localStorage.getItem('useIndex');
+
+        if (this.props.order.reservation && this.props.order.reservation[index]) {
+            let answer = window.confirm('Your previous reservation will be cancelled, do you want to continue?')
+
+            if (!answer) {
+                return
+            }
+            this.props.orderCancelReservation(this.props.order.reservation[index]).catch(
+                error => {
+                    console.log(error)
+                    alert(error.message)
+                }
+            )
+        }
+        this.props.scrollDown()
+        this.props.orderAddItem(time)
+    }
+
     isSelected = slot => {
         return this.props.order.slots.indexOf(slot) >= 0
     }
 
     showResults = () => {
         let rows = [];
+
         this.state.times.map((time,index) => {
+          let timeSlot = time
+          timeSlot.treatments = this.props.order.treatments
+          console.log('timeSlot: ',timeSlot)
             rows.push(
                 <tr key={"time-"+index}>
                     <td>
@@ -29,7 +53,7 @@ class BookResultTable extends React.Component {
                     <td>{
                         this.isSelected(time)
                         ? <Button className="selectBtnModal" onClick={() => this.props.orderRemoveItem(time)}> CANCEL </Button>
-                        : <Button className="selectBtnModal" onClick={() => this.props.orderAddItem(time)}> BOOK </Button>
+                        : <Button className="selectBtnModal" onClick={() => this.addItem(timeSlot)}> BOOK </Button> 
                     }</td>
                 </tr>
             )

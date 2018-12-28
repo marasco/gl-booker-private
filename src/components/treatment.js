@@ -4,11 +4,16 @@ import '../App.css';
 import Specialist from './specialist';
 import request from 'superagent'
 import { API_URL } from '../App'
+import Timer from './timer'
 
 
 class Treatment extends Component{
     constructor(props){
         super(props)
+        let useIndex=localStorage.getItem('useIndex')
+        if (useIndex===null){
+          localStorage.setItem('useIndex',0);
+        }
 
         this.state = {
             treatment: null,
@@ -143,6 +148,7 @@ class Treatment extends Component{
     render(){
     return(
         <div className="treatments">
+            <Timer/>
             <Row>
               {(()=>{
                 let doms = []

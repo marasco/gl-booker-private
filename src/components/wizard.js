@@ -5,7 +5,7 @@ import Cart from './cart'
 import BookResults from './bookResults';
 
 import { connect } from 'react-redux'
-import { setSpecialists, addTreatment, removeTreatment, selectDate, selectSpecialist, orderAddItem, orderRemoveItem, orderClearItems } from '../store/actions'
+import { setSpecialists, addTreatment, removeTreatment,removeTreatments, selectDate, selectSpecialist, orderAddItem, orderRemoveItem, orderClearItems, orderCancelReservation } from '../store/actions'
 
 export const DEBUG_MODE = process.env.REACT_APP_DEBUG_MODE;
 
@@ -154,13 +154,14 @@ class Wizard extends Component {
       // addToCart: this.addToCart,
       // removeItem: this.removeItem,
       orderRemoveItem: this.props.orderRemoveItem,
+      removeTreatments: this.props.removeTreatments,
       orderClearItems: this.props.orderClearItems,
       // clearCart: this.clearCart
     })
 
     return (
       <div>
-         
+
         <div className="centered col-xs-12 marginBottom20">
           <div className="centered col-xs-12">
               <h1 className="centered section-1">BOOK A SERVICE</h1>
@@ -187,6 +188,7 @@ class Wizard extends Component {
               order={this.props.order}
               orderAddItem={this.props.orderAddItem}
               orderRemoveItem={this.props.orderRemoveItem}
+              orderCancelReservation={this.props.orderCancelReservation}
               scrollDown={this.props.scrollDown}
               data={this.props.data}/>
           )}
@@ -210,8 +212,10 @@ const mapDispatchToProps = dispatch => ({
     orderAddItem: slot => dispatch(orderAddItem(slot)),
     orderRemoveItem: slot => dispatch(orderRemoveItem(slot)),
     orderClearItems: () => dispatch(orderClearItems()),
+    orderCancelReservation: reservation => dispatch(orderCancelReservation(reservation)),
     setSpecialists: (treatment, specialists) => dispatch(setSpecialists(treatment, specialists)),
     addTreatment: treatment => dispatch(addTreatment(treatment)),
+    removeTreatments: () => dispatch(removeTreatments()),
     removeTreatment: treatment => dispatch(removeTreatment(treatment)),
     selectDate: date => dispatch(selectDate(date)),
     selectSpecialist: (treatment, specialist) => dispatch(selectSpecialist(treatment, specialist)),

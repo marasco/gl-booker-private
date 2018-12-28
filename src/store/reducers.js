@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import { timer } from './timer'
 let slots = localStorage.getItem('slots')
 if (slots){
   slots = JSON.parse(slots)
@@ -11,6 +12,12 @@ if (treatments){
 }else{
   treatments = {}
 }
+let reservation = localStorage.getItem('reservation')
+if (reservation) {
+  reservation = JSON.parse(reservation)
+}else{
+  reservation = null
+}
 export const initialState = {
   data: {
     orders: [],
@@ -20,8 +27,9 @@ export const initialState = {
     date: null,
     treatments: treatments,
     slots: slots,
-    reservation: null,
+    reservation: reservation,
   },
+  timer: null,
 }
 
 function data(state = {}, action) {
@@ -51,7 +59,8 @@ function data(state = {}, action) {
 }
 
 function order(state = {}, action) {
-  let data = null
+  let data
+  let slots
   switch (action.type) {
 
     case 'addTreatment':
@@ -71,6 +80,11 @@ function order(state = {}, action) {
         treatments: data
       }
 
+    case 'removeTreatments':
+      delete({ ...state.treatments })
+      localStorage.setItem('treatments', JSON.stringify([]));
+
+      return { ...state, treatments: [] }
     case 'removeTreatment':
       let data = { ...state.treatments }
       delete(data[action.treatment.ID])
@@ -99,10 +113,17 @@ function order(state = {}, action) {
       }
 
     case 'orderAddItem':
-      localStorage.setItem('slots', JSON.stringify([action.slot]));
+      let index = localStorage.getItem('useIndex');
+      slots = JSON.parse(localStorage.getItem('slots'))
+      if (!slots){
+        slots = []
+      }
+      slots[index]=action.slot
+      console.log('updating slot:',slots)
+      localStorage.setItem('slots', JSON.stringify(slots));
       return {
         ...state,
-        slots: [ /*...state.slots,*/ action.slot ]
+        slots: slots
       }
 
     case 'orderRemoveItem':
@@ -122,13 +143,29 @@ function order(state = {}, action) {
         slots: [],
       }
 
-    case 'orderSetReservation':
+    case 'orderAddReservation':
+      let reservations = JSON.parse(localStorage.getItem('reservation'))
+      if (!reservations){
+        reservations = []
+      }
+      reservations.push(action.reservation)
+      localStorage.setItem('reservation', JSON.stringify(reservations));
       return {
         ...state,
-        reservation: action.reservation,
+        reservation: reservations,
+      }
+
+    case 'orderCancelReservation':
+      index = localStorage.getItem('useIndex');
+      let reservation = [...state.reservation]
+      delete(reservation[index])
+      return {
+        ...state,
+        reservation,
       }
 
     case 'orderClearReservation':
+      localStorage.removeItem('reservation');
       return {
         ...state,
         reservation: null,
@@ -142,4 +179,4 @@ function order(state = {}, action) {
   }
 }
 
-export const reducers = combineReducers({ data, order })
+export const reducers = combineReducers({ data, order, timer })
