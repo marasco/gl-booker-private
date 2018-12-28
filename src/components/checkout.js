@@ -8,7 +8,7 @@ import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { timerStartTimer } from '../store/timer' 
-import { orderSetReservation, orderAddReservation, dataSaveOrder,removeTreatments,orderClearItems,orderClearReservation } from '../store/actions' 
+import { orderAddReservation, dataSaveOrder,removeTreatments,orderClearItems,orderClearReservation } from '../store/actions'
 import Cart from './cart'
 import Timer from './timer'
 
@@ -512,7 +512,6 @@ const mapDispatchToProps = dispatch => ({
   orderCancelReservation: order => dispatch(orderCancelReservation()),
   dataSaveOrder: order => dispatch(dataSaveOrder(order)),
   removeTreatments: () => dispatch(removeTreatments()),
-  orderSetReservation: reservation => dispatch(orderSetReservation(reservation)),
   orderAddReservation: reservation => dispatch(orderAddReservation(reservation)),
 })
 

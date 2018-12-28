@@ -5,7 +5,7 @@ import Cart from './cart'
 import BookResults from './bookResults';
 
 import { connect } from 'react-redux' 
-import { setSpecialists, addTreatment, removeTreatment,removeTreatments, selectDate, selectSpecialist, orderAddItem, orderRemoveItem, orderClearItems } from '../store/actions'
+import { setSpecialists, addTreatment, removeTreatment,removeTreatments, selectDate, selectSpecialist, orderAddItem, orderRemoveItem, orderClearItems, orderCancelReservation } from '../store/actions'
 
 export const DEBUG_MODE = process.env.REACT_APP_DEBUG_MODE;
 
