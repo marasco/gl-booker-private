@@ -86,17 +86,25 @@ class Cart extends Component{
                   rows.push(
                     <div className="row"  key={'cartItem'+index}>
                     <div className="col-xs-12">
-                    <div className="item col-xs-10">
-                      {items}
+
                       {
                         (this.state.readonly!==true)?
+                        <div className="item col-xs-12">
+                        <div className=" col-xs-10">
+                          {items}
+                        </div>
                         <div className="remove col-xs-2">
                         <span onClick={() => this.props.orderRemoveItem(item)} className="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
-                        </div>:
-                        <div></div>
+                        </div>
+                        </div>
+                        :
+                        <div className="item col-xs-12">
+                        <div className=" col-xs-12">
+                          {items}
+                        </div>
+                        </div>
                       }
 
-                    </div>
                     </div>
                     </div>
                   )

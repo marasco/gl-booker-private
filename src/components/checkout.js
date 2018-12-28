@@ -104,8 +104,8 @@ class Checkout extends Component {
            if (!existReservation){
              console.log('creating reservation for slot '+index)
                 request
-                  .auth(API_USER, API_PASS)
                   .post(API_URL + '/appointment/reservation')
+                  .auth(API_USER, API_PASS)
                   .send({
                     startDateTime: slot.startDate,
                     access_token: this.state.access_token,
@@ -253,8 +253,8 @@ class Checkout extends Component {
     }
     createAppointment = payload => {
         request
-          .auth(API_USER, API_PASS)
           .post(API_URL + '/appointment')
+          .auth(API_USER, API_PASS)
           .send(payload)
           .then(res => {
             console.log('response',res)
