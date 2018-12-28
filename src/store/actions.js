@@ -9,7 +9,48 @@ export function setSpecialists(treatment, specialists) {
     specialists,
   }
 }
+export function orderCancelReservation() {
+   return (dispatch, getState) => {
+     let { order: { reservation } } = getState()
+     let { access_token } = JSON.parse(localStorage.getItem('loggedUser'))
 
+      return new Promise((resolve, reject) => {
+       if (!reservation) {
+         resolve()
+       }
+
+        request
+         .delete(API_URL + '/appointment/reservation')
+         .send({
+           access_token,
+           incompleteAppointmentId: reservation.id
+         })
+         .then(res => {
+           if (res.body.IsSuccess) {
+             dispatch(orderClearReservation())
+             return resolve()
+           }
+           throw new Error('Could not cancel reservation');
+         })
+         .catch(reject)
+     })
+
+      reservation && request
+       .delete(API_URL + '/appointment/reservation')
+       .send({
+         access_token,
+         incompleteAppointmentId: reservation.id
+       })
+       .then(res => {
+         if (res.body.IsSuccess) {
+           return dispatch(orderClearReservation())
+         }
+         throw new Error('Could not cancel reservation');
+       })
+       .catch(error => alert(error.message))
+   }
+ }
+ 
 export function addTreatment(treatment) {
   return {
     type: 'addTreatment',
@@ -68,7 +109,7 @@ export function orderClearItems() {
 export function orderAddReservation(reservation) {
   return {
     type: 'orderAddReservation',
-    reservation, 
+    reservation,
   }
 }
 

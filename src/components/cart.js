@@ -12,30 +12,28 @@ class Cart extends Component{
   }
   renderList = (treats, avail)=> {
     let itemResult=[]
-      let dateFormatted = avail.startDateTime.substring(0, 10) +
-       ' ' + avail.startDateTime.substring(11, 16);
-       if (typeof treats==='object'){
-         let i=1
+    let dateFormatted = avail.startDateTime.substring(0, 10) +
+     ' ' + avail.startDateTime.substring(11, 16);
+     if (typeof treats==='object'){
+       let i=1
 
-         Object.keys(treats).forEach(function(index) {
-            let service= treats[index]
-            let treatmentName=''
-            let treatmentPrice=0
-            if (service.treatment.ID === avail.serviceId){
-              treatmentName = service.treatment.Name;
-              treatmentPrice = service.treatment.Price.Amount;
-              itemResult.push(<div className="cartObject">
-              ({i}) <strong>{treatmentName}</strong> at {dateFormatted} - <strong>USD {treatmentPrice}.00</strong>
-              </div>)
-            }
-
-
-            return service
-
-});
+       Object.keys(treats).forEach(function(index) {
+          let service= treats[index]
+          let treatmentName=''
+          let treatmentPrice=0
+          if (service.treatment.ID === avail.serviceId){
+            treatmentName = service.treatment.Name;
+            treatmentPrice = service.treatment.Price.Amount;
+            itemResult.push(<div className="cartObject">
+            ({i}) <strong>{treatmentName}</strong> at {dateFormatted} - <strong>USD {treatmentPrice}.00</strong>
+            </div>)
+          }
 
 
-    }
+          return service
+
+        });
+      }
       return (
 
           <div className="desc col-xs-10">
@@ -44,7 +42,20 @@ class Cart extends Component{
 
       )
   }
-
+  componentDidMount = () => {
+    let sum=0
+    this.props.order.slots.map((item,index) => {
+      if (item){
+      let treats = item.treatments
+      Object.keys(treats).forEach(function(index) {
+         let service= treats[index]
+         let treatmentPrice = service.treatment.Price.Amount;
+         sum+=treatmentPrice
+       })
+     }
+   })
+   this.setState({sum:sum})
+  }
     checkout = () => {
         let loggedUser = JSON.parse(localStorage.getItem('loggedUser'))
         if( !loggedUser ) {
@@ -101,7 +112,7 @@ class Cart extends Component{
               (this.props.order.slots.length>0)?
                   <div className="centered row marginBottom20">
                   {
-                    (this.state.readonly===true)?<div></div>:
+                    (this.state.readonly===true)?<div className="total">Total: USD {this.state.sum}</div>:
                     <div>
                       <div className="col-xs-12">
                       <Button className="centered selectBtnModal marginTop20" onClick={this.props.orderClearItems}>Clear Items</Button>

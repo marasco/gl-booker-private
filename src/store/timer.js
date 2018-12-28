@@ -53,7 +53,7 @@ export function timerRefreshTimer(expirationDate) {
 export function timerExpired() {
   return (dispatch, getState) => {
     dispatch(orderClearReservation())
-    alert('Timeout')
+    alert('Your reservation expired')
   }
 }
 
@@ -61,7 +61,8 @@ export function timerClearTimer() {
   return (dispatch, getState) => {
     let { timer } = getState()
     localStorage.removeItem('expirationDate')
-    clearInterval(timer.intervalHandler)
+    if (timer)
+      clearInterval(timer.intervalHandler)
 
     return dispatch({
       type: 'clearTimer'
