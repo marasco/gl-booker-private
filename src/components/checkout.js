@@ -311,8 +311,9 @@ class Checkout extends Component {
         })
         .then(res => {
           if (res.body.IsSuccess) {
+          }else{
+            throw new Error('Could not cancel reservation');
           }
-          throw new Error('Could not cancel reservation');
         })
         .catch(error => alert(error.message))
     }
@@ -496,8 +497,8 @@ class Checkout extends Component {
                         <p>{this.state.message}</p>:<p></p>
                       }
                     </div>
-                    <Button  className="selectBtnModal" onClick={()=>this.processCheckout()}>BOOK</Button>
-                    <Button  className="selectBtnModal" onClick={()=>this.cancelCheckout()}>CANCEL</Button>
+                    <Button  className="selectBtnModal" style={{marginRight:'10px'}} onClick={()=>this.processCheckout()}>BOOK</Button>
+                    <Button  className="selectBtnModal" style={{marginRight:'10px'}} onClick={()=>this.cancelCheckout()}>CANCEL</Button>
                     <Button  className="selectBtnModal" onClick={()=>this.addMoreTreatments()}>ADD MORE TREATMENTS</Button>
                     </div>
                 </Form>

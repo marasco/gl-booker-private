@@ -54,6 +54,7 @@ class Cart extends Component{
        })
      }
    })
+
    this.setState({sum:sum})
   }
     checkout = () => {
@@ -117,7 +118,7 @@ class Cart extends Component{
             </div>
 
             {
-              (this.props.order.slots.length>0)?
+              (this.props.order.slots.filter(function(e){return e!==null}).length>0)?
                   <div className="centered row marginBottom20">
                   {
                     (this.state.readonly===true)?<div className="total">Total: USD {this.state.sum}</div>:
@@ -127,9 +128,6 @@ class Cart extends Component{
                       </div>
 
                       <div className="col-xs-12">
-                          {/*<Button className="selectBtnModal" onClick={()=>{
-                              this.props.addMoreServices()
-                          }} >ADD MORE SERVICES</Button>*/}
                           <Button className="selectBtnModal" onClick={()=>{
                               this.checkout()
                           }} >PROCEED TO CHECKOUT</Button>

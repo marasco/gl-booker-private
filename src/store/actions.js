@@ -26,11 +26,14 @@ export function orderCancelReservation() {
            incompleteAppointmentId: reservation.id
          })
          .then(res => {
+           console.log('deleteRes:',res.body)
+
            if (res.body.IsSuccess) {
              dispatch(orderClearReservation())
              return resolve()
+           }else{
+             throw new Error('Could not cancel reservation');
            }
-           throw new Error('Could not cancel reservation');
          })
          .catch(reject)
      })
@@ -42,10 +45,12 @@ export function orderCancelReservation() {
          incompleteAppointmentId: reservation.id
        })
        .then(res => {
+         console.log('deleteRes:',res.body)
          if (res.body.IsSuccess) {
            return dispatch(orderClearReservation())
+         }else{
+           throw new Error('Could not cancel reservation');
          }
-         throw new Error('Could not cancel reservation');
        })
        .catch(error => alert(error.message))
    }
