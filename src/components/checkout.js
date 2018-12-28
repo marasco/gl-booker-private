@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import * as moment from 'moment'
 import {  FormGroup, Button, Label, FormControl, Form } from 'react-bootstrap';
 import request from 'superagent'
-import { API_URL } from '../App'
+import { API_URL, API_USER, API_PASS } from '../App'
 import Select from 'react-select';
 import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux'
@@ -143,7 +143,29 @@ class Checkout extends Component {
       })
 
 
-
+ 
+      request
+        .auth(API_USER, API_PASS)
+        .post(API_URL + '/appointment/reservation')
+        .auth(API_USER, API_PASS)
+        .send({
+          startDateTime: slot.startDate,
+          access_token: this.state.access_token,
+          treatments: slot.slot.availabilityItems.map(item => ({
+            id: item.serviceId,
+            slot: item.startDateTime,
+            employeeId: item.employeeId,
+          }))
+        })
+        .then(res => {
+          if (res.body.IncompleteAppointmentID) {
+            return this.props.orderSetReservation({
+              id: res.body.IncompleteAppointmentID
+            })
+          }
+          throw new Error('Could not place reservation');
+        })
+        .catch(error => alert(error.message)) 
     }
 
     removeCartItem = (id) => {
@@ -237,8 +259,8 @@ class Checkout extends Component {
 
             }
           }
-
-        })
+ 
+        }) 
 
 
 
@@ -253,6 +275,7 @@ class Checkout extends Component {
     }
     createAppointment = payload => {
         request
+          .auth(API_USER, API_PASS)
           .post(API_URL + '/appointment')
           .send(payload)
           .then(res => {
@@ -303,6 +326,7 @@ class Checkout extends Component {
     cancelIncompleteAppointment = (id) => {
       request
         .delete(API_URL + '/appointment/reservation')
+        .auth(API_USER, API_PASS)
         .send({
           access_token: this.state.access_token,
           incompleteAppointmentId: id

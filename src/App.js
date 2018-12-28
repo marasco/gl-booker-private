@@ -5,6 +5,8 @@ import {Nav, NavItem, Navbar} from 'react-bootstrap';
 import Wizard from './components/wizard'
 
 export const API_URL = process.env.REACT_APP_API_URL;
+export const API_USER = process.env.REACT_APP_API_USERNAME;
+export const API_PASS = process.env.REACT_APP_API_PASS;
 
 class App extends React.Component {
   constructor(props) {

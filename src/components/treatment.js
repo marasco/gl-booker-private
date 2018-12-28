@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Button, Row, Col } from 'react-bootstrap';
 import '../App.css';
 import Specialist from './specialist';
-import request from 'superagent'
-import { API_URL } from '../App'
-import Timer from './timer'
+import request from 'superagent' 
+import { API_URL, API_USER, API_PASS } from '../App' 
+import Timer from './timer' 
 
 
 class Treatment extends Component{
@@ -32,7 +32,7 @@ class Treatment extends Component{
         try {
             request
             .get(API_URL + '/treatments')
-            .set('Authorization', 'Bearer xxxx')
+            .auth(API_USER, API_PASS)
             .query({
                 page: this.state.page,
                 pageSize: 12,
@@ -64,7 +64,7 @@ class Treatment extends Component{
     loadSpeacialists = treatment => {
         request
         .get(API_URL + '/employees')
-        .set('Authorization', 'Bearer xxxx')
+        .auth(API_USER, API_PASS)
         .query({
         pageSize: 100,
         treatmentId: treatment.ID,

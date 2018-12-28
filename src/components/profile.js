@@ -5,7 +5,7 @@ import NumberFormat from 'react-number-format';
 
 import {  FormGroup, Button, Label, FormControl, Form } from 'react-bootstrap';
 import request from 'superagent'
-import { API_URL } from '../App'
+import { API_URL, API_USER, API_PASS } from '../App'
 import {withRouter} from "react-router-dom";
 
 class Profile extends Component {
@@ -54,6 +54,7 @@ class Profile extends Component {
         form.DateOfBirth = this.reConvertDate(form.DateOfBirth)
         request
         .put(API_URL + '/account/'+this.state.customer.ID+'?access_token='+this.state.access_token)
+        .auth(API_USER, API_PASS)
         .send(form)
         .then(res => {
           console.log(res)
@@ -87,6 +88,7 @@ class Profile extends Component {
       refreshCustomerData = () =>{
         request
         .get(API_URL + '/account/'+this.state.customer.ID+'?access_token='+this.state.access_token)
+        .auth(API_USER, API_PASS)
         .then(res => {
 
 

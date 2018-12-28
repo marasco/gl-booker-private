@@ -2,7 +2,7 @@ import React from 'react';
 import request from 'superagent'
 import * as moment from 'moment'
 import Calendar from 'react-calendar';
-import { API_URL } from '../App'
+import { API_URL, API_USER, API_PASS } from '../App'
 import BookResults from './bookResults';
 
 export default class Calendario extends React.Component {
@@ -32,10 +32,10 @@ export default class Calendario extends React.Component {
       return false;
     }
   this.props.scrollDown()
-    this.setState({loading: true})
-    request
+  this.setState({loading: true})
+  request
     .post(API_URL + '/availability/itinerary-dates')
-    .set('Authorization', 'Bearer xxxx')
+    .auth(API_USER, API_PASS)
     .send({
         fromDate: moment().format('Y-MM-DD')+'T00:00:00-08:00',
         toDate: moment().add(1, 'month').format('Y-MM-DD')+'T00:00:00-08:00',

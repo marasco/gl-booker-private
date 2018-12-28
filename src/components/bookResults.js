@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import BookResultTable from './bookResultTable';
 import request from "superagent";
-import {API_URL} from "../App";
+import {API_URL, API_USER, API_PASS} from "../App";
 import moment from "moment";
 
 class BookResults extends Component{
@@ -55,7 +55,7 @@ class BookResults extends Component{
         return new Promise((resolve,reject)=>{
             request
                 .get(API_URL + '/employees')
-                .set('Authorization', 'Bearer xxxx')
+                .auth(API_USER, API_PASS)
                 .query({
                     pageSize: 1000,
                     treatmentId,
@@ -92,7 +92,7 @@ class BookResults extends Component{
 
         request
             .post(API_URL + '/availability/itinerary/1day')
-            .set('Authorization', 'Bearer xxxx')
+            .auth(API_USER, API_PASS)
             .send(query)
             .then(res => {
                 try {

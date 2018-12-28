@@ -3,7 +3,7 @@ import request from 'superagent'
 import LoginForm from './loginForm';
 import ResetForm from './resetForm';
 import RegisterForm from './registerForm';
-import {API_URL} from '../App'
+import {API_URL, API_USER, API_PASS} from '../App'
 import {Modal, Col} from 'react-bootstrap';
 import {withRouter} from "react-router-dom";
 
@@ -23,6 +23,7 @@ class Auth extends Component {
     login = (email, password) => {
         request
             .post(API_URL + '/account/login')
+            .auth(API_USER, API_PASS)
             .send({
                 Email: email,
                 Password: password
@@ -62,6 +63,7 @@ class Auth extends Component {
         form.DateOfBirth = this.formatDate(form.DateOfBirth)
         request
             .post(API_URL + '/account')
+            .auth(API_USER, API_PASS)
             .send(form)
             .then(res => {
 
@@ -110,6 +112,7 @@ class Auth extends Component {
     submitForgotPassword = (form) => {
         request
             .post(API_URL + '/account/forgot-password')
+            .auth(API_USER, API_PASS)
             .send({Email: form.email, Firstname: form.firstname})
             .then(res => {
                 if (res.body.error) {

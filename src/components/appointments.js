@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { API_URL } from '../App';
+import { API_URL, API_USER, API_PASS } from '../App';
 import request from "superagent";
 import moment from 'moment';
 
@@ -17,7 +17,7 @@ class Appointments extends Component {
         try {
             request
                 .post(API_URL + '/appointment/find')
-                .set('Authorization', 'Bearer xxxx')
+                .auth(API_USER, API_PASS)
                 .query({})
                 .send({
                     "customerId": this.state.loggedUser.Customer.CustomerID,
