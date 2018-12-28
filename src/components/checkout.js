@@ -8,7 +8,7 @@ import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { timerStartTimer } from '../store/timer' 
-import { orderAddReservation, dataSaveOrder,removeTreatments,orderClearItems,orderClearReservation } from '../store/actions'
+import { orderAddReservation, dataSaveOrder,removeTreatments,orderClearItems,orderClearReservation,orderCancelReservation } from '../store/actions'
 import Cart from './cart'
 import Timer from './timer'
 

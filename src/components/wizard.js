@@ -212,7 +212,7 @@ const mapDispatchToProps = dispatch => ({
     orderAddItem: slot => dispatch(orderAddItem(slot)),
     orderRemoveItem: slot => dispatch(orderRemoveItem(slot)),
     orderClearItems: () => dispatch(orderClearItems()),
-    orderCancelReservation: () => dispatch(orderCancelReservation()),
+    orderCancelReservation: reservation => dispatch(orderCancelReservation(reservation)),
     setSpecialists: (treatment, specialists) => dispatch(setSpecialists(treatment, specialists)),
     addTreatment: treatment => dispatch(addTreatment(treatment)),
     removeTreatments: () => dispatch(removeTreatments()),

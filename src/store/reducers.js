@@ -155,6 +155,15 @@ function order(state = {}, action) {
         reservation: reservations,
       }
 
+    case 'orderCancelReservation':
+      index = localStorage.getItem('useIndex');
+      let reservation = [...state.reservation]
+      delete(reservation[index])
+      return {
+        ...state,
+        reservation,
+      }
+
     case 'orderClearReservation':
       localStorage.removeItem('reservation');
       return {
