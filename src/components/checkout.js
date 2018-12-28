@@ -104,6 +104,7 @@ class Checkout extends Component {
            if (!existReservation){
              console.log('creating reservation for slot '+index)
                 request
+                  .auth(API_USER, API_PASS)
                   .post(API_URL + '/appointment/reservation')
                   .send({
                     startDateTime: slot.startDate,
@@ -143,29 +144,6 @@ class Checkout extends Component {
       })
 
 
- 
-      request
-        .auth(API_USER, API_PASS)
-        .post(API_URL + '/appointment/reservation')
-        .auth(API_USER, API_PASS)
-        .send({
-          startDateTime: slot.startDate,
-          access_token: this.state.access_token,
-          treatments: slot.slot.availabilityItems.map(item => ({
-            id: item.serviceId,
-            slot: item.startDateTime,
-            employeeId: item.employeeId,
-          }))
-        })
-        .then(res => {
-          if (res.body.IncompleteAppointmentID) {
-            return this.props.orderSetReservation({
-              id: res.body.IncompleteAppointmentID
-            })
-          }
-          throw new Error('Could not place reservation');
-        })
-        .catch(error => alert(error.message)) 
     }
 
     removeCartItem = (id) => {
@@ -259,8 +237,8 @@ class Checkout extends Component {
 
             }
           }
- 
-        }) 
+
+        })
 
 
 
