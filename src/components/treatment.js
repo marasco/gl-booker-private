@@ -10,6 +10,10 @@ import Timer from './timer'
 class Treatment extends Component{
     constructor(props){
         super(props)
+        let useIndex=localStorage.getItem('useIndex')
+        if (useIndex===null){
+          localStorage.setItem('useIndex',0);
+        }
 
         this.state = {
             treatment: null,

@@ -1,5 +1,6 @@
 import * as moment from 'moment'
 import { orderClearReservation } from './actions'
+export const MINUTES = process.env.REACT_APP_MINUTES;
 
 export function timerStartTimer() {
   return (dispatch, getState) => {
@@ -8,8 +9,8 @@ export function timerStartTimer() {
     if (!order.reservation) {
       return
     }
-
-    let expirationDate = moment().add(1, 'minutes')
+    console.log('minutes', MINUTES)
+    let expirationDate = moment().add(MINUTES || 1, 'minutes')
     let cachedExpirationDate = localStorage.getItem('expirationDate')
 
     if (cachedExpirationDate) {

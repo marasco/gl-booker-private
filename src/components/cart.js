@@ -66,17 +66,19 @@ class Cart extends Component{
             <div className="list">
              {(()=>{
                 let rows = [];
-                const treats = this.props.order.treatments
+                //const treats = this.props.order.slots
                 this.props.order.slots.map((item,index) => {
+                  if (item){
+                  let treats = item.treatments
                   let items =item.slot.availabilityItems.map(this.renderList.bind(this, treats));
 
                   rows.push(
-                    <div className="row"  key={'xxxkey'}>
+                    <div className="row"  key={'cartItem'+index}>
                     <div className="col-xs-12">
                     <div className="item col-xs-12">
                       {items}
                       {
-                        (this.state.readonly===false)?
+                        (this.state.readonly!==true)?
                         <div className="remove col-xs-2">
                         <span onClick={() => this.props.orderRemoveItem(item)} className="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
                         </div>:
@@ -89,8 +91,8 @@ class Cart extends Component{
                   )
 
                   return item
+                  }
                 })
-                console.log('rows',rows)
                 return rows
               })()}
             </div>
