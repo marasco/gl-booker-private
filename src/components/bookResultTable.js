@@ -17,7 +17,11 @@ class BookResultTable extends React.Component {
 
     showResults = () => {
         let rows = [];
+
         this.state.times.map((time,index) => {
+          let timeSlot = time
+          timeSlot.treatments = this.props.order.treatments
+          console.log('timeSlot: ',timeSlot)
             rows.push(
                 <tr key={"time-"+index}>
                     <td>
@@ -29,7 +33,7 @@ class BookResultTable extends React.Component {
                     <td>{
                         this.isSelected(time)
                         ? <Button className="selectBtnModal" onClick={() => this.props.orderRemoveItem(time)}> CANCEL </Button>
-                        : <Button className="selectBtnModal" onClick={() => this.props.orderAddItem(time)}> BOOK </Button>
+                        : <Button className="selectBtnModal" onClick={() => this.props.orderAddItem(timeSlot)}> BOOK </Button>
                     }</td>
                 </tr>
             )

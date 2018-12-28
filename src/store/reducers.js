@@ -59,7 +59,8 @@ function data(state = {}, action) {
 }
 
 function order(state = {}, action) {
-  let data = null
+  let data
+  let slots
   switch (action.type) {
 
     case 'addTreatment':
@@ -79,6 +80,11 @@ function order(state = {}, action) {
         treatments: data
       }
 
+    case 'removeTreatments':
+      delete({ ...state.treatments })
+      localStorage.setItem('treatments', JSON.stringify([]));
+
+      return { ...state, treatments: [] }
     case 'removeTreatment':
       let data = { ...state.treatments }
       delete(data[action.treatment.ID])
@@ -107,10 +113,17 @@ function order(state = {}, action) {
       }
 
     case 'orderAddItem':
-      localStorage.setItem('slots', JSON.stringify([action.slot]));
+      let index = localStorage.getItem('useIndex');
+      slots = JSON.parse(localStorage.getItem('slots'))
+      if (!slots){
+        slots = []
+      }
+      slots[index]=action.slot
+      console.log('updating slot:',slots)
+      localStorage.setItem('slots', JSON.stringify(slots));
       return {
         ...state,
-        slots: [ /*...state.slots,*/ action.slot ]
+        slots: slots
       }
 
     case 'orderRemoveItem':
@@ -135,6 +148,18 @@ function order(state = {}, action) {
       return {
         ...state,
         reservation: action.reservation,
+      }
+
+    case 'orderAddReservation':
+      let reservations = JSON.parse(localStorage.getItem('reservation'))
+      if (!reservations){
+        reservations = []
+      }
+      reservations.push(action.reservation)
+      localStorage.setItem('reservation', JSON.stringify(reservations));
+      return {
+        ...state,
+        reservation: reservations,
       }
 
     case 'orderClearReservation':

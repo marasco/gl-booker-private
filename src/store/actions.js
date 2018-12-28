@@ -15,6 +15,12 @@ export function addTreatment(treatment) {
   }
 }
 
+export function removeTreatments() {
+  return {
+    type: 'removeTreatments'
+  }
+}
+
 export function removeTreatment(treatment) {
   return {
     type: 'removeTreatment',
@@ -60,6 +66,13 @@ export function orderClearItems() {
 export function orderSetReservation(reservation) {
   return {
     type: 'orderSetReservation',
+    reservation,
+  }
+}
+
+export function orderAddReservation(reservation) {
+  return {
+    type: 'orderAddReservation',
     reservation,
   }
 }
