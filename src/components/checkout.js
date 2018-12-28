@@ -8,7 +8,7 @@ import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { timerStartTimer } from '../store/timer'
-import { orderSetReservation, dataSaveOrder,orderClearItems,orderClearReservation } from '../store/actions'
+import { orderSetReservation, dataSaveOrder,orderClearItems,orderClearReservation, orderCancelReservation } from '../store/actions'
 import Cart from './cart'
 import Timer from './timer'
 
@@ -274,25 +274,10 @@ class Checkout extends Component {
 
     cancelCheckout = () => {
       if (this.props.order.reservation) {
-        this.cancelIncompleteAppointment()
+        this.props.orderCancelReservation().then(() => {
+          this.props.history.push('/')
+        })
       }
-    }
-
-    cancelIncompleteAppointment = () => {
-      request
-        .delete(API_URL + '/appointment/reservation')
-        .send({
-          access_token: this.state.access_token,
-          incompleteAppointmentId: this.props.order.reservation.id
-        })
-        .then(res => {
-          if (res.body.IsSuccess) {
-            this.props.orderClearReservation()
-            return this.props.history.push('/')
-          }
-          throw new Error('Could not cancel reservation');
-        })
-        .catch(error => alert(error.message))
     }
 
     handleChange(value, key){
@@ -498,6 +483,7 @@ const mapDispatchToProps = dispatch => ({
   timerStartTimer: () => dispatch(timerStartTimer()),
   orderClearItems: order => dispatch(orderClearItems()),
   orderClearReservation: order => dispatch(orderClearReservation()),
+  orderCancelReservation: order => dispatch(orderCancelReservation()),
   dataSaveOrder: order => dispatch(dataSaveOrder(order)),
   orderSetReservation: reservation => dispatch(orderSetReservation(reservation)),
 })

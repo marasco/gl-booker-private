@@ -1,3 +1,5 @@
+import request from 'superagent'
+import { API_URL } from '../App'
 import { timerClearTimer } from './timer'
 
 export function setSpecialists(treatment, specialists) {
@@ -64,12 +66,53 @@ export function orderSetReservation(reservation) {
   }
 }
 
+export function orderCancelReservation() {
+  return (dispatch, getState) => {
+    let { order: { reservation } } = getState()
+    let { access_token } = JSON.parse(localStorage.getItem('loggedUser'))
+
+    return new Promise((resolve, reject) => {
+      if (!reservation) {
+        resolve()
+      }
+
+      request
+        .delete(API_URL + '/appointment/reservation')
+        .send({
+          access_token,
+          incompleteAppointmentId: reservation.id
+        })
+        .then(res => {
+          if (res.body.IsSuccess) {
+            dispatch(orderClearReservation())
+            return resolve()
+          }
+          throw new Error('Could not cancel reservation');
+        })
+        .catch(reject)
+    })
+
+    reservation && request
+      .delete(API_URL + '/appointment/reservation')
+      .send({
+        access_token,
+        incompleteAppointmentId: reservation.id
+      })
+      .then(res => {
+        if (res.body.IsSuccess) {
+          return dispatch(orderClearReservation())
+        }
+        throw new Error('Could not cancel reservation');
+      })
+      .catch(error => alert(error.message))
+  }
+}
+
 export function orderClearReservation() {
   return (dispatch, getState) => {
     dispatch({
       type: 'orderClearReservation'
     })
-    dispatch(orderClearItems())
     dispatch(timerClearTimer())
   }
 }

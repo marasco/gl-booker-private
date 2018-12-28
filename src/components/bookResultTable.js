@@ -11,6 +11,19 @@ class BookResultTable extends React.Component {
 
     }
 
+    addItem = time => {
+        if (this.props.order.reservation) {
+            let answer = window.confirm('Your previous reservation will be cancelled, do you want to continue?')
+
+            if (!answer) {
+                return
+            }
+            this.props.orderCancelReservation()
+        }
+        this.props.scrollDown()
+        this.props.orderAddItem(time)
+    }
+
     isSelected = slot => {
         return this.props.order.slots.indexOf(slot) >= 0
     }
@@ -29,7 +42,7 @@ class BookResultTable extends React.Component {
                     <td>{
                         this.isSelected(time)
                         ? <Button className="selectBtnModal" onClick={() => this.props.orderRemoveItem(time)}> CANCEL </Button>
-                        : <Button className="selectBtnModal" onClick={() => this.props.orderAddItem(time)}> BOOK </Button>
+                        : <Button className="selectBtnModal" onClick={() => this.addItem(time)}> BOOK </Button>
                     }</td>
                 </tr>
             )
