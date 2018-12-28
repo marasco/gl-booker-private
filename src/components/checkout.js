@@ -267,10 +267,11 @@ class Checkout extends Component {
             }
             if (res.body.IsSuccess===true){
               this.props.dataSaveOrder(this.props.order)
-              this.props.orderClearItems()
               this.setState({message: 'Your appointment was made successfully.'})
               this.setState(prev => ({ ...prev, errors: null }))
               this.props.orderClearReservation()
+
+              this.props.orderClearItems()
               this.props.removeTreatments()
               return this.props.history.push('/appointments')
 
@@ -297,6 +298,8 @@ class Checkout extends Component {
         })
         // need promises (cancel all appointments)
           this.props.orderClearReservation()
+          this.props.orderClearItems()
+          this.props.removeTreatments()
           return this.props.history.push('/')
       }
     }
@@ -539,7 +542,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   timerStartTimer: () => dispatch(timerStartTimer()),
-  orderClearItems: order => dispatch(orderClearItems()),
+  orderClearItems: () => dispatch(orderClearItems()),
   orderClearReservation: order => dispatch(orderClearReservation()),
   orderCancelReservation: order => dispatch(orderCancelReservation()),
   dataSaveOrder: order => dispatch(dataSaveOrder(order)),

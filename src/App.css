@@ -15,6 +15,10 @@ a:hover{
 .cartObject {
   line-height: 30px
 }
+.timer-div {
+  background: #fcf6f0;
+  padding:15px;
+}
 a{
   cursor:pointer;
   color: black;

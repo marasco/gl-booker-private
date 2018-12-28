@@ -137,6 +137,7 @@ function order(state = {}, action) {
       }
 
     case 'orderClearItems':
+    console.error('orderClearItems')
       localStorage.setItem('slots', JSON.stringify([]));
       return {
         ...state,

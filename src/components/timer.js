@@ -10,7 +10,7 @@ class Timer extends Component {
 
   render() {
     return (this.props.timer && (
-      <pre>{this.props.timer.timeLeft}</pre>
+      <div className="timer-div">Please complete your booking in <strong>{this.props.timer.timeLeft}</strong></div>
     ))
   }
 

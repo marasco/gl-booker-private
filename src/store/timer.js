@@ -1,5 +1,5 @@
 import * as moment from 'moment'
-import { orderClearReservation } from './actions'
+import { orderClearReservation, orderClearItems,removeTreatments } from './actions'
 export const MINUTES = process.env.REACT_APP_MINUTES;
 
 export function timerStartTimer() {
@@ -53,7 +53,11 @@ export function timerRefreshTimer(expirationDate) {
 export function timerExpired() {
   return (dispatch, getState) => {
     dispatch(orderClearReservation())
+    // clear everything
+    dispatch(orderClearItems())
+    dispatch(removeTreatments())
     alert('Your reservation has expired')
+
 
   }
 }
