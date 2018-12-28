@@ -50,7 +50,7 @@ export function orderCancelReservation() {
        .catch(error => alert(error.message))
    }
  }
- 
+
 export function addTreatment(treatment) {
   return {
     type: 'addTreatment',
@@ -110,32 +110,6 @@ export function orderAddReservation(reservation) {
   return {
     type: 'orderAddReservation',
     reservation,
-  }
-}
-
-export function orderCancelReservation(reservation) {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
-      let { access_token } = JSON.parse(localStorage.getItem('loggedUser'))
-
-      request
-        .delete(API_URL + '/appointment/reservation')
-        .send({
-          access_token,
-          incompleteAppointmentId: reservation.id
-        })
-        .then(res => {
-          if (res.body.IsSuccess) {
-            dispatch({
-              type: 'orderCancelReservation',
-              reservation,
-            })
-            return resolve()
-          }
-          reject(new Error('Could not cancel reservation'))
-        })
-        .catch(reject)
-    })
   }
 }
 
