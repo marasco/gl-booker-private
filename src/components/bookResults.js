@@ -151,7 +151,14 @@ class BookResults extends Component{
             <div>
                 {(this.state.loading)?<div className="marginTop20 marginBottom40">Loading...</div>:
                     <div className="timetable marginTop20">
-                        <BookResultTable order={this.props.order} times={this.state.times} orderAddItem={this.props.orderAddItem} orderRemoveItem={this.props.orderRemoveItem}></BookResultTable>
+                        <BookResultTable
+                            order={this.props.order}
+                            times={this.state.times}
+                            scrollDown={this.props.scrollDown}
+                            orderAddItem={this.props.orderAddItem}
+                            orderRemoveItem={this.props.orderRemoveItem}
+                            orderCancelReservation={this.props.orderCancelReservation}>
+                        </BookResultTable>
                         {
                             (false)?
                                 <div className="col-xs-12 centered">

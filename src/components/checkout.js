@@ -7,8 +7,8 @@ import Select from 'react-select';
 import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { timerStartTimer } from '../store/timer'
-import { orderSetReservation, orderAddReservation, dataSaveOrder,removeTreatments,orderClearItems,orderClearReservation } from '../store/actions'
+import { timerStartTimer } from '../store/timer' 
+import { orderSetReservation, orderAddReservation, dataSaveOrder,removeTreatments,orderClearItems,orderClearReservation } from '../store/actions' 
 import Cart from './cart'
 import Timer from './timer'
 
@@ -279,13 +279,13 @@ class Checkout extends Component {
         })
     }
 
-    cancelCheckout = () => {
+    cancelCheckout = () => { 
       if (this.props.order.reservation && this.props.order.reservation.length) {
         this.props.order.reservation.map(item => {
           this.cancelIncompleteAppointment(item.id)
 
         })
-
+        // need promises (cancel all appointments)
           this.props.orderClearReservation()
           return this.props.history.push('/')
       }
@@ -303,7 +303,7 @@ class Checkout extends Component {
           }
           throw new Error('Could not cancel reservation');
         })
-        .catch(error => alert(error.message))
+        .catch(error => alert(error.message)) 
     }
 
     handleChange(value, key){
@@ -509,6 +509,7 @@ const mapDispatchToProps = dispatch => ({
   timerStartTimer: () => dispatch(timerStartTimer()),
   orderClearItems: order => dispatch(orderClearItems()),
   orderClearReservation: order => dispatch(orderClearReservation()),
+  orderCancelReservation: order => dispatch(orderCancelReservation()),
   dataSaveOrder: order => dispatch(dataSaveOrder(order)),
   removeTreatments: () => dispatch(removeTreatments()),
   orderSetReservation: reservation => dispatch(orderSetReservation(reservation)),

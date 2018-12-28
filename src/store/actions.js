@@ -1,3 +1,5 @@
+import request from 'superagent'
+import { API_URL } from '../App'
 import { timerClearTimer } from './timer'
 
 export function setSpecialists(treatment, specialists) {
@@ -73,7 +75,7 @@ export function orderSetReservation(reservation) {
 export function orderAddReservation(reservation) {
   return {
     type: 'orderAddReservation',
-    reservation,
+    reservation, 
   }
 }
 
@@ -82,7 +84,6 @@ export function orderClearReservation() {
     dispatch({
       type: 'orderClearReservation'
     })
-    dispatch(orderClearItems())
     dispatch(timerClearTimer())
   }
 }

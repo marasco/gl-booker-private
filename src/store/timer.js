@@ -53,7 +53,6 @@ export function timerRefreshTimer(expirationDate) {
 export function timerExpired() {
   return (dispatch, getState) => {
     dispatch(orderClearReservation())
-
     alert('Timeout')
   }
 }

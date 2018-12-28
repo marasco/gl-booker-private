@@ -4,7 +4,7 @@ import Calendar from './calendar'
 import Cart from './cart'
 import BookResults from './bookResults';
 
-import { connect } from 'react-redux'
+import { connect } from 'react-redux' 
 import { setSpecialists, addTreatment, removeTreatment,removeTreatments, selectDate, selectSpecialist, orderAddItem, orderRemoveItem, orderClearItems } from '../store/actions'
 
 export const DEBUG_MODE = process.env.REACT_APP_DEBUG_MODE;
@@ -188,6 +188,7 @@ class Wizard extends Component {
               order={this.props.order}
               orderAddItem={this.props.orderAddItem}
               orderRemoveItem={this.props.orderRemoveItem}
+              orderCancelReservation={this.props.orderCancelReservation}
               scrollDown={this.props.scrollDown}
               data={this.props.data}/>
           )}
@@ -211,6 +212,7 @@ const mapDispatchToProps = dispatch => ({
     orderAddItem: slot => dispatch(orderAddItem(slot)),
     orderRemoveItem: slot => dispatch(orderRemoveItem(slot)),
     orderClearItems: () => dispatch(orderClearItems()),
+    orderCancelReservation: () => dispatch(orderCancelReservation()),
     setSpecialists: (treatment, specialists) => dispatch(setSpecialists(treatment, specialists)),
     addTreatment: treatment => dispatch(addTreatment(treatment)),
     removeTreatments: () => dispatch(removeTreatments()),
