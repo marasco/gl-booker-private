@@ -261,6 +261,7 @@ class Checkout extends Component {
               this.setState({message: 'Your appointment was made successfully.'})
               this.setState(prev => ({ ...prev, errors: null }))
               this.props.orderClearReservation()
+              this.props.removeTreatments()
               return this.props.history.push('/appointments')
 
               //msg+="Your appointment was created successfully");
