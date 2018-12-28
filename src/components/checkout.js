@@ -6,8 +6,8 @@ import { API_URL } from '../App'
 import Select from 'react-select';
 import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router-dom' 
-import { timerStartTimer } from '../store/timer' 
+import { Redirect } from 'react-router-dom'
+import { timerStartTimer } from '../store/timer'
 import { orderAddReservation, dataSaveOrder,removeTreatments,orderClearItems,orderClearReservation,orderCancelReservation } from '../store/actions'
 import Cart from './cart'
 import Timer from './timer'
@@ -136,6 +136,7 @@ class Checkout extends Component {
                   .catch(error => {
                     console.log(error)
                     alert(error.message)
+                    this.props.history.push('/')
                   })
             } // end if
         }
@@ -518,7 +519,7 @@ class Checkout extends Component {
 
               <div className="col-xs-12">
                 {cart}
-              </div> 
+              </div>
             </div>
 
 

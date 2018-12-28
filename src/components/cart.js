@@ -24,9 +24,9 @@ class Cart extends Component{
           if (service.treatment.ID === avail.serviceId){
             treatmentName = service.treatment.Name;
             treatmentPrice = service.treatment.Price.Amount;
-            itemResult.push(<div className="cartObject">
+            itemResult.push(<span>
             ({i}) <strong>{treatmentName}</strong> at {dateFormatted} - <strong>USD {treatmentPrice}.00</strong>
-            </div>)
+            </span>)
           }
 
 
@@ -36,7 +36,7 @@ class Cart extends Component{
       }
       return (
 
-          <div className="desc col-xs-10">
+          <div className="cartObject">
             {itemResult}
           </div>
 
@@ -86,7 +86,7 @@ class Cart extends Component{
                   rows.push(
                     <div className="row"  key={'cartItem'+index}>
                     <div className="col-xs-12">
-                    <div className="item col-xs-12">
+                    <div className="item col-xs-10">
                       {items}
                       {
                         (this.state.readonly!==true)?
@@ -131,7 +131,7 @@ class Cart extends Component{
                       </div>
                     }
                   </div>
-                  :<div><p className="marginTop20">Your treatments list is empty.</p></div>
+                  :<div><p className="marginTop20">Your treatments cart is empty.</p></div>
 
             }
             </div>
