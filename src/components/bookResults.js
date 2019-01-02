@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import BookResultTable from './bookResultTable';
 import request from "superagent";
-import {API_URL, API_USER, API_PASS} from "../App";
+import {API_URL, API_USER, API_PASS, TIME_FORMAT} from "../App";
 import moment from "moment";
 
 class BookResults extends Component{
@@ -112,10 +112,11 @@ class BookResults extends Component{
 
                                     })
                                     console.log('adding '+duration+' to '+lastTime)
-                                    let end = moment(lastTime,"HH::mm").add(duration,"minutes").format("HH:mm");
+                                    let start = moment(startTime,"HH:mm").format(TIME_FORMAT)
+                                    let end = moment(lastTime,"HH::mm").add(duration,"minutes").format(TIME_FORMAT);
                                     //let time = item.time.substring(0,5);
                                     times.push({
-                                        start: startTime,
+                                        start: start,
                                         end: end,
                                         startDate: item.startDateTime,
                                         slot: item,

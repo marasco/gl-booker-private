@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
+import * as moment from 'moment'
 import {withRouter} from 'react-router-dom'
+import {TIME_FORMAT} from '../App'
 
 class Cart extends Component{
   constructor(props){
@@ -13,7 +15,7 @@ class Cart extends Component{
   renderList = (treats, avail)=> {
     let itemResult=[]
     let dateFormatted = avail.startDateTime.substring(0, 10) +
-     ' ' + avail.startDateTime.substring(11, 16);
+     ' ' + moment(avail.startDateTime.substring(11, 16),"HH:mm").format(TIME_FORMAT);
      if (typeof treats==='object'){
        let i=1
 
