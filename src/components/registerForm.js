@@ -5,13 +5,13 @@ import NumberFormat from 'react-number-format';
 
 class RegisterForm extends Component {
     formFields = {
-        FirstName:{ label:'Name',value:''},
+        FirstName:{ label:'First Name',value:''},
         LastName:{ label:'Last name',value:''},
         Email:{ label:'Email',value:''},
         Password:{ label:'Password',value:''},
         ConfirmPassword:{ label:'Confirm Password',value:''},
-        CellPhone: { label: 'Phone', value: '' },
-        DateOfBirth: { label: 'Birthdate', value: '' },
+        CellPhone: { label: 'CellPhone', value: '' },
+        DateOfBirth: { label: 'Date of Birth', value: '' },
     }
     state = {
         form:{
