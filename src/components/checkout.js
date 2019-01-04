@@ -86,7 +86,11 @@ class Checkout extends Component {
       // to do: add promise for timerStart
       this.props.timerStartTimer()
     }
-
+    logout() {
+        localStorage.removeItem('loggedUser')
+        this.setState(prev => ({ ...prev, customer: null }))
+        return this.props.history.push('/');
+    }
     createIncompleteAppointments = () => {
       let slots = this.props.order.slots
       if (!slots){return false}
@@ -116,6 +120,13 @@ class Checkout extends Component {
                     }))
                   })
                   .then(res => {
+                  if (res.body.ErrorMessage && res.body.ErrorMessage ==='invalid access token'){
+                    alert("Your session has expired, you have to login again.")
+                    this.logout();
+                    return false;
+                  }
+
+
                     if (res.body.IncompleteAppointmentID) {
                       this.props.orderAddReservation({
                         id: res.body.IncompleteAppointmentID,

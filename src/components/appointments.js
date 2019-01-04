@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { API_URL, API_USER, API_PASS } from '../App';
+import { API_URL, API_USER, API_PASS, TIME_FORMAT } from '../App';
 import request from "superagent";
 import moment from 'moment';
 
@@ -29,13 +29,12 @@ class Appointments extends Component {
                     console.log('xhr.response:',res.body.Results)
                     if( res.body.Results && res.body.Results.length ) {
                         this.setState({
-                            appointments: res.body.Results.map(appointment => {
-
-
-
+                            appointments: res.body.Results.sort((a, b) => {
+                                return this.convertDate(a.StartDateTime).diff(this.convertDate(b.StartDateTime), 's')
+                            }).map(appointment => {
                                 return {
                                     id: appointment.ID,
-                                    startDate: this.convertDate(appointment.StartDateTime),
+                                    startDate: this.convertDate(appointment.StartDateTime).format('MM/DD/YYYY ' + TIME_FORMAT),
                                     treatments: appointment.AppointmentTreatments,
                                     treatment:{
                                         name: appointment.Treatment.Name
@@ -69,7 +68,7 @@ class Appointments extends Component {
         dob = dob.replace("/Date(","");
         dob = dob.replace(")/","");
 
-        return moment(dob,'x').format('MM/DD/YYYY HH:mm');
+        return moment(dob,'x');
     }
 
 
