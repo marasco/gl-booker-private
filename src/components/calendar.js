@@ -14,7 +14,8 @@ export default class Calendario extends React.Component {
         // Get date from global wizard data.
         date: props.data.date,
         availability: [],
-        loading: true
+        loading: false,
+        showCalendar: false
       }
 
   }
@@ -30,9 +31,10 @@ export default class Calendario extends React.Component {
     if (Object.keys(this.props.order.treatments).length ===0){
       alert('Please, select one or more treatments first.');
       return false;
+    }else{
+      this.setState({loading: true})
     }
   this.props.scrollDown()
-  this.setState({loading: true})
   request
     .post(API_URL + '/availability/itinerary-dates')
     .auth(API_USER, API_PASS)
@@ -85,14 +87,20 @@ export default class Calendario extends React.Component {
       <div>
       {
         (!this.state.loading)?
-
-      <div className="col-xs-12 centered marginTop20 marginBottom40">
-        <Calendar className="fix"
-          onChange={this.onChange}
-          value={this.state.date}
-          tileDisabled={ this.tileDisabledCallback }
-        />
-      </div>
+          <div>
+          {
+            (this.state.availability.length > 0)?
+            <div className="col-xs-12 centered marginTop20 marginBottom40">
+              <Calendar className="fix"
+                onChange={this.onChange}
+                value={this.state.date}
+                tileDisabled={ this.tileDisabledCallback }
+              />
+            </div>
+            :
+            <div></div>
+          }
+          </div>
       :
       <div className="col-xs-12 centered marginBottom40">
         Loading availability...
