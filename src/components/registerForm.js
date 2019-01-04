@@ -9,6 +9,7 @@ class RegisterForm extends Component {
         LastName:{ label:'Last name',value:''},
         Email:{ label:'Email',value:''},
         Password:{ label:'Password',value:''},
+        ConfirmPassword:{ label:'Confirm Password',value:''},
         CellPhone: { label: 'Phone', value: '' },
         DateOfBirth: { label: 'Birthdate', value: '' },
     }
@@ -17,6 +18,7 @@ class RegisterForm extends Component {
             FirstName:'',
             LastName:'',
             Email:'',
+            ConfirmPassword:'',
             Password:'',
             CellPhone: '',
             DateOfBirth: '',
@@ -48,9 +50,9 @@ class RegisterForm extends Component {
             format="##/##/####" />
               :
             <FormControl
-                type={(x==='Password')?"password":"text"}
+                type={(x==='Password'||x==='ConfirmPassword')?"password":"text"}
                 value={this.state.form[x]}
-                placeholder={"Enter your " + x}
+                placeholder={"Enter your " + this.formFields[x].label}
                 onChange={e => this.handleChange(e.target.value,x)}
             />
           }

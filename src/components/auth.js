@@ -61,6 +61,22 @@ class Auth extends Component {
 
     register = (form) => {
         form.DateOfBirth = this.formatDate(form.DateOfBirth)
+
+        if (
+          !form.Email || !form.Email.length ||
+          !form.FirstName || !form.FirstName.length ||
+          !form.LastName || !form.LastName.length ||
+          !form.Password || !form.Password.length ||
+          !form.ConfirmPassword || !form.ConfirmPassword.length ||
+          !form.DateOfBirth || !form.DateOfBirth.length ||
+          !form.CellPhone || !form.CellPhone.length
+
+        ){
+          return alert('You must complete all required fields');
+        }
+        if (form.Password !== form.ConfirmPassword){
+          return alert('Passwords do not match.')
+        }
         request
             .post(API_URL + '/account')
             .auth(API_USER, API_PASS)
@@ -82,7 +98,7 @@ class Auth extends Component {
             })
 
             .catch(errors => {
-              console.log('errors',errors);debugger;
+              console.log('errors',errors);
                 if (errors.status) {
                     // Handle non-200 gracefully.
                     errors = errors.response.body.errors
