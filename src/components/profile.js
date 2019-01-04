@@ -113,7 +113,7 @@ class Profile extends Component {
                         LastName: user.Customer.Customer.LastName,
                         Email: user.Customer.Customer.Email,
                         Password: user.Customer.Customer.Password,
-                        DateOfBirth: user.Customer.Customer.DateOfBirth,
+                        DateOfBirth: this.convertDate(user.Customer.Customer.DateOfBirth),
                         CellPhone: user.Customer.Customer.CellPhone}
 
                    })
